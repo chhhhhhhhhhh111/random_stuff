@@ -1,0 +1,5003 @@
+local v0 = setmetatable({}, {__index=((getfenv and (getfenv(0) or getfenv(1))) or _G)});
+if setfenv then
+	pcall(setfenv, 1, v0);
+end
+local v1 = nil;
+local v2 = false;
+local v3 = 2;
+local v4 = 0;
+local v5 = 0;
+local v6 = false;
+local v7 = nil;
+ui_block_input = false;
+local v8 = 0;
+local v9 = false;
+local v10 = 0;
+local v11 = 60;
+local v12, v13, v14 = bit.band, bit.bnot, bit.bor;
+local v15 = {};
+local v16 = {};
+local v17 = {};
+local v18 = {};
+local v19 = {};
+local v20 = nil;
+local v21 = {};
+local v22 = 0;
+local v23 = 0;
+local v24 = "";
+local v25 = nil;
+local v26 = false;
+local v27 = 0;
+local v28 = nil;
+local v29 = false;
+local v30 = true;
+local v31 = 0;
+local v32 = {text="",born=0,ok=true};
+local v33 = false;
+local v34 = "";
+local v35 = "";
+local v36 = "";
+local v37 = 1;
+local v38 = {x=120,y=250};
+local v39 = false;
+local v40 = {x=0,y=0};
+theme_bg_r, theme_bg_g, theme_bg_b = 15, 15, 15;
+theme_card_r, theme_card_g, theme_card_b = 26, 26, 26;
+theme_border_r, theme_border_g, theme_border_b = 42, 42, 42;
+theme_text_r, theme_text_g, theme_text_b = 235, 235, 235;
+local v41 = nil;
+pcall(function()
+	if globals then
+		if (type(globals.tickcount) == "function") then
+			function v41()
+				return globals.tickcount();
+			end
+		elseif (type(globals.tickcount) == "number") then
+			function v41()
+				return globals.tickcount;
+			end
+		elseif (type(globals.tick_count) == "function") then
+			function v41()
+				return globals.tick_count();
+			end
+		elseif (type(globals.tick_count) == "number") then
+			function v41()
+				return globals.tick_count;
+			end
+		elseif (type(globals.get_tickcount) == "function") then
+			function v41()
+				return globals.get_tickcount();
+			end
+		elseif (type(globals.get_tick_count) == "function") then
+			function v41()
+				return globals.get_tick_count();
+			end
+		end
+	end
+end);
+if not v41 then
+	function v41()
+		local v984 = 0;
+		pcall(function()
+			v984 = globals.curtime() or 0;
+		end);
+		local v985 = 0.015625;
+		pcall(function()
+			if globals.tickinterval then
+				v985 = globals.tickinterval() or 0.015625;
+			elseif globals.tick_interval then
+				v985 = globals.tick_interval() or 0.015625;
+			end
+		end);
+		if (v985 <= 0) then
+			v985 = 0.015625;
+		end
+		return math.floor(v984 / v985);
+	end
+end
+local v42 = 18;
+local v43 = 32;
+local v44 = 40;
+local v45 = 22;
+local v46 = 28;
+local v47 = 20;
+local v48 = 0.1;
+local v49 = 0.3;
+local v50 = 0.5;
+local v51 = v48 + v49 + v50;
+local v52 = {{dx=-1,dy=-1},{dx=-1,dy=1},{dx=1,dy=-1},{dx=1,dy=1}};
+local v53 = 0.15;
+local v54 = memory.find_pattern("client.dll", "40 53 48 83 EC 20 48 8B D9 4C 8B C2 48 8B 0D ?? ?? ?? ?? 48 8D 54 24");
+local v55 = nil;
+pcall(function()
+	v55 = render.load_font("C:\\Windows\\Fonts\\lucon.ttf", 14);
+end);
+if not v55 then
+	pcall(function()
+		v55 = render.load_font("C:\\Windows\\Fonts\\cour.ttf", 14);
+	end);
+end
+local v56 = nil;
+pcall(function()
+	v56 = render.load_font("C:\\Windows\\Fonts\\impact.ttf", 54);
+end);
+function make_var(v95)
+	return {v=v95,get=function(v844)
+		return v844.v;
+	end,set=function(v845, v846)
+		v845.v = v846;
+	end};
+end
+function make_color(v96, v97, v98, v99)
+	return {r=v96,g=v97,b=v98,a=v99,get=function(v848)
+		return v848.r, v848.g, v848.b, v848.a;
+	end,set=function(v849, v850, v851, v852, v853)
+		v849.r = v850;
+		v849.g = v851;
+		v849.b = v852;
+		v849.a = v853;
+	end};
+end
+local v57 = {master_switch=make_var(true),per_groups=make_var(0),weapon_class=make_var(1),session_start=globals.realtime(),enable_aim=make_var(true),draw_fov=make_var(true),dynamic_fov=make_var(false),aim_amount=make_var(1.918),aim_smooth=make_var(2.067),aim_snap=make_var(true),aim_target_hitgroup=make_var(0),aim_sort_mode=make_var(0),auto_aim_shoot=make_var(true),silent_aim=make_var(true),rcs_enable=make_var(true),rcs_amount=make_var(2),aim_lethal_only=make_var(false),snap_freeze_time=make_var(0.18),one_click_delay=make_var(false),before_shot_delay=make_var(0),target_switch_delay=make_var(250),min_hit_chance=make_var(45),min_damage=make_var(20),min_damage_head=make_var(20),min_damage_body=make_var(20),min_damage_auto=make_var(false),rage_lethal_ignore_hc=make_var(false),dmg_rifle_base=make_var(32),dmg_sniper_base=make_var(85),dmg_pistol_base=make_var(22),dmg_head_mult=make_var(4),dmg_body_mult=make_var(1),dmg_scale=make_var(1),autowall_enable=make_var(true),autowall_max_thickness=make_var(42),autowall_min_damage=make_var(20),autowall_retention=make_var(0.6),autowall_lethal_only=make_var(false),dmg_falloff=make_var(0),auto_scope=make_var(true),quick_stop_mode=make_var(1),shot_delay=make_var(0),spread_mode=make_var(0),spread_scale=make_var(1),spread_accurate_vel=make_var(60),peek_enable=make_var(true),peek_highlight=make_var(true),peek_auto_stop=make_var(false),peek_ring=make_var(false),esp_enable=make_var(false),esp_color=make_color(80, 200, 255, 220),esp_hp=make_var(true),esp_name=make_var(true),esp_dist=make_var(true),esp_skeleton=make_var(false),esp_ring=make_var(false),esp_avatar=make_var(false),tracer_enable=make_var(false),tracer_color=make_color(255, 200, 90, 220),tracer_life=make_var(1),grenade_enable=make_var(false),arrows_enable=make_var(false),arrows_color=make_color(235, 90, 90, 230),wm_style=make_var(0),aa_desync_enable=make_var(false),aa_desync_amount=make_var(58),aa_desync_side=make_var(0),aim_hitbox=make_var(0),rage_360_enable=make_var(false),rage_360_max_angle=make_var(180),rage_360_spin=make_var(false),rage_360_spin_speed=make_var(12),rage_360_keep_view=make_var(true),fov_color=make_color(80, 200, 255, 170),esp_vis_mode=make_var(0),esp_hidden_color=make_color(150, 150, 150, 170),esp_armor=make_var(false),arrows_distance=make_var(true),wm_avatar=make_var(false),wm_kills=make_var(false),auto_pistol=make_var(true),auto_pistol_delay=make_var(110),resolver_brute_key=make_var(0),aa_desync_key=make_var(0),peek_key=make_var(0),peek_return_after_shot=make_var(true),peek_return_on_release=make_var(true),shot_break_enable=make_var(false),shot_break_time=make_var(120),peek_speed=make_var(250),peek_timeout=make_var(900),peek_tolerance=make_var(40),peek_abort_on_move=make_var(true),peek_invert_side=make_var(false),autowall_hc=make_var(45),resolver_mode=make_var(0),resolver_offset=make_var(58),resolver_fallback_body=make_var(true),resolver_brute_delay=make_var(8),hvh_aa_flip_shot=make_var(false),hvh_baim_hp=make_var(0),hvh_baim=make_var(false),hvh_hc_override=make_var(false),hvh_hc_override_val=make_var(0),hvh_dmg_override=make_var(false),hvh_dmg_override_val=make_var(0),revolver_enable=make_var(true),revolver_delay=make_var(250),revolver_subtick=make_var(true),mvfix_mode=make_var(0),hit_selection=make_var(0),only_body_aim=make_var(false),prefer_head=make_var(false),prefer_body=make_var(false),body_lethal=make_var(true),aa=make_var(true),aa_at_targets=make_var(true),aa_manual_left=make_var(37),aa_manual_right=make_var(39),aa_manual_back=make_var(40),aa_manual_state=make_var(0),mvfix=make_var(true),hold_off=make_var(true),legs=make_var(false),aa_manual_move=make_var(true),aa_yaw_inverter_key=make_var(0),aa_yaw_inverted=make_var(false),aa_ladder_check=make_var(true),aa_ladder_as_air=make_var(true),aa_move_speed=make_var(10),aa_disable_on_shot=make_var(true),aa_jitter_random=make_var(false),aa_pitch_jitter=make_var(false),aa_pitch_jitter_val=make_var(20),aa_state=make_var(0),aa_pitch_std=make_var(1),aa_yaw_std=make_var(1),aa_pitch_val_std=make_var(89),aa_yaw_val_std=make_var(180),aa_jitter_std=make_var(true),aa_jitter_val_std=make_var(15),aa_spin_std=make_var(false),aa_spin_val_std=make_var(5),aa_pitch_mov=make_var(1),aa_yaw_mov=make_var(1),aa_pitch_val_mov=make_var(89),aa_yaw_val_mov=make_var(180),aa_jitter_mov=make_var(true),aa_jitter_val_mov=make_var(20),aa_spin_mov=make_var(false),aa_spin_val_mov=make_var(5),aa_pitch_air=make_var(1),aa_yaw_air=make_var(1),aa_pitch_val_air=make_var(89),aa_yaw_val_air=make_var(180),aa_jitter_air=make_var(true),aa_jitter_val_air=make_var(35),aa_spin_air=make_var(false),aa_spin_val_air=make_var(10),scope_rem=make_var(true),scope_enable=make_var(false),scope_type=make_var(0),scope_len=make_var(80),scope_gap=make_var(20),scope_thick=make_var(1),scope_inner=make_color(255, 255, 255, 220),scope_outer=make_color(255, 255, 255, 0),crosshair_size=make_var(8),crosshair_gap=make_var(3),crosshair_thick=make_var(1),crosshair_col=make_color(229, 62, 62, 220),inv_unlock=make_var(false),model_changer_en=make_var(false),gui_scale=make_var(5),menu_bind_key=make_var(45),menu_width=make_var(740),menu_height=make_var(480),menu_color=make_color(229, 62, 62, 255),menu_glow=make_var(false),menu_avatar=make_var(false),menu_cards=make_var(false),dmg_enable=make_var(true),dmg_life=make_var(1.2),dmg_rise=make_var(24),dmg_color=make_color(255, 80, 80, 255),hit_enable=make_var(true),hit_size=make_var(8),hit_gap=make_var(3),hit_thick=make_var(1.5),hit_life=make_var(0.6),hit_glow=make_var(true),hit_glow_size=make_var(1.5),hit_glow_op=make_var(35),hit_color=make_color(255, 255, 255, 255),hit_head_color=make_color(229, 62, 62, 255),dmg_outline=make_var(true),dmg_head_color=make_color(255, 170, 60, 255),fn_enable=make_var(true),fn_size=make_var(44),fn_filter=make_var(0),fn_color=make_color(255, 213, 0, 255),fn_gravity=make_var(120),fn_speed_y=make_var(140),fn_drift_x=make_var(40)};
+local v58 = {"aa_manual_left","aa_manual_right","aa_manual_back","aa_manual_forward"};
+local v59 = {};
+for v100, v101 in ipairs(v58) do
+	v59[v101] = true;
+end
+local v60 = {{id="enable_aim",name="Aimbot"},{id="aim_lethal_only",name="Lethal Only"},{id="autowall_enable",name="Auto Wall"},{id="auto_aim_shoot",name="Auto Fire"},{id="silent_aim",name="Silent Aim"},{id="rage_360_enable",name="360 Shots"},{id="esp_enable",name="Player ESP"},{id="auto_pistol",name="Auto Pistol"},{id="peek_enable",name="Peek Assistant"},{id="hvh_baim",name="Body Aim"},{id="hvh_hc_override",name="Hit Chance Override"},{id="hvh_dmg_override",name="Damage Override"},{id="aa",name="Anti-Aim"},{id="scope_enable",name="Custom Scope"},{id="dmg_enable",name="Damage Text"},{id="hit_enable",name="Hitmarkers"},{id="fn_enable",name="Fortnite Damage"},{id="model_changer_en",name="Model Changer"},{id="aa_manual_left",name="Manual Left",manual=true},{id="aa_manual_right",name="Manual Right",manual=true},{id="aa_manual_back",name="Manual Back",manual=true},{id="aa_manual_forward",name="Manual Forward",manual=true}};
+local v61 = {};
+local v62 = {};
+for v103, v104 in ipairs(v60) do
+	local v105 = v57[v104.id];
+	if (v104.manual or (type(v105) ~= "table") or (type(v105.get) ~= "function")) then
+		v105 = make_var(false);
+	end
+	v61[v104.id] = {name=v104.name,key=0,mode=0,active=false,was_down=false,waiting=false,ui_ref=v105,manual=((v104.manual and true) or false)};
+	v62[#v62 + 1] = v104.id;
+end
+local v63 = {[1]="LMouse",[2]="RMouse",[3]="Break",[4]="MMouse",[5]="X1Mouse",[6]="X2Mouse",[8]="Back",[9]="Tab",[12]="Clear",[13]="Enter",[16]="Shift",[17]="Control",[18]="Alt",[19]="Pause",[20]="Capital",[27]="Esc",[32]="Space",[33]="PageUp",[34]="PageDown",[35]="End",[36]="Home",[37]="Left",[38]="Up",[39]="Right",[40]="Down",[41]="Select",[42]="Print",[43]="Execute",[44]="Snapshot",[45]="Insert",[46]="Delete",[47]="Help",[48]="0",[49]="1",[50]="2",[51]="3",[52]="4",[53]="5",[54]="6",[55]="7",[56]="8",[57]="9",[65]="A",[66]="B",[67]="C",[68]="D",[69]="E",[70]="F",[71]="G",[72]="H",[73]="I",[74]="J",[75]="K",[76]="L",[77]="M",[78]="N",[79]="O",[80]="P",[81]="Q",[82]="R",[83]="S",[84]="T",[85]="U",[86]="V",[87]="W",[88]="X",[89]="Y",[90]="Z",[91]="LWin",[92]="RWin",[93]="Apps",[96]="Num 0",[97]="Num 1",[98]="Num 2",[99]="Num 3",[100]="Num 4",[101]="Num 5",[102]="Num 6",[103]="Num 7",[104]="Num 8",[105]="Num 9",[106]="Multiply",[107]="Add",[108]="Separator",[109]="Subtract",[110]="Decimal",[111]="Divide",[112]="F1",[113]="F2",[114]="F3",[115]="F4",[116]="F5",[117]="F6",[118]="F7",[119]="F8",[120]="F9",[121]="F10",[122]="F11",[123]="F12",[144]="NumLock",[145]="Scroll",[160]="LShift",[161]="RShift",[162]="LControl",[163]="RControl",[164]="LAlt",[165]="RAlt"};
+function get_clean_key_name(v109)
+	if (not v109 or (v109 == 0)) then
+		return "None";
+	end
+	return v63[v109] or ("Key " .. tostring(v109));
+end
+function get_bind_mode_name(v110)
+	if (v110 == 1) then
+		return "Hold";
+	end
+	if (v110 == 2) then
+		return "Always";
+	end
+	return "Toggle";
+end
+function get_bind_mode_tag(v111)
+	if (v111 == 1) then
+		return "H";
+	end
+	if (v111 == 2) then
+		return "A";
+	end
+	return "T";
+end
+local v64 = nil;
+local v65 = nil;
+function begin_key_capture(v112, v113)
+	v64 = v113;
+	v65 = v112;
+end
+function is_capturing()
+	return v64 ~= nil;
+end
+function capture_label(v114)
+	if v64 then
+		return "Press key... (Esc)";
+	end
+	return v114;
+end
+function process_key_capture()
+	if not v64 then
+		return;
+	end
+	local v115 = false;
+	pcall(function()
+		v115 = input.is_button_pressed(27);
+	end);
+	if v115 then
+		v64 = nil;
+		v65 = nil;
+		return;
+	end
+	for v858 = 3, 255 do
+		if (v858 ~= 27) then
+			local v1170, v1171 = pcall(function()
+				return input.is_button_pressed(v858);
+			end);
+			if (v1170 and v1171) then
+				local v1358 = v64;
+				v64 = nil;
+				v65 = nil;
+				pcall(v1358, v858);
+				return;
+			end
+		end
+	end
+end
+function draw_arc(v116, v117, v118, v119, v120, v121, v122, v123, v124, v125, v126, v127)
+	v121 = v121 or 16;
+	v127 = v127 or v118;
+	local v128, v129 = nil, nil;
+	for v859 = 0, v121 do
+		local v860 = v119 + ((v120 - v119) * (v859 / v121));
+		local v861 = v116 + (math.cos(v860) * v118);
+		local v862 = v117 + (math.sin(v860) * v127);
+		if v128 then
+			imgui.dl_add_line(v128, v129, v861, v862, v122, v123, v124, v125, v126 or 1);
+		end
+		v128, v129 = v861, v862;
+	end
+end
+function draw_mini_icon(v130, v131, v132, v133, v134, v135, v136, v137)
+	local v138 = v133 * 0.5;
+	if (v130 == "key") then
+		imgui.dl_add_rect(v131, v132, v131 + v133, v132 + v133, v134, v135, v136, v137, 2, 1);
+		imgui.dl_add_circle_filled(v131 + v138, v132 + v138, v133 * 0.16, v134, v135, v136, v137);
+	elseif (v130 == "config") then
+		imgui.dl_add_rect(v131, v132 + (v133 * 0.16), v131 + (v133 * 0.68), v132 + (v133 * 0.46), v134, v135, v136, v137, 1, 1);
+		imgui.dl_add_rect(v131, v132 + (v133 * 0.54), v131 + (v133 * 0.68), v132 + (v133 * 0.84), v134, v135, v136, v137, 1, 1);
+		imgui.dl_add_line(v131 + (v133 * 0.76), v132 + (v133 * 0.2), v131 + (v133 * 0.96), v132 + (v133 * 0.5), v134, v135, v136, v137, 1);
+		imgui.dl_add_line(v131 + (v133 * 0.96), v132 + (v133 * 0.5), v131 + (v133 * 0.76), v132 + (v133 * 0.8), v134, v135, v136, v137, 1);
+	elseif (v130 == "gear") then
+		imgui.dl_add_circle(v131 + v138, v132 + v138, v138 * 0.6, v134, v135, v136, v137, 14, 1.3);
+		for v1447 = 0, 7 do
+			local v1448 = (v1447 * math.pi) / 4;
+			imgui.dl_add_line(v131 + v138 + (math.cos(v1448) * v138 * 0.6), v132 + v138 + (math.sin(v1448) * v138 * 0.6), v131 + v138 + (math.cos(v1448) * v138 * 0.95), v132 + v138 + (math.sin(v1448) * v138 * 0.95), v134, v135, v136, v137, 1.1);
+		end
+	end
+end
+function draw_rect_outline(v139, v140, v141, v142, v143, v144, v145, v146)
+	render.line(v139, v140, v139 + v141, v140, v143, v144, v145, v146, 1);
+	render.line(v139, v140 + v142, v139 + v141, v140 + v142, v143, v144, v145, v146, 1);
+	render.line(v139, v140, v139, v140 + v142, v143, v144, v145, v146, 1);
+	render.line(v139 + v141, v140, v139 + v141, v140 + v142, v143, v144, v145, v146, 1);
+end
+function is_bind_active(v147)
+	local v148 = v61[v147];
+	if not v148 then
+		return false;
+	end
+	return v148.active;
+end
+function update_binds()
+	local v149 = {"aa_manual_left","aa_manual_right","aa_manual_back","aa_manual_forward"};
+	for v863, v864 in ipairs(v149) do
+		local v865 = v61[v864];
+		if (v865 and v865.key and (v865.key ~= 0)) then
+			local v1172 = false;
+			pcall(function()
+				v1172 = input.is_button_down(v865.key);
+			end);
+			if v1172 then
+				if not v865.was_down then
+					for v1507, v1508 in ipairs(v149) do
+						v61[v1508].active = v1508 == v864;
+						if v61[v1508].ui_ref then
+							v61[v1508].ui_ref:set(v1508 == v864);
+						end
+					end
+				end
+				v865.was_down = true;
+			else
+				v865.was_down = false;
+			end
+		end
+	end
+	for v866, v867 in pairs(v61) do
+		local v868 = (v866 == "aa_manual_left") or (v866 == "aa_manual_right") or (v866 == "aa_manual_back") or (v866 == "aa_manual_forward");
+		if not v868 then
+			if (v867.key and (v867.key ~= 0)) then
+				local v1361 = false;
+				pcall(function()
+					v1361 = input.is_button_down(v867.key);
+				end);
+				if (v867.mode == 2) then
+					v867.active = true;
+					if v867.ui_ref then
+						v867.ui_ref:set(true);
+					end
+				elseif (v867.mode == 0) then
+					if v1361 then
+						if not v867.was_down then
+							v867.active = not v867.active;
+							if v867.ui_ref then
+								v867.ui_ref:set(v867.active);
+							end
+						end
+						v867.was_down = true;
+					else
+						v867.was_down = false;
+					end
+				elseif (v867.mode == 1) then
+					v867.active = v1361;
+					if v867.ui_ref then
+						v867.ui_ref:set(v867.active);
+					end
+				end
+			elseif v867.ui_ref then
+				v867.active = v867.ui_ref:get();
+			end
+		end
+	end
+end
+local v66 = {pitch_jitter_state=false,pitch_spin_angle=0,yaw_jitter_state=false,yaw_spin_angle=0,strafe_yaw=0,last_aa=false,cur_fov=90,_scope_line_anim=0,trigger_last_shot_time=0,last_shot_time=0,last_snap_time=0,last_snap_angles=nil,sub_tab_home=0,sub_tab_misc=0,sub_tab_rage=0,sub_tab_settings=0};
+local v67 = {};
+local v68 = {};
+local v69 = {};
+local v70, v71 = {}, {};
+function reload_agents()
+	if (not skin or (type(skin.get_agents) ~= "function")) then
+		return false;
+	end
+	local v150 = skin.get_agents();
+	if (#v150 == 0) then
+		return false;
+	end
+	table.sort(v150, function(v869, v870)
+		return v869.name < v870.name;
+	end);
+	v70, v71 = {}, {};
+	for v871, v872 in ipairs(v150) do
+		local v873 = v872.model_path or "";
+		if (v873:find("ctm_") or v873:find("/ct")) then
+			table.insert(v70, v872);
+		else
+			table.insert(v71, v872);
+		end
+	end
+	return true;
+end
+local v72 = 0;
+function get_agent_srv(v151)
+	if (not skin or (type(skin.get_agent_srv) ~= "function")) then
+		return 0;
+	end
+	local v152 = skin.get_agent_srv(v151.def_idx) or 0;
+	if (v152 ~= 0) then
+		return v152;
+	end
+	if (v72 == 0) then
+		v72 = skin.get_def_agent_srv() or 0;
+	end
+	return v72;
+end
+local v73 = {[0]={150,150,150},[1]={176,195,217},[2]={94,152,217},[3]={75,105,255},[4]={135,71,255},[5]={212,43,229},[6]={235,75,75},[7]={227,173,56}};
+function rc(v153)
+	return v73[v153] or v73[0];
+end
+function basename(v154)
+	if (not v154 or (v154 == "")) then
+		return "";
+	end
+	return v154:match("([^/\\]+)%.vmdl") or v154:match("([^/\\]+)$") or v154;
+end
+function safe_write_byte(v155, v156)
+	if (not v155 or (v155 == 0)) then
+		return false;
+	end
+	local v157 = pcall(function()
+		memory.write_u8(v155, v156);
+	end);
+	return v157;
+end
+function get_light_palette_color(v158, v159)
+	local v160 = (v158 - 1) / 12;
+	local v161 = 0.85;
+	local v162 = 0.4 + ((v159 - 1) * 0.08);
+	local v163, v164, v165;
+	if (v161 == 0) then
+		v163, v164, v165 = v162, v162, v162;
+	else
+		local function v986(v1173, v1174, v1175)
+			if (v1175 < 0) then
+				v1175 = v1175 + 1;
+			end
+			if (v1175 > 1) then
+				v1175 = v1175 - 1;
+			end
+			if (v1175 < (1 / 6)) then
+				return v1173 + ((v1174 - v1173) * 6 * v1175);
+			end
+			if (v1175 < (1 / 2)) then
+				return v1174;
+			end
+			if (v1175 < (2 / 3)) then
+				return v1173 + ((v1174 - v1173) * ((2 / 3) - v1175) * 6);
+			end
+			return v1173;
+		end
+		local v987 = ((v162 < 0.5) and (v162 * (1 + v161))) or ((v162 + v161) - (v162 * v161));
+		local v988 = (2 * v162) - v987;
+		v163 = v986(v988, v987, v160 + (1 / 3));
+		v164 = v986(v988, v987, v160);
+		v165 = v986(v988, v987, v160 - (1 / 3));
+	end
+	return math.floor(v163 * 255), math.floor(v164 * 255), math.floor(v165 * 255);
+end
+function get_flag(v166)
+	local v167, v168 = pcall(function()
+		return imgui[v166];
+	end);
+	return (v167 and v168 and v168) or 0;
+end
+function safe_set(v169, v170)
+	if (v57[v169] and (type(v57[v169].set) == "function")) then
+		pcall(function()
+			v57[v169]:set(v170);
+		end);
+	end
+end
+function lerp(v171, v172, v173)
+	if (type(v171) ~= "number") then
+		v171 = 0;
+	end
+	if (type(v172) ~= "number") then
+		v172 = v171;
+	end
+	if (type(v173) ~= "number") then
+		v173 = 0;
+	end
+	return v171 + ((v172 - v171) * v173);
+end
+function safe_get_mouse()
+	local v174, v175, v176 = pcall(function()
+		return input.get_mouse_pos();
+	end);
+	if (v174 and v175 and v176) then
+		return v175, v176;
+	end
+	local v177, v178, v179 = pcall(function()
+		return imgui.get_mouse_pos();
+	end);
+	if (v177 and v178) then
+		if ((type(v178) == "table") or (type(v178) == "userdata")) then
+			return v178.x or 0, v178.y or 0;
+		elseif (type(v178) == "number") then
+			return v178, v179 or 0;
+		end
+	end
+	return 0, 0;
+end
+function is_clicked_area(v180, v181, v182, v183)
+	local v184, v185 = safe_get_mouse();
+	local v186, v187 = pcall(function()
+		return input.is_button_pressed(1);
+	end);
+	return v186 and v187 and (v184 >= v180) and (v184 <= (v180 + v182)) and (v185 >= v181) and (v185 <= (v181 + v183));
+end
+function safe_get_velocity(v188)
+	local v189, v190, v191, v192 = pcall(function()
+		return v188:get_velocity();
+	end);
+	if not v189 then
+		return {x=0,y=0,z=0};
+	end
+	if ((type(v190) == "userdata") or (type(v190) == "table")) then
+		return {x=(v190.x or 0),y=(v190.y or 0),z=(v190.z or 0)};
+	elseif (type(v190) == "number") then
+		return {x=v190,y=(v191 or 0),z=(v192 or 0)};
+	end
+	return {x=0,y=0,z=0};
+end
+function get_direction_vector(v193, v194)
+	local v195 = math.rad(v193);
+	local v196 = math.rad(v194);
+	return {x=(math.cos(v195) * math.cos(v196)),y=(math.cos(v195) * math.sin(v196)),z=-math.sin(v195)};
+end
+local v74 = schema.get_offset("C_CSPlayerPawn", "m_bIsScoped");
+local v75 = schema.get_offset("C_CSWeaponBaseGun", "m_zoomLevel") or schema.get_offset("CWeaponCSBase", "m_zoomLevel") or schema.get_offset("CCSWeaponBase", "m_zoomLevel") or schema.get_offset("C_CSWeaponBase", "m_zoomLevel");
+function is_scoped()
+	if not engine.is_in_game() then
+		return false;
+	end
+	local v197 = entitylist.get_local_player();
+	if (not v197 or not v197:is_alive()) then
+		return false;
+	end
+	local v198 = v197:get_address();
+	if (not v198 or (v198 == 0) or not v74) then
+		return false;
+	end
+	return memory.read_u8(v198 + v74) ~= 0;
+end
+function get_zoom_level()
+	if not engine.is_in_game() then
+		return 0;
+	end
+	local v199 = entitylist.get_local_player();
+	if (not v199 or not v199:is_alive()) then
+		return 0;
+	end
+	if not is_scoped() then
+		return 0;
+	end
+	if v75 then
+		local v989 = v199:get_active_weapon();
+		if not v989 then
+			return 1;
+		end
+		local v990 = v989:get_address();
+		if (not v990 or (v990 == 0)) then
+			return 1;
+		end
+		return memory.read_u32(v990 + v75);
+	end
+	return 1;
+end
+function is_player_ducking(v200)
+	local v201 = schema.get_offset("C_CSPlayerPawn", "m_bDucked");
+	if not v201 then
+		return false;
+	end
+	local v202 = v200:get_address();
+	if (not v202 or (v202 == 0)) then
+		return false;
+	end
+	local v203 = 0;
+	pcall(function()
+		v203 = memory.read_u8(v202 + v201);
+	end);
+	return v203 ~= 0;
+end
+function safe_get_screen_pos(v204, v205, v206)
+	local v207, v208, v209 = pcall(function()
+		return render.world_to_screen(v204, v205, v206);
+	end);
+	if (v207 and v208 and v209) then
+		return v208, v209;
+	end
+	local v210, v211 = pcall(function()
+		return render.world_to_screen({x=v204,y=v205,z=v206});
+	end);
+	if (v210 and v211 and v211.x and v211.y) then
+		return v211.x, v211.y;
+	end
+	return nil, nil;
+end
+function safe_w2s(v212, v213, v214)
+	local v215, v216, v217 = pcall(function()
+		return render.w2s(v212, v213, v214);
+	end);
+	if (v215 and v216) then
+		return v216, v217;
+	end
+	return nil, nil;
+end
+function safe_get_text_size(v218, v219)
+	local v220, v221, v222 = pcall(function()
+		if v56 then
+			return render.get_text_size(v218, v56);
+		end
+		return render.get_text_size(v218, "menu");
+	end);
+	if (v220 and v221) then
+		return v221, v222;
+	end
+	return #v218 * v219 * 0.5, v219;
+end
+function safe_render_text(v223, v224, v225, v226, v227, v228, v229, v230, v231)
+	local v232 = false;
+	if v56 then
+		v232 = pcall(function()
+			render.text(v223, v224, v225, v226, v227, v228, v229, v230, v56, v231);
+		end);
+	end
+	if not v232 then
+		pcall(function()
+			render.text(v223, v224, v225, v226, v227, v228, v229, v230, "menu", v231);
+		end);
+	end
+end
+function gradient_line(v233, v234, v235, v236, v237, v238, v239, v240, v241, v242, v243)
+	for v874 = 0, v243 - 1 do
+		local v875 = v874 / v243;
+		local v876 = math.floor(lerp(v240, v241, v875));
+		render.line(lerp(v233, v235, v875), lerp(v234, v236, v875), lerp(v233, v235, (v874 + 1) / v243), lerp(v234, v236, (v874 + 1) / v243), v237, v238, v239, v876, v242);
+	end
+end
+local v76 = {};
+function init_memory_hacks()
+	local v244 = memory.get_module("client.dll");
+	if not v244 then
+		return;
+	end
+	v76.legs_fn = memory.find_pattern("client.dll", "40 55 53 56 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? F2 0F 10 42");
+	if v76.legs_fn then
+		v76.legs_orig = memory.read_u8(v76.legs_fn);
+	end
+	v76.scope_fn = memory.find_pattern("client.dll", "48 8B C4 53 57 48 83 EC ? 48 8B FA");
+	if v76.scope_fn then
+		v76.scope_orig = memory.read_u8(v76.scope_fn);
+	end
+	v76.inv_fn = memory.find_pattern("client.dll", "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B E9 48 8B 0D") or memory.find_pattern("client.dll", "40 53 48 83 EC ? 48 8B D9 48 8B 0D ? ? ? ? 48 85 C9 75 ? E8");
+	if v76.inv_fn then
+		v76.inv_orig = memory.read_u8(v76.inv_fn);
+	end
+end
+function is_revolver(v248)
+	local v249 = v248:get_active_weapon();
+	if not v249 then
+		return false;
+	end
+	local v250, v251 = pcall(function()
+		return v249:get_name();
+	end);
+	if (v250 and v251) then
+		return v251:lower():find("revolver") or v251:lower():find("revol");
+	end
+	local v252, v253 = pcall(function()
+		return v249:get_address();
+	end);
+	if (v252 and v253 and (v253 ~= 0)) then
+		local v994 = schema.get_offset("C_EconEntity", "m_AttributeManager") or 0;
+		if (v994 ~= 0) then
+			local v1269 = schema.get_offset("C_EconItemView", "m_iItemDefinitionIndex") or 464;
+			local v1270 = memory.read_u16(v253 + v994 + v1269);
+			if (v1270 == 64) then
+				return true;
+			end
+		end
+	end
+	return false;
+end
+function draw_intro()
+	if v2 then
+		return;
+	end
+	local v254 = globals.realtime();
+	if not v1 then
+		v1 = v254;
+	end
+	local v255 = v254 - v1;
+	if (v255 >= v3) then
+		v2 = true;
+		return;
+	end
+	local v256, v257 = render.get_screen_size();
+	local v258, v259 = v256 * 0.5, v257 * 0.5;
+	local v260 = ((v255 < 0.5) and (v255 / 0.5)) or ((v255 > (v3 - 0.5)) and ((v3 - v255) / 0.5)) or 1;
+	v260 = math.max(0, math.min(1, v260));
+	local v261 = math.floor(v260 * 255);
+	imgui.push_style_color(imgui.Col_WindowBg, 0, 0, 0, 0);
+	imgui.push_style_color(imgui.Col_Border, 0, 0, 0, 0);
+	imgui.push_style_var_float(imgui.StyleVar_WindowRounding, 0);
+	imgui.push_style_var_float(imgui.StyleVar_WindowBorderSize, 0);
+	imgui.push_style_var(imgui.StyleVar_WindowPadding, 0, 0);
+	imgui.set_next_window_pos(1, 1, imgui.Cond_Always);
+	imgui.set_next_window_size(v256 - 2, v257 - 2, imgui.Cond_Always);
+	imgui.set_next_window_bg_alpha(0);
+	local v262 = get_flag("WindowFlags_NoCollapse") + get_flag("WindowFlags_NoTitleBar") + get_flag("WindowFlags_NoResize") + get_flag("WindowFlags_NoMove") + get_flag("WindowFlags_NoScrollbar");
+	if imgui.begin("##sunrize_intro", v262) then
+		local v995, v996, v997 = v57.menu_color:get();
+		imgui.dl_add_background_blur(0, 0, v256, v257, 0, v260 * 0.95);
+		imgui.dl_add_rect_filled(0, 0, v256, v257, 0, 0, 0, math.floor(v260 * 180));
+		local v998 = "Get good, get SunRize!";
+		local v999, v1000 = imgui.calc_text_size(v998);
+		imgui.dl_add_text(v258 - (v999 * 0.5), (v259 - (v1000 * 0.5)) - 10, 255, 255, 255, v261, v998);
+		local v1001 = 200;
+		local v1002 = 2;
+		local v1003 = v258 - (v1001 * 0.5);
+		local v1004 = v259 + (v1000 * 0.5) + 10;
+		imgui.dl_add_rect_filled(v1003, v1004, v1003 + v1001, v1004 + v1002, 45, 45, 48, math.floor(v260 * 200), 1);
+		local v1005 = v255 / v3;
+		imgui.dl_add_rect_filled(v1003, v1004, v1003 + (v1001 * v1005), v1004 + v1002, v995, v996, v997, v261, 1);
+	end
+	imgui.end_window();
+	imgui.pop_style_color(2);
+	imgui.pop_style_var(3);
+end
+function widget_hit(v263, v264, v265)
+	if ui_block_input then
+		imgui.dummy(v264, v265);
+		return false;
+	end
+	return imgui.invisible_button(v263, v264, v265);
+end
+function custom_checkbox(v266, v267, v268, v269)
+	local v270, v271 = imgui.get_cursor_screen_pos();
+	local v272 = 11;
+	local v273 = 18;
+	local v274 = 18;
+	local v275 = false;
+	local v276 = false;
+	imgui.set_cursor_screen_pos(v270, v271);
+	if widget_hit("##cb_box_" .. v268, v273, v272 + 2) then
+		v275 = true;
+	end
+	local v277 = v270;
+	if (v269 and v61[v269]) then
+		imgui.same_line(0, 5);
+		local v1006, v1007 = imgui.get_cursor_screen_pos();
+		v277 = v1006;
+		if widget_hit("##cb_dots_" .. v268, v274, v272 + 2) then
+			v276 = true;
+		end
+	end
+	imgui.same_line(0, 6);
+	local v278, v279 = imgui.get_cursor_screen_pos();
+	local v280 = imgui.calc_text_size(v266);
+	if widget_hit("##cb_lbl_" .. v268, math.max(120, v280), v272 + 2) then
+		v275 = true;
+	end
+	if v275 then
+		v267 = not v267;
+		if (v269 and v61[v269]) then
+			v61[v269].active = v267;
+			if v61[v269].ui_ref then
+				v61[v269].ui_ref:set(v267);
+			end
+		end
+	end
+	local v281 = (v267 and 1) or 0;
+	v67[v268] = lerp(v67[v268] or 0, v281, 0.2);
+	local v283, v284, v285 = v57.menu_color:get();
+	local v286 = v67[v268] or 0;
+	local v287 = math.floor(theme_border_r + ((v283 - theme_border_r) * v286));
+	local v288 = math.floor(theme_border_g + ((v284 - theme_border_g) * v286));
+	local v289 = math.floor(theme_border_b + ((v285 - theme_border_b) * v286));
+	if (v57.menu_glow:get() and (v286 > 0.03)) then
+		imgui.dl_add_rect_filled(v270 - 1, v271, v270 + v273 + 1, v271 + v272 + 2, v283, v284, v285, math.floor(v286 * 30), 7);
+	end
+	imgui.dl_add_rect_filled(v270, v271 + 1, v270 + v273, v271 + v272 + 1, v287, v288, v289, 255, 6);
+	imgui.dl_add_rect(v270, v271 + 1, v270 + v273, v271 + v272 + 1, theme_border_r, theme_border_g, theme_border_b, 255, 6, 1);
+	local v290 = v270 + 5 + ((v273 - 10) * v286);
+	imgui.dl_add_circle_filled(v290, v271 + 1 + (v272 * 0.5), 3.5, 255, 255, 255, 255);
+	if (v269 and v61[v269]) then
+		local v1008 = v271 + 1;
+		local v1009, v1010 = safe_get_mouse();
+		local v1011 = (v1009 >= v277) and (v1009 <= (v277 + v274)) and (v1010 >= v1008) and (v1010 <= (v1008 + v272));
+		local v1012, v1013, v1014 = theme_bg_r, theme_bg_g, theme_bg_b;
+		if v1011 then
+			v1012 = math.min(255, theme_bg_r + 20);
+			v1013 = math.min(255, theme_bg_g + 20);
+			v1014 = math.min(255, theme_bg_b + 20);
+		end
+		imgui.dl_add_rect_filled(v277, v1008, v277 + v274, v1008 + v272, v1012, v1013, v1014, 255, 2);
+		imgui.dl_add_rect(v277, v1008, v277 + v274, v1008 + v272, theme_border_r, theme_border_g, theme_border_b, 255, 2, 1);
+		local v1015 = (v1011 and 255) or 150;
+		local v1016 = v1008 + (v272 * 0.5);
+		imgui.dl_add_circle_filled(v277 + 4, v1016, 1, v1015, v1015, v1015, 255);
+		imgui.dl_add_circle_filled(v277 + 9, v1016, 1, v1015, v1015, v1015, 255);
+		imgui.dl_add_circle_filled(v277 + 14, v1016, 1, v1015, v1015, v1015, 255);
+		if v276 then
+			if (v28 and (v28.bind_id == v269)) then
+				v28 = nil;
+			else
+				v28 = {bind_id=v269,cx=(v277 + v274 + 4),cy=(v1008 + 12),opened_time=globals.realtime()};
+				v30 = true;
+			end
+		end
+	end
+	local v291 = math.floor(160 + (v67[v268] * (215 - 160)));
+	local v292 = math.floor(165 + (v67[v268] * (220 - 165)));
+	local v293 = math.floor(175 + (v67[v268] * (230 - 175)));
+	imgui.dl_add_text(v278, v271, v291, v292, v293, 255, v266);
+	local v294 = v269 and v61[v269];
+	if (v294 and v294.key and (v294.key ~= 0)) then
+		local v1017 = get_clean_key_name(v294.key):upper() .. "  " .. get_bind_mode_tag(v294.mode);
+		local v1018 = imgui.calc_text_size(v1017);
+		local v1019 = v278 + v280 + 6;
+		local v1020 = v1018 + 8;
+		local v1021 = v272 + 2;
+		local v1022, v1023, v1024 = v57.menu_color:get();
+		local v1025 = v294.active;
+		imgui.dl_add_rect_filled(v1019, v271, v1019 + v1020, v271 + v1021, (v1025 and v1022) or theme_bg_r, (v1025 and v1023) or theme_bg_g, (v1025 and v1024) or theme_bg_b, (v1025 and 225) or 255, 2);
+		imgui.dl_add_rect(v1019, v271, v1019 + v1020, v271 + v1021, (v1025 and v1022) or theme_border_r, (v1025 and v1023) or theme_border_g, (v1025 and v1024) or theme_border_b, 255, 2, 1);
+		imgui.dl_add_text(v1019 + 4, v271 + 1, (v1025 and 255) or 190, (v1025 and 255) or 195, (v1025 and 255) or 205, 255, v1017);
+	end
+	imgui.set_cursor_screen_pos(v270, v271 + v272 + 4);
+	return v267, v275;
+end
+function custom_slider(v295, v296, v297, v298, v299, v300, v301, v302)
+	local v303, v304 = imgui.get_cursor_screen_pos();
+	local v305 = v302 or 200;
+	local v306 = 2;
+	local v307 = 12;
+	v67[v301] = lerp(v67[v301] or v296, v296, 0.15);
+	local v309 = v67[v301];
+	imgui.dl_add_text(v303, v304, 160, 165, 175, 255, v295);
+	local v310 = (v299 and tostring(math.floor(v296))) or string.format("%.2f", v296);
+	if v300 then
+		v310 = v310 .. v300;
+	end
+	local v311 = imgui.calc_text_size(v310);
+	imgui.dl_add_text((v303 + v305) - v311, v304, 195, 200, 210, 255, v310);
+	v304 = v304 + v307 + 2;
+	imgui.set_cursor_screen_pos(v303, v304 - 2);
+	local v312 = false;
+	if widget_hit("##sl_" .. v301, v305, 8) then
+		v312 = true;
+	end
+	if (imgui.is_mouse_dragging(0) and imgui.is_item_active()) then
+		v312 = true;
+	end
+	local v313 = false;
+	if v312 then
+		local v1026, v1027 = safe_get_mouse();
+		if (v1026 and v1027) then
+			local v1272 = math.max(0, math.min(1, (v1026 - v303) / v305));
+			v296 = v297 + (v1272 * (v298 - v297));
+			if v299 then
+				v296 = math.floor(v296 + 0.5);
+			end
+			v313 = true;
+		end
+	end
+	imgui.dl_add_rect_filled(v303, v304, v303 + v305, v304 + v306, theme_bg_r, theme_bg_g, theme_bg_b, 255, 1);
+	local v314 = math.max(v297, math.min(v298, v309));
+	local v315 = (v314 - v297) / (v298 - v297);
+	v315 = math.max(0, math.min(1, v315));
+	local v316 = v305 * v315;
+	if (v316 > 1) then
+		local v1028, v1029, v1030 = v57.menu_color:get();
+		imgui.dl_add_rect_filled(v303, v304, v303 + v316, v304 + v306, v1028, v1029, v1030, 255, 1);
+		imgui.dl_add_circle_filled(v303 + v316, v304 + (v306 / 2), 3.5, v1028, v1029, v1030, 255);
+	end
+	imgui.set_cursor_screen_pos(v303, v304 + v306 + 3);
+	imgui.dummy(v305, 1);
+	return v296, v313;
+end
+function custom_combo(v317, v318, v319, v320, v321)
+	local v322, v323 = imgui.get_cursor_screen_pos();
+	local v324 = v321 or 200;
+	local v325 = 20;
+	local v326 = v318:get();
+	local v327 = v317 and (v317 ~= "") and not v317:find("^##");
+	if v327 then
+		imgui.dl_add_text(v322, v323, 160, 165, 175, 255, v317);
+		v323 = v323 + 13;
+	end
+	imgui.set_cursor_screen_pos(v322, v323);
+	if widget_hit("##combo_btn_" .. v320, v324, v325) then
+		v69[v320] = not v69[v320];
+		if v69[v320] then
+			for v1362, v1363 in pairs(v69) do
+				if (v1362 ~= v320) then
+					v69[v1362] = false;
+				end
+			end
+			local v1273 = #v319 * 20;
+			local v1274 = v323 + v325;
+			local v1275, v1276 = imgui.get_window_pos();
+			local v1277, v1278 = imgui.get_window_size();
+			if ((v1274 + v1273) > ((v1276 + v1278) - 6)) then
+				v1274 = v323 - v1273;
+				if (v1274 < (v1276 + 6)) then
+					v1274 = v1276 + 6;
+				end
+			end
+			v7 = {cx=v322,cy=v1274,box_w=v324,options=v319,combo_key=v320,current_idx=v326,var_ref=v318};
+		else
+			v7 = nil;
+		end
+	end
+	local v328 = imgui.is_item_hovered();
+	imgui.dl_add_rect_filled(v322, v323, v322 + v324, v323 + v325, theme_bg_r, theme_bg_g, theme_bg_b, 255, 2);
+	imgui.dl_add_rect(v322, v323, v322 + v324, v323 + v325, theme_border_r, theme_border_g, theme_border_b, 255, 2, 1);
+	local v329 = v319[v326 + 1] or "None";
+	imgui.dl_add_text(v322 + 8, v323 + 3, 215, 220, 225, 255, v329);
+	local v330 = (v328 and 255) or 150;
+	imgui.dl_add_line((v322 + v324) - 12, v323 + 8, (v322 + v324) - 9, v323 + 11, v330, v330, v330, 255, 1.2);
+	imgui.dl_add_line((v322 + v324) - 9, v323 + 11, (v322 + v324) - 6, v323 + 7, v330, v330, v330, 255, 1.2);
+	imgui.set_cursor_screen_pos(v322, v323 + v325 + 3);
+	imgui.dummy(v324, 1);
+	return v326;
+end
+function render_active_dropdown()
+	if not v7 then
+		return;
+	end
+	local v331, v332 = safe_get_mouse();
+	local v333 = false;
+	pcall(function()
+		v333 = input.is_button_pressed(1);
+	end);
+	local v334 = v7.cx;
+	local v335 = v7.cy;
+	local v336 = v7.box_w;
+	local v337 = v7.options;
+	local v338 = v7.combo_key;
+	local v339 = v7.current_idx;
+	local v340 = v7.var_ref;
+	local v341 = 20;
+	local v342 = #v337 * v341;
+	local v343, v344, v345 = v57.menu_color:get();
+	imgui.dl_add_rect_filled(v334, v335, v334 + v336, v335 + v342, theme_card_r, theme_card_g, theme_card_b, 255, 3);
+	imgui.dl_add_rect(v334, v335, v334 + v336, v335 + v342, v343, v344, v345, 255, 3, 1.2);
+	if v333 then
+		local v1032 = (v331 >= v334) and (v331 <= (v334 + v336)) and (v332 >= v335) and (v332 <= (v335 + v342));
+		if not v1032 then
+			v69[v338] = false;
+			v7 = nil;
+			return;
+		end
+	end
+	for v877, v878 in ipairs(v337) do
+		local v879 = v335 + ((v877 - 1) * v341);
+		imgui.set_cursor_screen_pos(v334, v879);
+		if imgui.invisible_button("##deferred_opt_" .. v338 .. "_" .. v877, v336, v341) then
+			v340:set(v877 - 1);
+			v69[v338] = false;
+			v7 = nil;
+			break;
+		end
+		local v880 = imgui.is_item_hovered();
+		if v880 then
+			imgui.dl_add_rect_filled(v334 + 1, v879 + 1, (v334 + v336) - 1, (v879 + v341) - 1, v343, v344, v345, 95, 2);
+		end
+		local v881 = v339 == (v877 - 1);
+		local v882 = (v881 and v343) or 190;
+		local v883 = (v881 and v344) or 195;
+		local v884 = (v881 and v345) or 205;
+		imgui.dl_add_text(v334 + 8, v879 + 3, v882, v883, v884, 255, v878);
+	end
+end
+function render_bind_popup(v346, v347, v348, v349)
+	if not v28 then
+		return;
+	end
+	local v350 = v28.bind_id;
+	local v351 = v61[v350];
+	if not v351 then
+		v28 = nil;
+		return;
+	end
+	if v30 then
+		local v1033 = false;
+		pcall(function()
+			v1033 = input.is_button_down(1) or input.is_button_down(2);
+		end);
+		if not v1033 then
+			v30 = false;
+		end
+	end
+	local v352, v353 = render.get_screen_size();
+	local v354 = 176 * v346;
+	local v355 = 134 * v346;
+	local v356 = v28.cx;
+	local v357 = v28.cy;
+	if ((v356 + v354) > (v352 - 6)) then
+		v356 = (v352 - v354) - 6;
+	end
+	if ((v357 + v355) > (v353 - 6)) then
+		v357 = (v353 - v355) - 6;
+	end
+	if (v356 < 6) then
+		v356 = 6;
+	end
+	if (v357 < 6) then
+		v357 = 6;
+	end
+	imgui.set_next_window_pos(v356, v357, imgui.Cond_Always);
+	imgui.set_next_window_size(v354, v355, imgui.Cond_Always);
+	imgui.push_style_color(imgui.Col_WindowBg, 0, 0, 0, 0);
+	imgui.push_style_color(imgui.Col_Border, 0, 0, 0, 0);
+	imgui.push_style_var_float(imgui.StyleVar_WindowRounding, 0);
+	imgui.push_style_var_float(imgui.StyleVar_WindowBorderSize, 0);
+	imgui.push_style_var(imgui.StyleVar_WindowPadding, 0, 0);
+	local v358 = get_flag("WindowFlags_NoTitleBar") + get_flag("WindowFlags_NoResize") + get_flag("WindowFlags_NoMove") + get_flag("WindowFlags_NoCollapse") + get_flag("WindowFlags_NoScrollbar") + get_flag("WindowFlags_NoSavedSettings");
+	local v359, v360, v361, v362 = v356, v357, v354, v355;
+	local v363 = imgui.begin("##bind_popup_" .. tostring(v350), v358);
+	if v363 then
+		local v1034, v1035 = imgui.get_window_pos();
+		local v1036, v1037 = imgui.get_window_size();
+		v359, v360, v361, v362 = v1034, v1035, v1036, v1037;
+		local v1038 = 8 * v346;
+		local v1039 = 20 * v346;
+		local v1040 = 4 * v346;
+		imgui.dl_add_rect_filled(v1034 + 1, v1035 + 1, (v1034 + v1036) - 1, (v1035 + v1037) - 1, theme_card_r, theme_card_g, theme_card_b, 252, 5);
+		imgui.dl_add_rect(v1034 + 0.5, v1035 + 0.5, (v1034 + v1036) - 0.5, (v1035 + v1037) - 0.5, theme_border_r, theme_border_g, theme_border_b, 255, 5, 1);
+		imgui.dl_add_rect_filled(v1034 + 2, v1035 + 1, (v1034 + v1036) - 2, v1035 + 3, v347, v348, v349, 255, 5);
+		draw_mini_icon("key", v1034 + v1038, v1035 + (7 * v346), 11 * v346, v347, v348, v349, 255);
+		imgui.dl_add_text(v1034 + v1038 + (16 * v346), v1035 + (6 * v346), theme_text_r, theme_text_g, theme_text_b, 255, v351.name or v350);
+		local v1041 = ((v1034 + v1036) - v1038) - (8 * v346);
+		imgui.set_cursor_screen_pos(v1041, v1035 + (5 * v346));
+		if imgui.invisible_button("##bind_popup_close_" .. tostring(v350), 12 * v346, 12 * v346) then
+			v28 = nil;
+		end
+		imgui.dl_add_line(v1041 + 2, v1035 + (8 * v346), v1041 + (9 * v346), v1035 + (15 * v346), 170, 175, 185, 255, 1.2);
+		imgui.dl_add_line(v1041 + (9 * v346), v1035 + (8 * v346), v1041 + 2, v1035 + (15 * v346), 170, 175, 185, 255, 1.2);
+		local v1042 = v1035 + (25 * v346);
+		local v1043 = "Key: " .. get_clean_key_name(v351.key):upper();
+		imgui.set_cursor_screen_pos(v1034 + v1038, v1042);
+		if custom_button(capture_label(v1043), v1036 - (v1038 * 2), v1039, false, "bkey_" .. tostring(v350)) then
+			begin_key_capture(v351.name or v350, function(v1364)
+				v351.key = v1364;
+				v351.was_down = true;
+			end);
+		end
+		v351.waiting = is_capturing();
+		v1042 = v1042 + v1039 + v1040;
+		local v1045 = ((v1036 - (v1038 * 2)) - (v1040 * 2)) / 3;
+		local v1046 = {"Toggle","Hold","Always"};
+		for v1177 = 0, 2 do
+			local v1178 = v1034 + v1038 + (v1177 * (v1045 + v1040));
+			imgui.set_cursor_screen_pos(v1178, v1042);
+			if imgui.invisible_button("##bmode_" .. tostring(v350) .. "_" .. v1177, v1045, v1039) then
+				v351.mode = v1177;
+				if (v1177 == 0) then
+					v351.was_down = false;
+				end
+			end
+			local v1179 = v351.mode == v1177;
+			local v1180 = imgui.is_item_hovered();
+			imgui.dl_add_rect_filled(v1178, v1042, v1178 + v1045, v1042 + v1039, (v1179 and v347) or theme_bg_r, (v1179 and v348) or theme_bg_g, (v1179 and v349) or theme_bg_b, (v1179 and 235) or (v1180 and 200) or 255, 3);
+			imgui.dl_add_rect(v1178, v1042, v1178 + v1045, v1042 + v1039, (v1179 and v347) or theme_border_r, (v1179 and v348) or theme_border_g, (v1179 and v349) or theme_border_b, 255, 3, 1);
+			local v1181 = imgui.calc_text_size(v1046[v1177 + 1]);
+			imgui.dl_add_text(v1178 + ((v1045 - v1181) * 0.5), v1042 + (3 * v346), (v1179 and 255) or 180, (v1179 and 255) or 185, (v1179 and 255) or 195, 255, v1046[v1177 + 1]);
+		end
+		v1042 = v1042 + v1039 + v1040;
+		local v1047 = ((v1036 - (v1038 * 2)) - v1040) * 0.5;
+		imgui.set_cursor_screen_pos(v1034 + v1038, v1042);
+		if custom_button("Unbind", v1047, v1039, false, "bunbind_" .. tostring(v350)) then
+			v351.key = 0;
+			v351.was_down = false;
+			v351.active = (v351.ui_ref and v351.ui_ref:get()) or false;
+		end
+		imgui.set_cursor_screen_pos(v1034 + v1038 + v1047 + v1040, v1042);
+		if custom_button("Close", v1047, v1039, false, "bclose_" .. tostring(v350)) then
+			v28 = nil;
+		end
+		v1042 = v1042 + v1039 + v1040;
+		imgui.dl_add_text(v1034 + v1038, v1042, 125, 130, 140, 255, "Esc or click outside to close");
+	end
+	imgui.end_window();
+	imgui.pop_style_color(2);
+	imgui.pop_style_var(3);
+	if v363 then
+		local v1048 = false;
+		pcall(function()
+			v1048 = input.is_button_pressed(27);
+		end);
+		if (v1048 and not is_capturing()) then
+			v28 = nil;
+		end
+	end
+	if (v28 and not v30) then
+		local v1049, v1050 = safe_get_mouse();
+		local v1051, v1052 = false, false;
+		pcall(function()
+			v1051 = input.is_button_pressed(1);
+		end);
+		pcall(function()
+			v1052 = input.is_button_pressed(2);
+		end);
+		if (v1051 or v1052) then
+			if ((v1049 < v359) or (v1049 > (v359 + v361)) or (v1050 < v360) or (v1050 > (v360 + v362))) then
+				v28 = nil;
+			end
+		end
+	end
+end
+function custom_button(v364, v365, v366, v367, v368)
+	local v369, v370 = imgui.get_cursor_screen_pos();
+	local v371 = false;
+	imgui.set_cursor_screen_pos(v369, v370);
+	if widget_hit("##btn_" .. v364 .. tostring(v368 or ""), v365, v366) then
+		v371 = true;
+	end
+	local v372 = imgui.is_item_hovered();
+	local v373 = imgui.is_item_active();
+	local v374, v375, v376 = v57.menu_color:get();
+	local v377, v378, v379, v380;
+	local v381, v382, v383;
+	if v367 then
+		v377, v378, v379 = v374, v375, v376;
+		v380 = (v373 and 190) or (v372 and 255) or 225;
+		v381, v382, v383 = v374, v375, v376;
+	else
+		v377, v378, v379 = theme_bg_r, theme_bg_g, theme_bg_b;
+		if (v372 and not v373) then
+			v377 = math.min(255, theme_bg_r + 14);
+			v378 = math.min(255, theme_bg_g + 14);
+			v379 = math.min(255, theme_bg_b + 14);
+		end
+		v380 = 255;
+		v381, v382, v383 = theme_border_r, theme_border_g, theme_border_b;
+	end
+	imgui.dl_add_rect_filled(v369, v370, v369 + v365, v370 + v366, v377, v378, v379, v380, 3);
+	imgui.dl_add_rect(v369, v370, v369 + v365, v370 + v366, v381, v382, v383, 255, 3, 1);
+	local v384, v385, v386 = 205, 210, 215;
+	if v367 then
+		v384, v385, v386 = 255, 255, 255;
+	elseif v372 then
+		v384, v385, v386 = 228, 232, 238;
+	end
+	local v387, v388 = imgui.calc_text_size(v364);
+	imgui.dl_add_text(v369 + ((v365 - v387) * 0.5), v370 + ((v366 - v388) * 0.5), v384, v385, v386, 255, v364);
+	imgui.set_cursor_screen_pos(v369, v370 + v366 + 3);
+	imgui.dummy(v365, 1);
+	return v371;
+end
+function draw_bind_row(v389, v390, v391, v392, v393, v394, v395, v396, v397)
+	local v398 = 18 * v394;
+	local v399 = math.floor(v391 * 0.42);
+	imgui.dl_add_text(v389 + (6 * v394), v390 + (2 * v394), theme_text_r, theme_text_g, theme_text_b, 235, v393.name or v392);
+	local v400 = 62 * v394;
+	imgui.set_cursor_screen_pos(v389 + v399, v390);
+	if custom_button(capture_label(get_clean_key_name(v393.key):upper()), v400, v398, false, "krow_key_" .. v392) then
+		begin_key_capture(v393.name or v392, function(v1182)
+			v393.key = v1182;
+			v393.was_down = true;
+		end);
+	end
+	local v401 = v389 + v399 + v400 + (4 * v394);
+	local v402 = 56 * v394;
+	imgui.set_cursor_screen_pos(v401, v390);
+	if custom_button(get_bind_mode_name(v393.mode), v402, v398, false, "krow_mode_" .. v392) then
+		v393.mode = (v393.mode + 1) % 3;
+		if (v393.mode == 0) then
+			v393.was_down = false;
+		end
+	end
+	local v403 = v401 + v402 + (4 * v394);
+	imgui.set_cursor_screen_pos(v403, v390);
+	if custom_button("x", 16 * v394, v398, false, "krow_clr_" .. v392) then
+		v393.key = 0;
+		v393.was_down = false;
+		v393.active = (v393.ui_ref and v393.ui_ref:get()) or false;
+	end
+	if ((v393.key ~= 0) and v393.active) then
+		imgui.dl_add_rect_filled(v389, v390, v389 + (2 * v394), v390 + v398, v395, v396, v397, 255, 1);
+	end
+end
+function custom_color_picker(v404, v405, v406)
+	local v407, v408 = imgui.get_cursor_screen_pos();
+	local v409 = 26;
+	local v410 = 12;
+	local v411 = v407 + 150;
+	local v412 = v408 + 2;
+	imgui.dl_add_text(v407, v408, 140, 150, 160, 255, v404);
+	imgui.set_cursor_screen_pos(v411, v412);
+	if widget_hit("##color_toggle_" .. v406, v409, v410) then
+		v68[v406] = not v68[v406];
+	end
+	local v413, v414, v415, v416 = v405:get();
+	imgui.dl_add_rect_filled(v411, v412, v411 + v409, v412 + v410, v413, v414, v415, 255, 2);
+	imgui.dl_add_rect(v411, v412, v411 + v409, v412 + v410, theme_border_r, theme_border_g, theme_border_b, 255, 2, 1);
+	if v68[v406] then
+		local v1058 = v411 - 120;
+		local v1059 = v412 + 16;
+		local v1060 = 10;
+		local v1061 = 1;
+		local v1062 = 12;
+		local v1063 = 6;
+		local v1064 = (v1062 * v1060) + ((v1062 - 1) * v1061);
+		local v1065 = (v1063 * v1060) + ((v1063 - 1) * v1061);
+		imgui.dl_add_rect_filled(v1058 - 6, v1059 - 6, v1058 + v1064 + 6, v1059 + v1065 + 6, theme_card_r, theme_card_g, theme_card_b, 245, 4);
+		imgui.dl_add_rect(v1058 - 6, v1059 - 6, v1058 + v1064 + 6, v1059 + v1065 + 6, theme_border_r, theme_border_g, theme_border_b, 200, 4, 1);
+		for v1185 = 1, v1063 do
+			for v1284 = 1, v1062 do
+				local v1285 = v1058 + ((v1284 - 1) * (v1060 + v1061));
+				local v1286 = v1059 + ((v1185 - 1) * (v1060 + v1061));
+				local v1287, v1288, v1289 = get_light_palette_color(v1284, v1185);
+				imgui.set_cursor_screen_pos(v1285, v1286);
+				if widget_hit("##color_cell_" .. v406 .. "_" .. v1185 .. "_" .. v1284, v1060, v1060) then
+					v405:set(v1287, v1288, v1289, 255);
+					v68[v406] = false;
+				end
+				imgui.dl_add_rect_filled(v1285, v1286, v1285 + v1060, v1286 + v1060, v1287, v1288, v1289, 255, 1);
+			end
+		end
+		imgui.set_cursor_screen_pos(v407, v1059 + v1065 + 8);
+		imgui.dummy(1, 1);
+	else
+		imgui.set_cursor_screen_pos(v407, v408 + 18);
+		imgui.dummy(1, 1);
+	end
+end
+function draw_card(v417, v418, v419, v420, v421)
+	local v422, v423, v424 = v57.menu_color:get();
+	imgui.dl_add_rect_filled(v418, v419, v418 + v420, v419 + v421, theme_card_r, theme_card_g, theme_card_b, 255, 6);
+	imgui.dl_add_rect(v418, v419, v418 + v420, v419 + v421, theme_border_r, theme_border_g, theme_border_b, 255, 6, 1.2);
+	imgui.dl_add_text(v418 + 12, v419 + 8, theme_text_r, theme_text_g, theme_text_b, 255, v417);
+	imgui.dl_add_rect_filled(v418 + 12, v419 + 23, v418 + 35, v419 + 25, v422, v423, v424, 255);
+end
+function draw_custom_card_header(v425, v426, v427, v428, v429)
+	local v430 = v429;
+	if not v430 then
+		local v1066 = {0.5,0.6,0.7,0.8,0.9,1,1.1,1.2,1.3,1.4,1.5};
+		v430 = v1066[v57.gui_scale:get() + 1] or 1;
+	end
+	local v431 = string.upper(v425);
+	local v432, v433 = imgui.calc_text_size(v431);
+	local v434, v435, v436 = v57.menu_color:get();
+	imgui.dl_add_text(v426 + ((v428 - v432) * 0.5), v427, theme_text_r, theme_text_g, theme_text_b, 240, v431);
+	imgui.dl_add_line(v426, v427 + (15 * v430), v426 + v428, v427 + (15 * v430), theme_border_r, theme_border_g, theme_border_b, 200, 1);
+	if v57.menu_glow:get() then
+		imgui.dl_add_rect_filled((v426 + ((v428 - v432) * 0.5)) - 5, v427 + (14 * v430), v426 + ((v428 + v432) * 0.5) + 5, v427 + (16 * v430), v434, v435, v436, 220, 1);
+	end
+end
+function draw_photo_column_header(v437, v438, v439, v440)
+	local v441, v442, v443 = v57.menu_color:get();
+	imgui.dl_add_text(v438 + 10, v439, 225, 230, 240, 255, v437);
+	imgui.dl_add_rect_filled(v438 + 3, v439 + 2, v438 + 6, v439 + 12, v441, v442, v443, 255, 1);
+	imgui.dl_add_line(v438 + 3, v439 + 16, (v438 + v440) - 3, v439 + 16, v441, v442, v443, 75, 1);
+end
+function draw_memesense_tab_icon(v444, v445, v446, v447, v448)
+	local v449 = v448 or 1;
+	local v450 = v447 or 0;
+	local v451 = math.floor(130 + (v450 * 125));
+	local v452, v453, v454 = v451, v451, v451;
+	local v455, v456, v457 = v57.menu_color:get();
+	if (v450 > 0.05) then
+		v452 = math.floor((130 * (1 - v450)) + (v455 * v450));
+		v453 = math.floor((130 * (1 - v450)) + (v456 * v450));
+		v454 = math.floor((130 * (1 - v450)) + (v457 * v450));
+	end
+	local v458 = 1.5 * v449;
+	if (v444 == 0) then
+		imgui.dl_add_triangle_filled(v445, v446 - (7.5 * v449), v445 - (8 * v449), v446 - (0.5 * v449), v445 + (8 * v449), v446 - (0.5 * v449), v452, v453, v454, 255);
+		imgui.dl_add_rect(v445 - (5.5 * v449), v446 - (0.5 * v449), v445 + (5.5 * v449), v446 + (7 * v449), v452, v453, v454, 255, 1, v458);
+		imgui.dl_add_rect(v445 - (1.8 * v449), v446 + (2.5 * v449), v445 + (1.8 * v449), v446 + (7 * v449), v452, v453, v454, 255, 1, v458);
+	elseif (v444 == 1) then
+		imgui.dl_add_circle(v445, v446, 5.5 * v449, v452, v453, v454, 255, 16, v458);
+		imgui.dl_add_circle_filled(v445, v446, 1.4 * v449, v452, v453, v454, 255);
+		imgui.dl_add_line(v445 - (9 * v449), v446, v445 - (3.5 * v449), v446, v452, v453, v454, 255, v458);
+		imgui.dl_add_line(v445 + (3.5 * v449), v446, v445 + (9 * v449), v446, v452, v453, v454, 255, v458);
+		imgui.dl_add_line(v445, v446 - (9 * v449), v445, v446 - (3.5 * v449), v452, v453, v454, 255, v458);
+		imgui.dl_add_line(v445, v446 + (3.5 * v449), v445, v446 + (9 * v449), v452, v453, v454, 255, v458);
+	elseif (v444 == 2) then
+		imgui.dl_add_triangle_filled(v445 + (1.5 * v449), v446 - (8 * v449), v445 - (6.5 * v449), v446 + (1.5 * v449), v445 + (1.5 * v449), v446 + (1.5 * v449), v452, v453, v454, 255);
+		imgui.dl_add_triangle_filled(v445 - (1.5 * v449), v446 + (8 * v449), v445 + (6.5 * v449), v446 - (1.5 * v449), v445 - (1.5 * v449), v446 - (1.5 * v449), v452, v453, v454, 255);
+	elseif (v444 == 3) then
+		draw_arc(v445, v446, 8 * v449, math.pi, math.pi * 2, 16, v452, v453, v454, 255, v458, 5.5 * v449);
+		draw_arc(v445, v446, 8 * v449, 0, math.pi, 16, v452, v453, v454, 255, v458, 5.5 * v449);
+		imgui.dl_add_circle_filled(v445, v446, 2.4 * v449, v452, v453, v454, 255);
+		imgui.dl_add_circle_filled(v445, v446, 1 * v449, theme_bg_r, theme_bg_g, theme_bg_b, 255);
+	elseif (v444 == 4) then
+		imgui.dl_add_circle(v445, v446, 4.6 * v449, v452, v453, v454, 255, 18, v458);
+		for v1590 = 0, 7 do
+			local v1591 = (v1590 * math.pi) / 4;
+			imgui.dl_add_line(v445 + (math.cos(v1591) * 5.2 * v449), v446 + (math.sin(v1591) * 5.2 * v449), v445 + (math.cos(v1591) * 8 * v449), v446 + (math.sin(v1591) * 8 * v449), v452, v453, v454, 255, v458);
+		end
+		imgui.dl_add_circle_filled(v445, v446, 1.6 * v449, v452, v453, v454, 255);
+	end
+end
+function draw_custom_scope_scene()
+	if not engine.is_in_game() then
+		return;
+	end
+	if not is_scoped() then
+		v66._scope_line_anim = v66._scope_line_anim + ((0 - v66._scope_line_anim) * 0.25);
+		if (v66._scope_line_anim < 0.01) then
+			return;
+		end
+	else
+		v66._scope_line_anim = v66._scope_line_anim + ((1 - v66._scope_line_anim) * 0.18);
+	end
+	local v459, v460 = render.get_screen_size();
+	local v461, v462 = v459 * 0.5, v460 * 0.5;
+	local v463 = v66._scope_line_anim;
+	local v464 = v57.scope_type:get();
+	local v465 = v57.scope_len:get() * v463;
+	local v466 = v57.scope_gap:get();
+	local v467 = v57.scope_thick:get();
+	local v468, v469, v470 = v57.scope_inner:get();
+	local v471 = math.floor(v463 * 255);
+	local v472, v473, v474 = v57.scope_outer:get();
+	local v475 = 0;
+	if (v464 == 0) then
+		local v1069 = v466 / 2;
+		render.gradient_rect(v461 - (v467 * 0.5), (v462 - v466) - v465, v467, v465, v472, v473, v474, v475, v468, v469, v470, v471, false);
+		render.gradient_rect(v461 - (v467 * 0.5), v462 - v466, v467, v1069, v468, v469, v470, v471, v472, v473, v474, v475, false);
+		render.gradient_rect(v461 - (v467 * 0.5), v462 + v466, v467, v465, v468, v469, v470, v471, v472, v473, v474, v475, false);
+		render.gradient_rect(v461 - (v467 * 0.5), (v462 + v466) - v1069, v467, v1069, v472, v473, v474, v475, v468, v469, v470, v471, false);
+		render.gradient_rect((v461 - v466) - v465, v462 - (v467 * 0.5), v465, v467, v472, v473, v474, v475, v468, v469, v470, v471, true);
+		render.gradient_rect(v461 - v466, v462 - (v467 * 0.5), v1069, v467, v468, v469, v470, v471, v472, v473, v474, v475, true);
+		render.gradient_rect(v461 + v466, v462 - (v467 * 0.5), v465, v467, v468, v469, v470, v471, v472, v473, v474, v475, true);
+		render.gradient_rect((v461 + v466) - v1069, v462 - (v467 * 0.5), v1069, v467, v472, v473, v474, v475, v468, v469, v470, v471, true);
+	else
+		render.line(0, v462, v459, v462, v468, v469, v470, v471, v467);
+		render.line(v461, 0, v461, v460, v468, v469, v470, v471, v467);
+	end
+end
+local v77 = schema.get_offset("C_CSPlayerPawn", "m_fFlags") or schema.get_offset("C_BaseEntity", "m_fFlags") or 968;
+local v78 = schema.get_offset("C_BaseEntity", "m_hGroundEntity") or schema.get_offset("C_CSPlayerPawn", "m_hGroundEntity");
+local v79 = schema.get_offset("C_BaseEntity", "m_MoveType") or schema.get_offset("C_CSPlayerPawn", "m_MoveType") or schema.get_offset("C_BaseEntity", "m_nActualMoveType") or schema.get_offset("C_BaseEntity", "m_nMoveType");
+local v80 = 9;
+function is_on_ladder(v476)
+	if (not v476 or not v79) then
+		return false;
+	end
+	local v477 = v476:get_address();
+	if (not v477 or (v477 == 0)) then
+		return false;
+	end
+	local v478 = 0;
+	pcall(function()
+		v478 = memory.read_u8(v477 + v79) or 0;
+	end);
+	return v478 == v80;
+end
+function get_ground_state(v479)
+	if not v479 then
+		return "ground";
+	end
+	local v480 = v479:get_address();
+	if (not v480 or (v480 == 0)) then
+		return "ground";
+	end
+	if (v57.aa_ladder_check:get() and is_on_ladder(v479)) then
+		return "ladder";
+	end
+	local v481 = nil;
+	if v77 then
+		local v1070 = 0;
+		pcall(function()
+			v1070 = memory.read_u32(v480 + v77) or 0;
+		end);
+		v481 = v12(v1070, 1) ~= 0;
+	end
+	if (not v481 and v78) then
+		local v1071 = 0;
+		pcall(function()
+			v1071 = memory.read_u32(v480 + v78) or 0;
+		end);
+		if ((v1071 ~= 0) and (v1071 ~= 4294967295)) then
+			v481 = true;
+		end
+	end
+	if (v481 == nil) then
+		local v1072 = safe_get_velocity(v479);
+		v481 = math.abs(v1072.z) < 1;
+	end
+	return (v481 and "ground") or "air";
+end
+function get_current_aa_condition(v482)
+	local v483 = get_ground_state(v482);
+	if (v483 == "air") then
+		return 2;
+	end
+	if ((v483 == "ladder") and v57.aa_ladder_as_air:get()) then
+		return 2;
+	end
+	local v484 = safe_get_velocity(v482);
+	local v485 = math.sqrt((v484.x * v484.x) + (v484.y * v484.y));
+	if (v485 > (v57.aa_move_speed:get() or 10)) then
+		return 1;
+	end
+	return 0;
+end
+function get_nearest_enemy_yaw(v486)
+	local v487 = entitylist.get_enemies();
+	local v488 = v486:get_origin();
+	if not v488 then
+		return nil;
+	end
+	local v489 = nil;
+	local v490 = 999999;
+	for v885, v886 in ipairs(v487) do
+		if (v886 and v886:is_alive() and v886:is_enemy()) then
+			local v1186 = v886:get_origin();
+			if v1186 then
+				local v1368 = v1186.x - v488.x;
+				local v1369 = v1186.y - v488.y;
+				local v1370 = math.sqrt((v1368 * v1368) + (v1369 * v1369));
+				if (v1370 < v490) then
+					v490 = v1370;
+					v489 = v886;
+				end
+			end
+		end
+	end
+	if v489 then
+		local v1073 = v489:get_origin();
+		local v1074 = v1073.x - v488.x;
+		local v1075 = v1073.y - v488.y;
+		local v1076 = math.deg(math.atan2(v1075, v1074));
+		while v1076 > 180 do
+			v1076 = v1076 - 360;
+		end
+		while v1076 < -180 do
+			v1076 = v1076 + 360;
+		end
+		return v1076;
+	end
+	return nil;
+end
+function handle_manual_aa()
+	if ((v57.aa_manual_left:get() ~= 0) and input.is_button_pressed(v57.aa_manual_left:get())) then
+		v57.aa_manual_state:set(1);
+	elseif ((v57.aa_manual_right:get() ~= 0) and input.is_button_pressed(v57.aa_manual_right:get())) then
+		v57.aa_manual_state:set(2);
+	elseif ((v57.aa_manual_back:get() ~= 0) and input.is_button_pressed(v57.aa_manual_back:get())) then
+		v57.aa_manual_state:set(0);
+	end
+end
+function get_aa_pitch(v491, v492)
+	if not v492 then
+		return v491;
+	end
+	local v493 = get_current_aa_condition(v492);
+	local v494, v495, v496, v497;
+	if (v493 == 0) then
+		v494 = v57.aa_pitch_std:get();
+		v495 = v57.aa_pitch_val_std:get();
+		v496 = v57.aa_jitter_std:get();
+		v497 = v57.aa_jitter_val_std:get();
+	elseif (v493 == 1) then
+		v494 = v57.aa_pitch_mov:get();
+		v495 = v57.aa_pitch_val_mov:get();
+		v496 = v57.aa_jitter_mov:get();
+		v497 = v57.aa_jitter_val_mov:get();
+	else
+		v494 = v57.aa_pitch_air:get();
+		v495 = v57.aa_pitch_val_air:get();
+		v496 = v57.aa_jitter_air:get();
+		v497 = v57.aa_jitter_val_air:get();
+	end
+	if (v494 == 0) then
+		return v491;
+	end
+	local v498 = v491;
+	if (v494 == 1) then
+		v498 = 89;
+	elseif (v494 == 2) then
+		v498 = -89;
+	elseif (v494 == 3) then
+		v498 = 0;
+	elseif (v494 == 4) then
+		v498 = v495;
+	end
+	if v496 then
+		local v1077 = v497;
+		if v57.aa_pitch_jitter:get() then
+			v1077 = v57.aa_pitch_jitter_val:get();
+		end
+		local v1078 = 1;
+		if v57.aa_jitter_random:get() then
+			v1078 = ((math.random() < 0.5) and -1) or 1;
+		else
+			v66.pitch_jitter_state = not v66.pitch_jitter_state;
+			v1078 = (v66.pitch_jitter_state and 1) or -1;
+		end
+		v498 = v498 + (v1078 * v1077);
+	end
+	if (v498 > 89) then
+		v498 = 89;
+	end
+	if (v498 < -89) then
+		v498 = -89;
+	end
+	return v498;
+end
+function get_aa_yaw(v499, v500)
+	if not v500 then
+		return v499;
+	end
+	local v501 = get_current_aa_condition(v500);
+	local v502, v503, v504, v505, v506, v507;
+	if (v501 == 0) then
+		v502 = v57.aa_yaw_std:get();
+		v503 = v57.aa_yaw_val_std:get();
+		v504 = v57.aa_jitter_std:get();
+		v505 = v57.aa_jitter_val_std:get();
+		v506 = v57.aa_spin_std:get();
+		v507 = v57.aa_spin_val_std:get();
+	elseif (v501 == 1) then
+		v502 = v57.aa_yaw_mov:get();
+		v503 = v57.aa_yaw_val_mov:get();
+		v504 = v57.aa_jitter_mov:get();
+		v505 = v57.aa_jitter_val_mov:get();
+		v506 = v57.aa_spin_mov:get();
+		v507 = v57.aa_spin_val_mov:get();
+	else
+		v502 = v57.aa_yaw_air:get();
+		v503 = v57.aa_yaw_val_air:get();
+		v504 = v57.aa_jitter_air:get();
+		v505 = v57.aa_jitter_val_air:get();
+		v506 = v57.aa_spin_air:get();
+		v507 = v57.aa_spin_val_air:get();
+	end
+	local v508 = v499;
+	if v57.aa_at_targets:get() then
+		local v1079 = get_nearest_enemy_yaw(v500);
+		if v1079 then
+			v508 = v1079;
+		end
+	end
+	local v509 = is_bind_active("aa_manual_left");
+	local v510 = is_bind_active("aa_manual_right");
+	local v511 = is_bind_active("aa_manual_back");
+	local v512 = is_bind_active("aa_manual_forward");
+	local v513 = false;
+	local v514 = false;
+	pcall(function()
+		v513 = input.is_button_down(65);
+		v514 = input.is_button_down(68);
+	end);
+	if v509 then
+		v508 = v499 - 90;
+	elseif v510 then
+		v508 = v499 + 90;
+	elseif v511 then
+		v508 = v499 + 180;
+	elseif v512 then
+		v508 = v499;
+	elseif v57.aa_manual_move:get() then
+		if v513 then
+			v508 = v499 + 90;
+		elseif v514 then
+			v508 = v499 - 90;
+		elseif (v502 == 1) then
+			v508 = v508 + 180;
+		elseif (v502 == 2) then
+			v508 = v508 + 0;
+		elseif (v502 == 3) then
+			v508 = v508 + v503;
+		end
+	elseif (v502 == 1) then
+		v508 = v508 + 180;
+	elseif (v502 == 2) then
+		v508 = v508 + 0;
+	elseif (v502 == 3) then
+		v508 = v508 + v503;
+	end
+	if v57.aa_desync_enable:get() then
+		local v1080 = v57.aa_desync_amount:get() or 58;
+		local v1081 = v57.aa_desync_side:get();
+		local v1082 = -1;
+		if (v1081 == 1) then
+			v1082 = 1;
+		elseif (v1081 == 2) then
+			v66.desync_flip = not v66.desync_flip;
+			v1082 = (v66.desync_flip and 1) or -1;
+		end
+		local v1083 = v57.aa_desync_key:get();
+		if (v1083 and (v1083 ~= 0)) then
+			local v1291 = false;
+			pcall(function()
+				v1291 = input.is_button_down(v1083);
+			end);
+			if v1291 then
+				v1082 = -v1082;
+			end
+		end
+		v508 = v508 + (v1080 * v1082);
+	end
+	local v515 = (v57.aa_yaw_inverted:get() and -1) or 1;
+	if v504 then
+		if v57.aa_jitter_random:get() then
+			local v1292 = math.random();
+			v508 = v508 + (((v1292 * 2) - 1) * v505 * v515);
+		else
+			v66.yaw_jitter_state = not v66.yaw_jitter_state;
+			v508 = v508 + ((v66.yaw_jitter_state and (v505 * v515)) or -(v505 * v515));
+		end
+	end
+	if v506 then
+		v66.yaw_spin_angle = (v66.yaw_spin_angle + (v507 * v515)) % 360;
+		v508 = v508 + v66.yaw_spin_angle;
+	end
+	while v508 > 180 do
+		v508 = v508 - 360;
+	end
+	while v508 < -180 do
+		v508 = v508 + 360;
+	end
+	return v508;
+end
+function is_visible(v516, v517, v518)
+	local v519, v520 = 1, 0;
+	pcall(function()
+		v519, v520 = trace.line(v516.x, v516.y, v516.z, v517.x, v517.y, v517.z, v518);
+	end);
+	return (v519 >= 0.99) or (v520 and (v520 ~= 0));
+end
+local v81 = {58,-58,0,116,-116};
+function get_enemy_eye_yaw(v521)
+	local v522 = v521:get_origin();
+	local v523 = v521:get_eye_position();
+	if (not v522 or not v523) then
+		return nil;
+	end
+	local v524, v525 = v523.x - v522.x, v523.y - v522.y;
+	if ((math.abs(v524) < 0.01) and (math.abs(v525) < 0.01)) then
+		return nil;
+	end
+	return math.deg(math.atan2(v525, v524));
+end
+function get_enemy_move_yaw(v526)
+	local v527 = safe_get_velocity(v526);
+	local v528 = math.sqrt((v527.x * v527.x) + (v527.y * v527.y));
+	if (v528 < 5) then
+		return nil;
+	end
+	return math.deg(math.atan2(v527.y, v527.x));
+end
+function resolve_target_pos(v529, v530, v531)
+	if (not v530 or not v529) then
+		return v530;
+	end
+	local v532 = v57.resolver_mode:get();
+	local v533 = v57.resolver_brute_key:get();
+	if (v533 and (v533 ~= 0)) then
+		local v1085 = false;
+		pcall(function()
+			v1085 = input.is_button_down(v533);
+		end);
+		if v1085 then
+			v532 = 2;
+		end
+	end
+	if (v532 == 0) then
+		return v530;
+	end
+	local v534 = v529:get_origin();
+	if not v534 then
+		return v530;
+	end
+	local v535 = get_enemy_eye_yaw(v529);
+	local v536 = nil;
+	if (v532 == 1) then
+		v536 = get_enemy_move_yaw(v529);
+	elseif (v532 == 2) then
+		local v1294 = globals.realtime();
+		local v1295 = (v57.resolver_brute_delay:get() or 8) / 1000;
+		if (not v66.brute_next or (v1294 >= v66.brute_next)) then
+			v66.brute_next = v1294 + v1295;
+			v66.brute_idx = ((v66.brute_idx or 0) % #v81) + 1;
+		end
+		local v1296 = v535 or 0;
+		v536 = v1296 + v81[v66.brute_idx or 1];
+	elseif (v532 == 3) then
+		if v535 then
+			v536 = v535 + (v57.resolver_offset:get() or 58);
+		end
+	end
+	if not v536 then
+		if v57.resolver_fallback_body:get() then
+			local v1297 = nil;
+			pcall(function()
+				if hitbox then
+					v1297 = v529:get_hitbox_position(hitbox.chest);
+				end
+			end);
+			if v1297 then
+				return v1297;
+			end
+		end
+		return v530;
+	end
+	if not v535 then
+		return v530;
+	end
+	local v537 = math.rad(v536 - v535);
+	if (math.abs(v537) < 0.001) then
+		return v530;
+	end
+	local v538, v539 = v530.x - v534.x, v530.y - v534.y;
+	local v540, v541 = math.cos(v537), math.sin(v537);
+	return {x=((v534.x + (v538 * v540)) - (v539 * v541)),y=(v534.y + (v538 * v541) + (v539 * v540)),z=v530.z};
+end
+local v82 = {};
+do
+	local v542 = {{"Head","head",true},{"Neck","neck"},{"Upper Chest","upper_chest"},{"Chest","chest"},{"Lower Chest","lower_chest"},{"Stomach","stomach"},{"Pelvis","pelvis"},{"Left Arm","left_upper_arm"},{"Right Arm","right_upper_arm"},{"Left Leg","left_thigh"},{"Right Leg","right_thigh"}};
+	for v887, v888 in ipairs(v542) do
+		local v889 = nil;
+		pcall(function()
+			v889 = hitbox[v888[2]];
+		end);
+		if (v889 ~= nil) then
+			v82[#v82 + 1] = {name=v888[1],id=v889,is_head=(v888[3] == true)};
+		end
+	end
+	if (#v82 == 0) then
+		v82[1] = {name="Head",id=hitbox.head,is_head=true};
+	end
+end
+local v83 = {};
+for v543, v544 in ipairs(v82) do
+	v83[v543] = v544.name;
+end
+function get_selected_hitbox()
+	local v547 = (v57.aim_hitbox:get() or 0) + 1;
+	return v82[v547] or v82[1];
+end
+function get_target_hitbox(v548)
+	if v548 then
+		local v1088 = nil;
+		pcall(function()
+			v1088 = hitbox.chest;
+		end);
+		return v1088 or hitbox.head;
+	end
+	local v549 = get_selected_hitbox();
+	return v549.id or hitbox.head;
+end
+function get_damage_hg()
+	local v550 = get_selected_hitbox();
+	if (v550 and v550.is_head) then
+		return 0;
+	end
+	return 1;
+end
+function get_min_damage(v551, v552, v553)
+	local v554;
+	if (v551 == 0) then
+		v554 = v57.min_damage_head:get();
+	else
+		v554 = v57.min_damage_body:get();
+	end
+	if (not v554 or (v554 <= 0)) then
+		v554 = v57.min_damage:get() or 0;
+	end
+	if v553 then
+		local v1089 = v57.autowall_min_damage:get();
+		if (v1089 and (v1089 > 0)) then
+			v554 = v1089;
+		end
+	end
+	if (v57.min_damage_auto:get() and v552 and (v552 > 0)) then
+		v554 = math.min(v554, v552);
+	end
+	return v554;
+end
+function get_effective_min_damage(v555, v556, v557)
+	local v558 = get_min_damage(v555, v556, v557);
+	if (v57.hvh_dmg_override:get() or is_bind_active("hvh_dmg_override")) then
+		local v1090 = v57.hvh_dmg_override_val:get();
+		if (v1090 and (v1090 >= 0)) then
+			v558 = v1090;
+		end
+	end
+	return v558;
+end
+function get_effective_hitchance(v559, v560, v561)
+	if (v57.hvh_hc_override:get() or is_bind_active("hvh_hc_override")) then
+		local v1091 = v57.hvh_hc_override_val:get() or 0;
+		return v1091;
+	end
+	return v559;
+end
+function is_body_aim_forced(v562)
+	if (v57.hvh_baim:get() or is_bind_active("hvh_baim")) then
+		return true;
+	end
+	local v563 = v57.hvh_baim_hp:get() or 0;
+	if (v563 > 0) then
+		local v1092 = 0;
+		pcall(function()
+			v1092 = v562:get_health() or 0;
+		end);
+		if ((v1092 > 0) and (v1092 <= v563)) then
+			return true;
+		end
+	end
+	return false;
+end
+function estimate_damage(v564, v565, v566)
+	local v567 = v564:get_active_weapon();
+	if not v567 then
+		return 0;
+	end
+	local v568 = v57.weapon_class:get();
+	local v569 = is_revolver(v564);
+	local v570 = v57.dmg_rifle_base:get() or 32;
+	if (v568 == 1) then
+		v570 = v57.dmg_sniper_base:get() or 85;
+	elseif (v568 == 2) then
+		v570 = v57.dmg_pistol_base:get() or 22;
+		if v569 then
+			v570 = v570 * 3.4;
+		end
+	end
+	local v571 = ((v566 == 0) and (v57.dmg_head_mult:get() or 4)) or v57.dmg_body_mult:get() or 1;
+	local v572 = v57.dmg_scale:get() or 1;
+	local v573 = v570 * v571 * v572;
+	local v574 = v57.dmg_falloff:get() or 0;
+	if (v574 > 0) then
+		local v1093 = v564:get_eye_position();
+		local v1094 = v565:get_origin();
+		if (v1093 and v1094) then
+			local v1298 = v1094.x - v1093.x;
+			local v1299 = v1094.y - v1093.y;
+			local v1300 = v1094.z - v1093.z;
+			local v1301 = math.sqrt((v1298 * v1298) + (v1299 * v1299) + (v1300 * v1300));
+			local v1302 = 1 - (v574 * (v1301 / 100));
+			if (v1302 < 0.15) then
+				v1302 = 0.15;
+			end
+			v573 = v573 * v1302;
+		end
+	end
+	return v573;
+end
+function can_penetrate_wall(v575, v576, v577, v578)
+	local v579, v580 = 1, 0;
+	pcall(function()
+		v579, v580 = trace.line(v575.x, v575.y, v575.z, v576.x, v576.y, v576.z, v577);
+	end);
+	if ((v579 >= 0.99) or (v580 and (v580 ~= 0))) then
+		return true, 0, 1;
+	end
+	if not v57.autowall_enable:get() then
+		return false, 999, 0;
+	end
+	local v581 = v57.autowall_max_thickness:get() or 42;
+	if (v581 < 1) then
+		return false, 999, 0;
+	end
+	local v582 = v576.x - v575.x;
+	local v583 = v576.y - v575.y;
+	local v584 = v576.z - v575.z;
+	local v585 = math.sqrt((v582 * v582) + (v583 * v583) + (v584 * v584));
+	if (v585 < 1) then
+		return false, 999, 0;
+	end
+	local v586, v587, v588 = v582 / v585, v583 / v585, v584 / v585;
+	local v589 = v575.x + (v582 * v579);
+	local v590 = v575.y + (v583 * v579);
+	local v591 = v575.z + (v584 * v579);
+	local v592 = v589 + (v586 * v581);
+	local v593 = v590 + (v587 * v581);
+	local v594 = v591 + (v588 * v581);
+	local v595, v596 = 1, 0;
+	pcall(function()
+		v595, v596 = trace.line(v592, v593, v594, v576.x, v576.y, v576.z, v577);
+	end);
+	if ((v595 >= 0.95) or (v596 and (v596 ~= 0))) then
+		local v1095 = v581 * math.max(0, math.min(1, 1 - v595));
+		local v1096 = v57.autowall_retention:get() or 0.6;
+		if (v1096 < 0.05) then
+			v1096 = 0.05;
+		end
+		if (v1096 > 1) then
+			v1096 = 1;
+		end
+		local v1097 = v1095 / math.max(1, v581);
+		local v1098 = 1 - (v1097 * (1 - v1096));
+		if (v1098 < 0.05) then
+			v1098 = 0.05;
+		end
+		return true, v1095, v1098;
+	end
+	return false, 999, 0;
+end
+function calculate_hitchance(v597, v598, v599, v600)
+	if (v600 <= 0) then
+		return true;
+	end
+	if (v57.spread_mode and (v57.spread_mode:get() == 1)) then
+		return true;
+	end
+	local v601 = v597:get_active_weapon();
+	if not v601 then
+		return false;
+	end
+	local v602 = v597:get_eye_position();
+	if not v602 then
+		return false;
+	end
+	local v603 = v599.x - v602.x;
+	local v604 = v599.y - v602.y;
+	local v605 = v599.z - v602.z;
+	local v606 = math.sqrt((v603 * v603) + (v604 * v604) + (v605 * v605));
+	if (v606 < 1) then
+		return true;
+	end
+	local v607 = 0.005;
+	local v608 = v57.weapon_class:get();
+	if (v608 == 1) then
+		v607 = (is_scoped() and 0.001) or 0.08;
+	elseif (v608 == 2) then
+		v607 = 0.015;
+	elseif (v608 == 3) then
+		v607 = 0.025;
+	else
+		v607 = 0.012;
+	end
+	v607 = v607 * (v57.spread_scale:get() or 1);
+	local v609 = 0;
+	local v610 = 20;
+	math.randomseed(math.floor(globals.realtime() * 1000));
+	for v890 = 1, v610 do
+		local v891 = ((math.random() * 2) - 1) * v607 * v606;
+		local v892 = ((math.random() * 2) - 1) * v607 * v606;
+		local v893 = ((math.random() * 2) - 1) * v607 * v606;
+		local v894 = {x=(v599.x + v891),y=(v599.y + v892),z=(v599.z + v893)};
+		local v895, v896 = trace.line(v602.x, v602.y, v602.z, v894.x, v894.y, v894.z, v597:get_address());
+		if ((v896 == v598:get_address()) or (v895 >= 0.98)) then
+			v609 = v609 + 1;
+		end
+	end
+	local v611 = (v609 / v610) * 100;
+	return v611 >= v600;
+end
+function run_optimized_rage_bot(v612, v613, v614, v615)
+	if not is_bind_active("enable_aim") then
+		return false, nil;
+	end
+	local v616 = v612:get_eye_position();
+	if not v616 then
+		return false, nil;
+	end
+	local v617 = entitylist.get_enemies();
+	local v618 = nil;
+	local v619 = nil;
+	local v620 = -1;
+	local v621 = get_damage_hg();
+	local v622 = get_min_damage(v621, nil, false);
+	local v623 = v57.min_hit_chance:get();
+	for v897, v898 in ipairs(v617) do
+		if (v898 and v898:is_alive() and v898:is_enemy()) then
+			local v1189 = v621;
+			if is_body_aim_forced(v898) then
+				v1189 = 1;
+			end
+			local v1190 = nil;
+			pcall(function()
+				if hitbox then
+					local v1419 = get_target_hitbox(v1189 == 1);
+					v1190 = v898:get_hitbox_position(v1419);
+				end
+			end);
+			if not v1190 then
+				v1190 = v898:get_eye_position() or v898:get_origin();
+			end
+			v1190 = resolve_target_pos(v898, v1190, v1189);
+			if v1190 then
+				local v1371 = v1190.x - v616.x;
+				local v1372 = v1190.y - v616.y;
+				local v1373 = v1190.z - v616.z;
+				local v1374 = math.sqrt((v1371 * v1371) + (v1372 * v1372));
+				if (v1374 > 0.1) then
+					local v1453 = -math.deg(math.atan2(v1373, v1374));
+					local v1454 = math.deg(math.atan2(v1372, v1371));
+					while v1454 > 180 do
+						v1454 = v1454 - 360;
+					end
+					while v1454 < -180 do
+						v1454 = v1454 + 360;
+					end
+					local v1455 = v1453 - v614;
+					local v1456 = v1454 - v615;
+					while v1456 > 180 do
+						v1456 = v1456 - 360;
+					end
+					while v1456 < -180 do
+						v1456 = v1456 + 360;
+					end
+					local v1457 = math.sqrt((v1455 * v1455) + (v1456 * v1456));
+					local v1458 = v57.aim_amount:get() or 10;
+					if v57.rage_360_enable:get() then
+						v1458 = v57.rage_360_max_angle:get() or 360;
+					end
+					if (v1457 <= v1458) then
+						local v1524, v1525, v1526 = can_penetrate_wall(v616, v1190, v612:get_address(), 120);
+						local v1527 = is_visible(v616, v1190, v612:get_address());
+						local v1528 = v1527 or v1524;
+						if v1528 then
+							local v1592 = estimate_damage(v612, v898, v621);
+							local v1593 = 0;
+							pcall(function()
+								v1593 = v898:get_health() or 0;
+							end);
+							local v1594 = not v1527 and v1524;
+							if v1594 then
+								v1592 = v1592 * (v1526 or v57.autowall_retention:get() or 0.6);
+							end
+							local v1595 = get_effective_min_damage(v621, v1593, v1594);
+							if (v1594 and v57.autowall_lethal_only:get() and (v1593 > 0)) then
+								v1595 = math.max(v1595, v1593);
+							end
+							local v1596 = true;
+							if v1594 then
+								local v1625 = v57.autowall_hc:get() or 0;
+								if (v1625 > 0) then
+									v1596 = calculate_hitchance(v612, v898, v1190, v1625);
+								end
+							end
+							if ((v1592 >= v1595) and v1596) then
+								local v1626 = v623;
+								if (v57.rage_lethal_ignore_hc:get() and (v1593 > 0) and (v1592 >= v1593)) then
+									v1626 = 0;
+								end
+								v1626 = get_effective_hitchance(v1626, v1592, v1593);
+								local v1627 = calculate_hitchance(v612, v898, v1190, v1626);
+								if v1627 then
+									local v1639 = v1592 / (v1457 + 1);
+									if (v1639 > v620) then
+										v620 = v1639;
+										v618 = v898;
+										v619 = {pitch=v1453,yaw=v1454};
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+	if (v618 and v619) then
+		local v1099 = globals.realtime();
+		local v1100 = v57.auto_aim_shoot:get();
+		if (v1100 and (v57.spread_mode:get() == 2)) then
+			local v1303 = safe_get_velocity(v612);
+			local v1304 = math.sqrt((v1303.x * v1303.x) + (v1303.y * v1303.y));
+			if (v1304 > (v57.spread_accurate_vel:get() or 60)) then
+				v1100 = false;
+				v66.spread_hold = true;
+			end
+		end
+		if (v1100 and ((v57.shot_delay:get() or 0) > 0)) then
+			local v1305 = v57.shot_delay:get() / 1000;
+			if ((v1099 - (v66.last_rage_shot or 0)) < v1305) then
+				v1100 = false;
+			end
+		end
+		if (v1100 and v57.auto_pistol:get() and (v57.weapon_class:get() == 2)) then
+			local v1306 = (v57.auto_pistol_delay:get() or 110) / 1000;
+			if ((v1099 - (v66.last_rage_shot or 0)) < v1306) then
+				v1100 = false;
+			end
+		end
+		if v1100 then
+			v66.last_rage_shot = v1099;
+			v66.spread_hold = false;
+			pcall(function()
+				v613.filter_subtick_button(buttons.attack);
+			end);
+			local v1309 = pcall(function()
+				v613.add_subtick(buttons.attack, 0, true);
+				v613.add_subtick(buttons.attack, 0.5, false);
+			end);
+			if not v1309 then
+				pcall(function()
+					v613.tap_button(buttons.attack);
+				end);
+			end
+		end
+		return true, v619;
+	end
+	return false, nil;
+end
+function get_aim_target_angles(v624, v625, v626, v627)
+	local v628 = v624:get_eye_position();
+	if not v628 then
+		return nil;
+	end
+	local v629 = entitylist.get_enemies();
+	local v630 = nil;
+	local v631 = nil;
+	local v632 = nil;
+	local v633, v634 = 0, 0;
+	pcall(function()
+		v633, v634 = v625.get_view_angles();
+	end);
+	local v635 = v57.aim_amount:get() or 10;
+	if v57.rage_360_enable:get() then
+		v635 = v57.rage_360_max_angle:get() or 360;
+	end
+	local v636 = v57.weapon_class:get();
+	if (v636 == 2) then
+		v635 = v635 * 0.8;
+	elseif (v636 == 1) then
+		v635 = v635 * 1.2;
+	end
+	for v899, v900 in ipairs(v629) do
+		if (v900 and v900:is_alive() and v900:is_enemy()) then
+			local v1191 = v626;
+			if is_body_aim_forced(v900) then
+				v1191 = 1;
+			end
+			local v1192 = nil;
+			pcall(function()
+				if hitbox then
+					local v1421 = get_target_hitbox(v1191 == 1);
+					v1192 = v900:get_hitbox_position(v1421);
+				end
+			end);
+			if not v1192 then
+				v1192 = v900:get_eye_position() or v900:get_origin();
+			end
+			v1192 = resolve_target_pos(v900, v1192, v1191);
+			if v1192 then
+				local v1375 = v1192.x - v628.x;
+				local v1376 = v1192.y - v628.y;
+				local v1377 = v1192.z - v628.z;
+				local v1378 = math.sqrt((v1375 * v1375) + (v1376 * v1376) + (v1377 * v1377));
+				if (v1378 > 0.1) then
+					local v1459 = -math.deg(math.atan2(v1377, math.sqrt((v1375 * v1375) + (v1376 * v1376))));
+					local v1460 = math.deg(math.atan2(v1376, v1375));
+					while v1460 > 180 do
+						v1460 = v1460 - 360;
+					end
+					while v1460 < -180 do
+						v1460 = v1460 + 360;
+					end
+					local v1461 = v1459 - v633;
+					local v1462 = v1460 - v634;
+					while v1462 > 180 do
+						v1462 = v1462 - 360;
+					end
+					while v1462 < -180 do
+						v1462 = v1462 + 360;
+					end
+					local v1463 = math.sqrt((v1461 * v1461) + (v1462 * v1462));
+					if (v1463 <= v635) then
+						local v1529 = 0;
+						pcall(function()
+							v1529 = v900:get_health() or 0;
+						end);
+						local v1530 = is_visible(v628, v1192, v624:get_address());
+						local v1531 = v1530;
+						local v1532 = 0;
+						if (not v1531 and v57.autowall_enable:get()) then
+							local v1597, v1598, v1599 = can_penetrate_wall(v628, v1192, v624:get_address(), 120);
+							if v1597 then
+								local v1628 = estimate_damage(v624, v900, v626) * (v1599 or v57.autowall_retention:get() or 0.6);
+								local v1629 = get_min_damage(v626, v1529, true);
+								if (v57.autowall_lethal_only:get() and (v1529 > 0)) then
+									v1629 = math.max(v1629, v1529);
+								end
+								if (v1628 >= v1629) then
+									v1531 = true;
+									v1532 = v1598 or 999;
+								end
+							end
+						end
+						if (v1531 and v57.aim_lethal_only:get()) then
+							local v1600 = estimate_damage(v624, v900, v626);
+							local v1601 = v900:get_health() or 100;
+							if (v1600 < v1601) then
+								v1531 = false;
+							end
+						end
+						if v1531 then
+							local v1602 = 0;
+							if (v627 == 0) then
+								v1602 = v1378 or 9999;
+							elseif (v627 == 1) then
+								v1602 = v1463 or 180;
+							elseif (v627 == 2) then
+								v1602 = v1532 or 999;
+							elseif (v627 == 3) then
+								v1602 = v900:get_health() or 100;
+							end
+							if v1602 then
+								if (not v631 or (v1602 < v631)) then
+									v631 = v1602;
+									v630 = v900;
+									v632 = {pitch=v1459,yaw=v1460};
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+	return v632;
+end
+function get_aim_snap_angles(v637, v638, v639)
+	local v640 = v637:get_eye_position();
+	if not v640 then
+		return nil;
+	end
+	local v641 = entitylist.get_enemies();
+	local v642 = nil;
+	local v643 = v57.aim_amount:get() or 10;
+	local v644, v645 = 0, 0;
+	pcall(function()
+		v644, v645 = v638.get_view_angles();
+	end);
+	for v901, v902 in ipairs(v641) do
+		if (v902 and v902:is_alive() and v902:is_enemy()) then
+			local v1193 = v639;
+			if is_body_aim_forced(v902) then
+				v1193 = 1;
+			end
+			local v1194 = nil;
+			pcall(function()
+				if hitbox then
+					local v1422 = get_target_hitbox(v1193 == 1);
+					v1194 = v902:get_hitbox_position(v1422);
+				end
+			end);
+			if not v1194 then
+				v1194 = v902:get_eye_position() or v902:get_origin();
+			end
+			v1194 = resolve_target_pos(v902, v1194, v1193);
+			if v1194 then
+				local v1379 = v1194.x - v640.x;
+				local v1380 = v1194.y - v640.y;
+				local v1381 = v1194.z - v640.z;
+				local v1382 = math.sqrt((v1379 * v1379) + (v1380 * v1380));
+				if (v1382 > 0.1) then
+					local v1464 = -math.deg(math.atan2(v1381, v1382));
+					local v1465 = math.deg(math.atan2(v1380, v1379));
+					while v1465 > 180 do
+						v1465 = v1465 - 360;
+					end
+					while v1465 < -180 do
+						v1465 = v1465 + 360;
+					end
+					local v1466 = v1464 - v644;
+					local v1467 = v1465 - v645;
+					while v1467 > 180 do
+						v1467 = v1467 - 360;
+					end
+					while v1467 < -180 do
+						v1467 = v1467 + 360;
+					end
+					local v1468 = math.sqrt((v1466 * v1466) + (v1467 * v1467));
+					if (v1468 < v643) then
+						v643 = v1468;
+						v642 = {pitch=v1464,yaw=v1465};
+					end
+				end
+			end
+		end
+	end
+	return v642;
+end
+function draw_fov_circle()
+	if not v57.draw_fov:get() then
+		return;
+	end
+	if not engine.is_in_game() then
+		return;
+	end
+	local v646 = entitylist.get_local_player();
+	if (not v646 or not v646:is_alive()) then
+		return;
+	end
+	local v647, v648 = render.get_screen_size();
+	local v649 = v57.aim_amount:get() or 10;
+	if v57.rage_360_enable:get() then
+		v649 = v57.rage_360_max_angle:get() or 360;
+	end
+	local v650 = 90;
+	pcall(function()
+		local v903 = cvar.get_float("fov");
+		if (v903 and (v903 > 1) and (v903 < 180)) then
+			v650 = v903;
+		end
+	end);
+	local v651 = (math.tan(math.rad(v649 * 0.5)) / math.tan(math.rad(v650 * 0.5))) * v648 * 0.5;
+	if ((v651 < 2) or (v651 > (v648 * 3))) then
+		return;
+	end
+	local v652 = v57.fov_color;
+	pcall(function()
+		render.circle(v647 * 0.5, v648 * 0.5, v651, v652.r, v652.g, v652.b, 150, 72);
+	end);
+	if v57.menu_glow:get() then
+		pcall(function()
+			render.glow_circle(v647 * 0.5, v648 * 0.5, v651 + 2, v652.r, v652.g, v652.b, 20, 0, 48);
+		end);
+	end
+end
+function draw_center_watermark()
+	local v653 = entitylist.get_local_player();
+	if not v653 then
+		return;
+	end
+	local v654, v655 = render.get_screen_size();
+	local v656, v657, v658 = v57.menu_color:get();
+	local v659 = 0;
+	pcall(function()
+		if engine.get_net_channel_info then
+			local v1195 = engine.get_net_channel_info();
+			if v1195 then
+				v659 = math.floor((v1195:get_latency(0) * 1000) + 0.5);
+			end
+		end
+	end);
+	local v660;
+	if ((v57.wm_style:get() or 0) == 1) then
+		local v1101 = "User";
+		pcall(function()
+			v1101 = v653:get_name() or "User";
+		end);
+		local v1102 = "none";
+		pcall(function()
+			local v1196 = v653:get_active_weapon();
+			if v1196 then
+				local v1383, v1384 = pcall(function()
+					return v1196:get_entity_name();
+				end);
+				if (v1383 and v1384 and (v1384 ~= "")) then
+					v1102 = tostring(v1384):gsub("^weapon_", "");
+				end
+			end
+		end);
+		local v1103 = "00:00";
+		pcall(function()
+			v1103 = os.date("%H:%M");
+		end);
+		v660 = string.format("SUNRIZE  |  %s  |  %d fps  |  %d ms  |  %s  |  %s", v1103, v11, v659, v1101:upper(), v1102:upper());
+	elseif v57.wm_kills:get() then
+		v660 = string.format("sunrize  |  %d fps  |  %d ms  |  %d kills", v11, v659, v66.kills or 0);
+	else
+		v660 = string.format("sunrize  |  %d fps  |  %d ms", v11, v659);
+	end
+	local v661, v662 = render.get_text_size(v660, "menu");
+	local v663 = 0;
+	if v57.wm_avatar:get() then
+		v663 = v662 + 10;
+	end
+	local v664 = ((v654 - v661) * 0.5) + (v663 * 0.5);
+	local v665 = 10;
+	if (v663 > 0) then
+		local v1104 = -1;
+		pcall(function()
+			v1104 = render.get_local_avatar();
+		end);
+		if (v1104 and (v1104 >= 0)) then
+			pcall(function()
+				render.image_rounded(v1104, ((v664 - 10) - v663) + 4, v665 - 4, v663 - 4, v663 - 4, 6);
+			end);
+		end
+	end
+	render.filled_rect(v664 - 8, v665 - 3, v661 + 16, v662 + 6, 12, 12, 15, 165);
+	render.filled_rect(v664 - 8, v665 - 3, v661 + 16, v665 - 2, v656, v657, v658, 200);
+	render.text(v654 * 0.5, v665, v660, 222, 226, 234, 230, true, "menu");
+end
+function draw_keybinds_window()
+	local v666 = menu.is_open();
+	local v667 = {};
+	for v904, v905 in ipairs(v62) do
+		local v906 = v61[v905];
+		if (v906 and v906.key and (v906.key ~= 0)) then
+			v667[#v667 + 1] = {id=v905,b=v906};
+		end
+	end
+	local v668 = ((#v667 > 0) and 1) or 0;
+	v31 = lerp(v31 or 0, v668, 0.15);
+	if (v31 < 0.02) then
+		return;
+	end
+	local v669 = 172;
+	local v670 = 22;
+	local v671 = 16;
+	local v672 = 0;
+	for v907, v908 in ipairs(v667) do
+		if v908.b.active then
+			v672 = v672 + 1;
+		end
+	end
+	local v673 = v670 + (#v667 * v671) + 6;
+	local v674, v675 = safe_get_mouse();
+	local v676 = false;
+	pcall(function()
+		v676 = input.is_button_down(1);
+	end);
+	if v666 then
+		if v676 then
+			if not v39 then
+				if ((v674 >= v38.x) and (v674 <= (v38.x + v669)) and (v675 >= v38.y) and (v675 <= (v38.y + v670))) then
+					v39 = true;
+					v40.x = v674 - v38.x;
+					v40.y = v675 - v38.y;
+				end
+			else
+				v38.x = v674 - v40.x;
+				v38.y = v675 - v40.y;
+			end
+		else
+			v39 = false;
+		end
+	end
+	local function v677(v909)
+		return math.floor(v909 * v31);
+	end
+	local v678, v679, v680 = v57.menu_color:get();
+	render.filled_rect(v38.x - 1, v38.y - 1, v669 + 2, v673 + 2, theme_bg_r, theme_bg_g, theme_bg_b, v677(255));
+	render.filled_rect(v38.x, v38.y, v669, v673, theme_card_r, theme_card_g, theme_card_b, v677(255));
+	draw_rect_outline(v38.x, v38.y, v669, v673, theme_border_r, theme_border_g, theme_border_b, v677(255));
+	render.filled_rect(v38.x + 1, v38.y + 1, v669 - 2, 2, v678, v679, v680, v677(255));
+	render.text(v38.x + 8, v38.y + 5, "keybinds", theme_text_r, theme_text_g, theme_text_b, v677(255), false, "menu", 11);
+	local v681 = string.format("%d/%d", v672, #v667);
+	local v682 = render.get_text_size(v681, "menu", 11);
+	render.text(((v38.x + v669) - v682) - 8, v38.y + 5, v681, v678, v679, v680, v677(220), false, "menu", 11);
+	for v910 = 1, #v667 do
+		local v911 = v667[v910];
+		local v912 = v911.b;
+		local v913 = v38.y + v670 + ((v910 - 1) * v671);
+		local v914 = (v912.active and 255) or 170;
+		if v912.active then
+			render.filled_rect(v38.x + 1, v913, 2, v671 - 3, v678, v679, v680, v677(255));
+		end
+		render.text(v38.x + 8, v913 + 2, v912.name or v911.id, theme_text_r, theme_text_g, theme_text_b, v677(v914), false, "menu", 11);
+		local v915 = string.format("[%s] %s", get_clean_key_name(v912.key):lower(), get_bind_mode_name(v912.mode):lower());
+		local v916 = render.get_text_size(v915, "menu", 11);
+		render.text(((v38.x + v669) - v916) - 8, v913 + 2, v915, v678, v679, v680, v677((v912.active and 235) or 170), false, "menu", 11);
+	end
+end
+function draw_peek_indicator()
+	if not v57.peek_enable:get() then
+		return;
+	end
+	if not engine.is_in_game() then
+		return;
+	end
+	local v683 = entitylist.get_local_player();
+	if (not v683 or not v683:is_alive()) then
+		return;
+	end
+	local v684 = v66.peek_exposed or 0;
+	local v685 = ((v684 == 0) and "peek: safe") or ("peek: exposed x" .. v684);
+	local v686, v687, v688 = 120, 215, 150;
+	if (v684 > 0) then
+		v686, v687, v688 = 238, 92, 92;
+	end
+	local v689, v690 = render.get_text_size(v685, "menu");
+	local v691 = 15;
+	local v692 = 40;
+	render.filled_rect(v691, v692, v689 + 14, v690 + 6, 12, 12, 15, 165);
+	render.filled_rect(v691, v692, 3, v690 + 6, v686, v687, v688, 235);
+	render.text(v691 + 8, v692 + 3, v685, v686, v687, v688, 235, false, "menu");
+	if ((v684 > 0) and v66.peek_names) then
+		local v1105 = table.concat(v66.peek_names, ", ");
+		local v1106 = render.get_text_size(v1105, "menu");
+		render.text(v691 + 8, v692 + v690 + 8, v1105, 200, 200, 205, 210, false, "menu");
+	end
+end
+function draw_hit_logs()
+	local v693 = globals.realtime();
+	local v694 = 60;
+	local v695, v696, v697 = v57.menu_color:get();
+	for v917 = #v19, 1, -1 do
+		local v918 = v19[v917];
+		local v919 = v693 - v918.born;
+		if (v919 > 4.5) then
+			table.remove(v19, v917);
+		else
+			local v1198 = 255;
+			if (v919 < 0.25) then
+				v1198 = math.floor((v919 / 0.25) * 255);
+			elseif (v919 > 4) then
+				v1198 = math.floor((1 - ((v919 - 4) / 0.5)) * 255);
+			end
+			v918.alpha_anim = lerp(v918.alpha_anim or 0, v1198, 0.15);
+			local v1200 = math.floor(v918.alpha_anim);
+			if (v1200 > 1) then
+				local v1385, v1386 = render.get_text_size(v918.text, "menu", 11);
+				local v1387 = 15;
+				local v1388 = v694;
+				render.filled_rect(v1387, v1388, v1385 + 18, v1386 + 8, theme_card_r, theme_card_g, theme_card_b, math.floor(v1200 * 0.85));
+				render.filled_rect(v1387, v1388, 3, v1386 + 8, v695, v696, v697, v1200);
+				draw_rect_outline(v1387, v1388, v1385 + 18, v1386 + 8, theme_border_r, theme_border_g, theme_border_b, math.floor(v1200 * 0.4));
+				render.text(v1387 + 9, v1388 + 4, v918.text, theme_text_r, theme_text_g, theme_text_b, v1200, false, "menu", 11);
+				v694 = v694 + v1386 + 12;
+			end
+		end
+	end
+end
+function update_peek_assistant()
+	v66.peek_exposed = 0;
+	v66.peek_names = {};
+	v66.peek_targets = {};
+	if not v57.peek_enable:get() then
+		return;
+	end
+	local v701 = entitylist.get_local_player();
+	if (not v701 or not v701:is_alive()) then
+		return;
+	end
+	local v702 = nil;
+	pcall(function()
+		v702 = v701:get_hitbox_position(hitbox.head);
+	end);
+	if not v702 then
+		return;
+	end
+	local v703 = v701:get_address();
+	for v920, v921 in ipairs(entitylist.get_enemies()) do
+		if (v921:is_alive() and not v921:is_dormant()) then
+			local v1201 = nil;
+			pcall(function()
+				v1201 = v921:get_eye_position();
+			end);
+			if v1201 then
+				local v1389 = false;
+				pcall(function()
+					v1389 = trace.visible(v1201.x, v1201.y, v1201.z, v702.x, v702.y, v702.z, v921:get_address(), v703);
+				end);
+				if v1389 then
+					v66.peek_exposed = v66.peek_exposed + 1;
+					local v1470 = "?";
+					pcall(function()
+						v1470 = v921:get_name() or "?";
+					end);
+					v66.peek_names[#v66.peek_names + 1] = v1470;
+					v66.peek_targets[#v66.peek_targets + 1] = v921;
+				end
+			end
+		end
+	end
+end
+function draw_peek_assistant()
+	if not v57.peek_enable:get() then
+		return;
+	end
+	local v704 = entitylist.get_local_player();
+	if (not v704 or not v704:is_alive()) then
+		return;
+	end
+	local v705 = v66.peek_exposed or 0;
+	if v57.peek_highlight:get() then
+		for v1202, v1203 in ipairs(v66.peek_targets or {}) do
+			local v1204 = nil;
+			pcall(function()
+				v1204 = cache.get_entity(v1203);
+			end);
+			if v1204 then
+				pcall(function()
+					v1204:box(238, 92, 92, v1204.alpha, cache.BOX_CORNER);
+					v1204:text("SEES YOU", cache.BOTTOM, 238, 92, 92, v1204.alpha);
+				end);
+				pcall(function()
+					v1204:reset();
+				end);
+			end
+		end
+	end
+	if v57.peek_ring:get() then
+		for v1205, v1206 in ipairs(v66.peek_targets or {}) do
+			local v1207 = nil;
+			pcall(function()
+				v1207 = v1206:get_origin();
+			end);
+			if v1207 then
+				pcall(function()
+					render.circle_3d(v1207.x, v1207.y, v1207.z, 42, 238, 92, 92, 190, 40);
+				end);
+			end
+		end
+	end
+end
+function draw_esp()
+	if not v57.esp_enable:get() then
+		return;
+	end
+	if not engine.is_in_game() then
+		return;
+	end
+	local v706 = entitylist.get_local_player();
+	if not v706 then
+		return;
+	end
+	local v707 = v57.esp_color;
+	local v708 = v57.esp_hidden_color;
+	local v709 = v57.esp_vis_mode:get() or 0;
+	local v710 = v57.esp_ring:get();
+	local v711 = nil;
+	local v712 = v706:get_address();
+	pcall(function()
+		v711 = v706:get_eye_position();
+	end);
+	for v922, v923 in ipairs(entitylist.get_enemies()) do
+		if (v923:is_alive() and not v923:is_dormant()) then
+			local v1208 = false;
+			if v711 then
+				pcall(function()
+					local v1425 = v923:get_hitbox_position(hitbox.head);
+					if v1425 then
+						v1208 = trace.visible(v711.x, v711.y, v711.z, v1425.x, v1425.y, v1425.z, v712, v923:get_address());
+					end
+				end);
+			end
+			local v1209, v1210, v1211 = v707.r, v707.g, v707.b;
+			if (v709 == 1) then
+				if v1208 then
+					v1209, v1210, v1211 = 120, 230, 140;
+				else
+					v1209, v1210, v1211 = v708.r, v708.g, v708.b;
+				end
+			elseif (v711 and not v1208) then
+				v1209 = math.floor(v707.r * 0.72);
+				v1210 = math.floor(v707.g * 0.72);
+				v1211 = math.floor(v707.b * 0.72);
+			end
+			if v710 then
+				local v1390 = nil;
+				pcall(function()
+					v1390 = v923:get_origin();
+				end);
+				if v1390 then
+					pcall(function()
+						render.circle_3d(v1390.x, v1390.y, v1390.z, 38, v1209, v1210, v1211, 170, 40);
+					end);
+				end
+			end
+			local v1212 = nil;
+			pcall(function()
+				v1212 = cache.get_entity(v923);
+			end);
+			if v1212 then
+				pcall(function()
+					v1212:box(v1209, v1210, v1211, v1212.alpha, cache.BOX_CORNER);
+					if (v57.esp_hp:get() and v1212.max_hp and (v1212.max_hp > 0)) then
+						local v1512 = math.floor((v1212.vis_hp / v1212.max_hp) * 255);
+						v1212:bar(v1212.max_hp, v1212.vis_hp, v1212.hp, 255 - v1512, v1512, 25, v1212.alpha, cache.LEFT, false);
+					end
+					if v57.esp_name:get() then
+						local v1513 = "enemy";
+						pcall(function()
+							v1513 = v923:get_name() or "enemy";
+						end);
+						v1212:text(v1513, cache.TOP, 235, 235, 235, v1212.alpha);
+					end
+					if v57.esp_dist:get() then
+						v1212:text(string.format("%du", math.floor(v1212.distance or 0)), cache.BOTTOM, 225, 225, 225, v1212.alpha);
+					end
+					if (v57.esp_armor:get() and v1212.armor and (v1212.armor > 0)) then
+						v1212:text(string.format("AR %d", v1212.armor), cache.RIGHT, 200, 210, 235, v1212.alpha);
+					end
+					if v57.esp_skeleton:get() then
+						local v1514 = nil;
+						pcall(function()
+							v1514 = v1212:bones();
+						end);
+						for v1533, v1534 in ipairs(v1514 or {}) do
+							render.line(v1534[1], v1534[2], v1534[3], v1534[4], 255, 255, 255, math.floor(v1212.alpha * 0.75), 1);
+						end
+					end
+					if v57.esp_avatar:get() then
+						local v1515 = -1;
+						pcall(function()
+							v1515 = render.get_avatar(v923);
+						end);
+						if (v1515 and (v1515 >= 0)) then
+							pcall(function()
+								render.image_rounded(v1515, v1212.x1, v1212.y1 - 28, 24, 24, 4);
+							end);
+						end
+					end
+				end);
+				pcall(function()
+					v1212:reset();
+				end);
+			end
+		end
+	end
+end
+function draw_tracers()
+	if not v57.tracer_enable:get() then
+		return;
+	end
+	if (#v16 == 0) then
+		return;
+	end
+	local v713 = entitylist.get_local_player();
+	if not v713 then
+		return;
+	end
+	local v714 = nil;
+	pcall(function()
+		v714 = v713:get_eye_position();
+	end);
+	if not v714 then
+		return;
+	end
+	local v715 = globals.realtime();
+	local v716 = v57.tracer_life:get() or 1;
+	local v717 = v57.tracer_color;
+	for v924 = #v16, 1, -1 do
+		local v925 = v16[v924];
+		local v926 = v715 - v925.born;
+		if (v926 >= v716) then
+			table.remove(v16, v924);
+		else
+			local v1213, v1214 = safe_w2s(v714.x, v714.y, v714.z);
+			local v1215, v1216 = safe_w2s(v925.x, v925.y, v925.z);
+			if (v1213 and v1215) then
+				local v1391 = math.floor(v717.a * (1 - (v926 / v716)));
+				gradient_line(v1213, v1214, v1215, v1216, v717.r, v717.g, v717.b, 0, v1391, 1, 10);
+			end
+		end
+	end
+end
+function draw_grenades()
+	if not v57.grenade_enable:get() then
+		return;
+	end
+	local v718 = nil;
+	pcall(function()
+		v718 = entitylist.get_grenades();
+	end);
+	for v927, v928 in ipairs(v718 or {}) do
+		local v929 = -1;
+		pcall(function()
+			v929 = v928:get_grenade_type();
+		end);
+		if (v929 >= 0) then
+			local v1217 = nil;
+			pcall(function()
+				v1217 = v928:get_origin();
+			end);
+			if v1217 then
+				local v1392, v1393 = safe_w2s(v1217.x, v1217.y, v1217.z);
+				if v1392 then
+					local v1476 = pcall(function()
+						render.grenade_icon(v1392, v1393, v929, 255, 255, 255, 230, 16);
+					end);
+					if not v1476 then
+						render.filled_circle(v1392, v1393, 5, 255, 255, 255, 220, 12);
+					end
+				end
+			end
+		end
+	end
+end
+function draw_offscreen_arrows()
+	if not v57.arrows_enable:get() then
+		return;
+	end
+	local v719 = entitylist.get_local_player();
+	if (not v719 or not v719:is_alive()) then
+		return;
+	end
+	local v720 = nil;
+	pcall(function()
+		v720 = v719:get_origin();
+	end);
+	if not v720 then
+		return;
+	end
+	local v721 = 0;
+	pcall(function()
+		local v930, v931 = v719:get_view_angles();
+		v721 = v931 or 0;
+	end);
+	local v722, v723 = render.get_screen_size();
+	local v724, v725 = v722 * 0.5, v723 * 0.5;
+	local v726 = math.min(v722, v723) * 0.4;
+	local v727 = v57.arrows_color;
+	for v932, v933 in ipairs(entitylist.get_enemies()) do
+		if (v933:is_alive() and not v933:is_dormant()) then
+			local v1218 = nil;
+			pcall(function()
+				v1218 = v933:get_origin();
+			end);
+			if v1218 then
+				local v1394 = safe_w2s(v1218.x, v1218.y, v1218.z);
+				if not v1394 then
+					local v1477 = v1218.x - v720.x;
+					local v1478 = v1218.y - v720.y;
+					local v1479 = (math.deg(math.atan2(v1478, v1477)) - v721) + 90;
+					local v1480 = math.rad(v1479);
+					local v1481 = v724 + (math.cos(v1480) * v726);
+					local v1482 = v725 - (math.sin(v1480) * v726);
+					local v1483 = math.cos(v1480 + (math.pi * 0.5));
+					local v1484 = -math.sin(v1480 + (math.pi * 0.5));
+					local v1485 = 9;
+					imgui.dl_add_triangle_filled(v1481 + (v1483 * v1485), v1482 + (v1484 * v1485), (v1481 - (v1483 * v1485)) + (math.cos(v1480) * v1485 * 0.4), (v1482 - (v1484 * v1485)) - (math.sin(v1480) * v1485 * 0.4), v1481 - (v1484 * v1485), v1482 + (v1483 * v1485), v727.r, v727.g, v727.b, v727.a);
+					imgui.dl_add_circle_filled(v1481, v1482, 3, v727.r, v727.g, v727.b, v727.a);
+					if v57.arrows_distance:get() then
+						local v1535 = math.sqrt((v1477 * v1477) + (v1478 * v1478)) * 0.01905;
+						imgui.dl_add_text(v1481 - 11, v1482 + 10, v727.r, v727.g, v727.b, v727.a, string.format("%.0fm", v1535));
+					end
+				end
+			end
+		end
+	end
+end
+local v84 = "SRZ1";
+local v85 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+local v86 = "sunrize_hvh.cfg";
+local v87 = {set=nil,get=nil,backend="none"};
+local function v88(v728)
+	if (v728 == "utils") then
+		return utils;
+	end
+	if (v728 == "client") then
+		return client;
+	end
+	if (v728 == "engine") then
+		return engine;
+	end
+	if (v728 == "globals") then
+		return globals;
+	end
+	if (v728 == "clipboard") then
+		return clipboard;
+	end
+	if (v728 == "imgui") then
+		return imgui;
+	end
+	if (v728 == "render") then
+		return render;
+	end
+	return nil;
+end
+local function v89(v729, v730, v731)
+	local v732 = nil;
+	pcall(function()
+		v732 = v88(v729);
+	end);
+	if (type(v732) ~= "table") then
+		return false;
+	end
+	local v733 = v732[v730];
+	local v734 = v732[v731];
+	if ((type(v733) ~= "function") or (type(v734) ~= "function")) then
+		return false;
+	end
+	v87.set = function(v934)
+		local v935 = false;
+		pcall(function()
+			v935 = v733(v934);
+		end);
+		return (v935 and true) or false;
+	end;
+	v87.get = function()
+		local v936 = nil;
+		pcall(function()
+			v936 = v734();
+		end);
+		if (type(v936) == "string") then
+			return v936;
+		end
+		return nil;
+	end;
+	v87.backend = v729 .. "." .. v730;
+	return true;
+end
+local function v90()
+	local v738 = pcall(function()
+		local v937 = nil;
+		if (type(ffi) == "table") then
+			v937 = ffi;
+		else
+			v937 = require("ffi");
+		end
+		if not v937 then
+			error("no ffi");
+		end
+		v937.cdef([[
+            void* GlobalAlloc(unsigned int uFlags, size_t dwBytes);
+            void* GlobalLock(void* hMem);
+            int   GlobalUnlock(void* hMem);
+            void* GetClipboardData(unsigned int uFormat);
+            int   OpenClipboard(void* hWndNewOwner);
+            int   CloseClipboard(void);
+            int   EmptyClipboard(void);
+            void* SetClipboardData(unsigned int uFormat, void* hMem);
+        ]]);
+		local v938 = v937.load("user32");
+		local v939 = v937.load("kernel32");
+		v87.set = function(v1107)
+			local v1108 = #v1107;
+			local v1109 = v939.GlobalAlloc(2, v1108 + 1);
+			if (v1109 == nil) then
+				return false;
+			end
+			local v1110 = v939.GlobalLock(v1109);
+			if (v1110 == nil) then
+				return false;
+			end
+			v937.copy(v1110, v1107, v1108);
+			v937.cast("char*", v1110)[v1108] = 0;
+			v939.GlobalUnlock(v1109);
+			if (v938.OpenClipboard(nil) == 0) then
+				return false;
+			end
+			v938.EmptyClipboard();
+			local v1112 = v938.SetClipboardData(1, v1109);
+			v938.CloseClipboard();
+			return v1112 ~= nil;
+		end;
+		v87.get = function()
+			if (v938.OpenClipboard(nil) == 0) then
+				return nil;
+			end
+			local v1113 = nil;
+			local v1114 = v938.GetClipboardData(1);
+			if (v1114 ~= nil) then
+				local v1310 = v939.GlobalLock(v1114);
+				if (v1310 ~= nil) then
+					v1113 = v937.string(v937.cast("char*", v1310));
+					v939.GlobalUnlock(v1114);
+				end
+			end
+			v938.CloseClipboard();
+			return v1113;
+		end;
+		v87.backend = "ffi/user32";
+	end);
+	return v738 and (v87.set ~= nil);
+end
+function clipboard_init()
+	if (v87.set and v87.get) then
+		return true;
+	end
+	local v739 = {{"utils","set_clipboard","get_clipboard"},{"utils","clipboard_set","clipboard_get"},{"client","set_clipboard","get_clipboard"},{"engine","set_clipboard","get_clipboard"},{"globals","set_clipboard","get_clipboard"},{"clipboard","set","get"},{"clipboard","set_text","get_text"},{"imgui","set_clipboard_text","get_clipboard_text"}};
+	for v943, v944 in ipairs(v739) do
+		local v945 = false;
+		pcall(function()
+			v945 = v89(v944[1], v944[2], v944[3]);
+		end);
+		if v945 then
+			return true;
+		end
+	end
+	local v740 = false;
+	pcall(function()
+		v740 = v90();
+	end);
+	return (v740 and true) or false;
+end
+local v91 = {session_start=true};
+function b64_encode(v741)
+	local v742, v743 = {}, #v741;
+	for v946 = 1, v743, 3 do
+		local v947 = v741:byte(v946) or 0;
+		local v948 = v741:byte(v946 + 1);
+		local v949 = v741:byte(v946 + 2);
+		local v950 = math.floor(v947 / 4);
+		local v951 = ((v947 % 4) * 16) + ((v948 and math.floor(v948 / 16)) or 0);
+		local v952 = v948 and (((v948 % 16) * 4) + ((v949 and math.floor(v949 / 64)) or 0));
+		local v953 = v949 and (v949 % 64);
+		v742[#v742 + 1] = v85:sub(v950 + 1, v950 + 1);
+		v742[#v742 + 1] = v85:sub(v951 + 1, v951 + 1);
+		v742[#v742 + 1] = (v952 and v85:sub(v952 + 1, v952 + 1)) or "=";
+		v742[#v742 + 1] = (v953 and v85:sub(v953 + 1, v953 + 1)) or "=";
+	end
+	return table.concat(v742);
+end
+function b64_decode(v744)
+	if (type(v744) ~= "string") then
+		return nil;
+	end
+	v744 = v744:gsub("%s+", "");
+	if ((#v744 == 0) or ((#v744 % 4) ~= 0)) then
+		return nil;
+	end
+	local v745 = {};
+	for v955 = 1, 64 do
+		v745[v85:sub(v955, v955)] = v955 - 1;
+	end
+	local v746 = {};
+	for v957 = 1, #v744, 4 do
+		local v958, v959 = v744:sub(v957, v957), v744:sub(v957 + 1, v957 + 1);
+		local v960, v961 = v744:sub(v957 + 2, v957 + 2), v744:sub(v957 + 3, v957 + 3);
+		local v962, v963 = v745[v958], v745[v959];
+		local v964, v965 = v745[v960], v745[v961];
+		if (not v962 or not v963) then
+			return nil;
+		end
+		local v966 = (v962 * 4) + math.floor(v963 / 16);
+		local v967 = ((v963 % 16) * 16) + ((v964 and math.floor(v964 / 4)) or 0);
+		local v968 = (v964 and (((v964 % 4) * 64) + (v965 or 0))) or 0;
+		v746[#v746 + 1] = string.char(v966);
+		if ((v960 ~= "=") and v964) then
+			v746[#v746 + 1] = string.char(v967);
+		end
+		if ((v961 ~= "=") and v965) then
+			v746[#v746 + 1] = string.char(v968);
+		end
+	end
+	return table.concat(v746);
+end
+function config_serialize()
+	local v747 = {};
+	v747[#v747 + 1] = "ver=1";
+	for v970, v971 in pairs(v57) do
+		if (not v91[v970] and (type(v971) == "table") and (type(v971.get) == "function")) then
+			local v1221 = select("#", v971:get());
+			local v1222, v1223, v1224, v1225 = v971:get();
+			if (v1221 == 4) then
+				if (type(v1222) == "number") then
+					v747[#v747 + 1] = "ui." .. v970 .. "=" .. string.format("%d,%d,%d,%d", v1222, v1223, v1224, v1225);
+				end
+			elseif (v1221 == 1) then
+				if (type(v1222) == "boolean") then
+					v747[#v747 + 1] = "ui." .. v970 .. "=" .. ((v1222 and "1") or "0");
+				elseif (type(v1222) == "number") then
+					v747[#v747 + 1] = "ui." .. v970 .. "=" .. string.format("%.4f", v1222);
+				elseif (type(v1222) == "string") then
+					v747[#v747 + 1] = "ui." .. v970 .. "=" .. v1222;
+				end
+			end
+		end
+	end
+	for v972, v973 in ipairs(v62) do
+		local v974 = v61[v973];
+		if v974 then
+			v747[#v747 + 1] = "bind." .. v973 .. "=" .. tostring(v974.key or 0) .. "," .. tostring(v974.mode or 0);
+		end
+	end
+	return v84 .. ":" .. b64_encode(table.concat(v747, "\n"));
+end
+function config_apply(v749)
+	if (type(v749) ~= "string") then
+		return false, "Clipboard is empty";
+	end
+	v749 = v749:gsub("^%s+", ""):gsub("%s+$", "");
+	if (v749 == "") then
+		return false, "Clipboard is empty";
+	end
+	local v750 = v749:match("^" .. v84 .. ":([A-Za-z0-9+/=]+)$");
+	if not v750 then
+		v750 = v749:match("^([A-Za-z0-9+/=]+)$");
+	end
+	if not v750 then
+		return false, "Not a SunRize config";
+	end
+	local v751 = b64_decode(v750);
+	if (not v751 or (v751 == "")) then
+		return false, "Corrupt config payload";
+	end
+	local v752, v753, v754 = 0, 0, 0;
+	for v975 in v751:gmatch("[^\n]+") do
+		local v976, v977 = v975:match("^([%w_%.]+)=(.*)$");
+		if (v976 and v977) then
+			local v1227, v1228 = v976:match("^(%a+)%.(.+)$");
+			if (v1227 == "ui") then
+				local v1395 = v57[v1228];
+				if ((type(v1395) == "table") and (type(v1395.set) == "function")) then
+					local v1487 = select("#", v1395:get());
+					if (v1487 == 4) then
+						local v1537, v1538, v1539, v1540 = v977:match("^(%-?%d+),(%-?%d+),(%-?%d+),(%-?%d+)$");
+						if v1537 then
+							pcall(function()
+								v1395:set(tonumber(v1537), tonumber(v1538), tonumber(v1539), tonumber(v1540));
+							end);
+							v752 = v752 + 1;
+						else
+							v754 = v754 + 1;
+						end
+					else
+						local v1541 = v1395:get();
+						if (type(v1541) == "string") then
+							v1395:set(v977);
+							v752 = v752 + 1;
+						else
+							local v1604 = tonumber(v977);
+							if v1604 then
+								if (type(v1541) == "boolean") then
+									v1395:set(v1604 ~= 0);
+								else
+									v1395:set(v1604);
+								end
+								v752 = v752 + 1;
+							else
+								v754 = v754 + 1;
+							end
+						end
+					end
+				else
+					v754 = v754 + 1;
+				end
+			elseif (v1227 == "bind") then
+				local v1488 = v61[v1228];
+				if v1488 then
+					local v1542, v1543 = v977:match("^(%d+),(%d+)$");
+					if v1542 then
+						v1488.key = tonumber(v1542);
+						v1488.mode = tonumber(v1543) or 0;
+						v1488.was_down = false;
+						v753 = v753 + 1;
+					else
+						v754 = v754 + 1;
+					end
+				else
+					v754 = v754 + 1;
+				end
+			elseif (v976 == "ver") then
+			else
+				v754 = v754 + 1;
+			end
+		end
+	end
+	if ((v752 == 0) and (v753 == 0)) then
+		return false, "Nothing to import (unknown format)";
+	end
+	return true, string.format("Imported %d settings, %d binds (%d skipped)", v752, v753, v754);
+end
+function config_export()
+	local v755 = nil;
+	pcall(function()
+		v755 = config_serialize();
+	end);
+	if not v755 then
+		v32 = {text="Export failed",born=globals.realtime(),ok=false};
+		return;
+	end
+	pcall(function()
+		file.write(v86, v755);
+	end);
+	local v756 = false;
+	pcall(function()
+		v756 = clipboard_init();
+	end);
+	if (v756 and v87.set) then
+		local v1115 = false;
+		pcall(function()
+			v1115 = v87.set(v755);
+		end);
+		if v1115 then
+			v32 = {text=("Copied to clipboard (" .. tostring(v87.backend) .. ")"),born=globals.realtime(),ok=true};
+			return;
+		end
+	end
+	v32 = {text=("Clipboard unavailable - saved to " .. v86),born=globals.realtime(),ok=false};
+end
+function config_import()
+	local v757 = nil;
+	pcall(function()
+		if (clipboard_init() and v87.get) then
+			v757 = v87.get();
+		end
+	end);
+	if (not v757 or (v757 == "")) then
+		pcall(function()
+			if file.exists(v86) then
+				v757 = file.read(v86);
+			end
+		end);
+	end
+	if (not v757 or (v757 == "")) then
+		v32 = {text="Clipboard and config file are empty",born=globals.realtime(),ok=false};
+		return;
+	end
+	local v758, v759 = false, nil;
+	pcall(function()
+		v758, v759 = config_apply(v757);
+	end);
+	v32 = {text=(v759 or "Import failed"),born=globals.realtime(),ok=((v758 and true) or false)};
+end
+client.set_callback("on_paint", function()
+	update_binds();
+	draw_intro();
+	if v57.scope_enable:get() then
+		draw_custom_scope_scene();
+	end
+	draw_fov_circle();
+	local v760 = entitylist.get_local_player();
+	if (engine.is_in_game() and v760) then
+		local v1116 = globals.realtime();
+		local v1117 = v1116 - v10;
+		v10 = v1116;
+		if (v1117 > 0) then
+			v11 = math.floor((1 / v1117) + 0.5);
+		end
+		update_peek_assistant();
+		draw_esp();
+		draw_tracers();
+		draw_grenades();
+		draw_offscreen_arrows();
+		draw_peek_assistant();
+		draw_peek_indicator();
+		draw_center_watermark();
+		draw_hit_logs();
+		if v57.dmg_enable:get() then
+			local v1311 = v57.dmg_color;
+			local v1312 = v57.dmg_life:get();
+			local v1313 = v57.dmg_rise:get();
+			for v1396 = #v17, 1, -1 do
+				local v1397 = v17[v1396];
+				local v1398 = v1116 - v1397.born;
+				if (v1398 >= v1312) then
+					table.remove(v17, v1396);
+				else
+					local v1489 = v1398 / v1312;
+					local v1490, v1491 = safe_w2s(v1397.x, v1397.y, v1397.z + (v1313 * v1489));
+					if v1490 then
+						local v1544 = ((v1397.hg == 1) and v57.dmg_head_color) or v57.dmg_color;
+						local v1545 = math.floor(v1544.a * (1 - v1489));
+						local v1546 = "-" .. v1397.dmg;
+						if v57.dmg_outline:get() then
+							local v1608 = math.floor(v1545 * 0.8);
+							render.text(v1490 - 1, v1491, v1546, 0, 0, 0, v1608, true, "menu");
+							render.text(v1490 + 1, v1491, v1546, 0, 0, 0, v1608, true, "menu");
+							render.text(v1490, v1491 - 1, v1546, 0, 0, 0, v1608, true, "menu");
+							render.text(v1490, v1491 + 1, v1546, 0, 0, 0, v1608, true, "menu");
+						end
+						render.text(v1490, v1491, v1546, v1544.r, v1544.g, v1544.b, v1545, true, "menu");
+					end
+				end
+			end
+		end
+		if (v57.hit_enable:get() and (#v18 > 0)) then
+			local v1314 = v57.hit_size:get();
+			local v1315 = v57.hit_gap:get();
+			local v1316 = v57.hit_thick:get();
+			local v1317 = v57.hit_life:get();
+			for v1399 = #v18, 1, -1 do
+				local v1400 = v18[v1399];
+				local v1401 = v1116 - v1400.born;
+				if (v1401 >= v1317) then
+					table.remove(v18, v1399);
+				else
+					local v1492, v1493 = safe_w2s(v1400.x, v1400.y, v1400.z);
+					if v1492 then
+						local v1547 = ((v1400.hg == 1) and v57.hit_head_color) or v57.hit_color;
+						local v1548 = 1 - (v1401 / v1317);
+						local v1549 = math.min(1, v1401 / v53);
+						local v1550 = 1 - ((1 - v1549) ^ 3);
+						local v1551 = (v1314 + v1315) * 2 * (1 - v1550);
+						local v1552 = math.floor(v1547.a * v1548);
+						if v57.hit_glow:get() then
+							local v1609 = (v1314 + v1315) * v57.hit_glow_size:get();
+							local v1610 = math.floor(v1547.a * v1548 * (v57.hit_glow_op:get() / 100));
+							render.glow_circle(v1492, v1493, v1609, v1547.r, v1547.g, v1547.b, v1610, 0, 48);
+						end
+						for v1577, v1578 in ipairs(v52) do
+							local v1579, v1580 = v1578.dx * v1551, v1578.dy * v1551;
+							gradient_line(v1492 + (v1578.dx * (v1315 + v1314)) + v1579, v1493 + (v1578.dy * (v1315 + v1314)) + v1580, v1492 + (v1578.dx * v1315) + v1579, v1493 + (v1578.dy * v1315) + v1580, v1547.r, v1547.g, v1547.b, 0, v1552, v1316, 8);
+						end
+					else
+						table.remove(v18, v1399);
+					end
+				end
+			end
+		end
+		if (v57.fn_enable:get() and (#v15 > 0)) then
+			local v1318 = v57.fn_color;
+			local v1319 = v57.fn_size:get();
+			for v1402 = #v15, 1, -1 do
+				local v1403 = v15[v1402];
+				local v1404 = v1116 - v1403.born;
+				if (v1404 > v51) then
+					table.remove(v15, v1402);
+				else
+					local v1494 = (v1403.vel_x or 0) * v1404;
+					local v1495 = (v1403.vel_y or 0) * v1404;
+					local v1496 = ((v1403.vel_z or 0) * v1404) - (0.5 * v57.fn_gravity:get() * v1404 * v1404);
+					local v1497, v1498 = safe_w2s(v1403.x + v1494, v1403.y + v1495, v1403.z + v1496);
+					if v1497 then
+						local v1553 = v1319;
+						local v1554 = 255;
+						local v1555 = 1;
+						if (v1404 < v48) then
+							local v1611 = v1404 / v48;
+							local v1612 = 1 - ((1 - v1611) ^ 3);
+							v1553 = math.floor((v1319 * 0.36) + (v1319 * 0.64 * v1612));
+						elseif (v1404 < (v48 + v49)) then
+							v1553 = v1319;
+						else
+							local v1631 = ((v1404 - v48) - v49) / v50;
+							local v1632 = v1631 * v1631;
+							local v1633 = v1631 * math.pi * 2;
+							v1555 = math.abs(math.cos(v1633));
+							v1553 = math.floor(v1319 * (1 - (v1632 * 0.6)));
+							v1554 = math.floor(255 * (1 - v1632));
+						end
+						local v1556 = v1403.dmg;
+						local v1557, v1558 = safe_get_text_size(v1556, v1553);
+						local v1559 = v1497 - ((v1557 * v1555) / 2);
+						for v1581 = 1, #v1556 do
+							local v1582 = v1556:sub(v1581, v1581);
+							local v1583, v1584 = safe_get_text_size(v1582, v1553);
+							local v1585 = v1559 + ((v1583 * v1555) / 2);
+							local v1586 = 3;
+							for v1613, v1614 in ipairs({{-v1586,0},{v1586,0},{0,-v1586},{0,v1586}}) do
+								safe_render_text(v1585 + v1614[1], v1498 + v1614[2], v1582, 0, 0, 0, v1554, true, v1553);
+							end
+							safe_render_text(v1585, v1498, v1582, v1318.r, v1318.g, v1318.b, v1554, true, v1553);
+							v1559 = v1559 + (v1583 * v1555);
+						end
+					end
+				end
+			end
+		end
+	end
+	draw_keybinds_window();
+	if not menu.is_open() then
+		return;
+	end
+	if not v2 then
+		return;
+	end
+	ui_block_input = v7 ~= nil;
+	local v761 = {0.5,0.6,0.7,0.8,0.9,1,1.1,1.2,1.3,1.4,1.5};
+	local v762 = v761[v57.gui_scale:get() + 1] or 1;
+	local v763 = v57.menu_width:get() * v762;
+	local v764 = v57.menu_height:get() * v762;
+	local v765 = 54 * v762;
+	local v766 = (v763 - v765) - (24 * v762);
+	local v767 = math.floor(v766 * 0.5) - (6 * v762);
+	local v768 = v42 * v762;
+	local v769 = v43 * v762;
+	local v770 = v44 * v762;
+	local v771 = v45 * v762;
+	local v772 = v46 * v762;
+	local v773 = v47 * v762;
+	process_key_capture();
+	local v774, v775, v776, v777 = v57.menu_color:get();
+	imgui.push_style_color(imgui.Col_WindowBg, theme_bg_r, theme_bg_g, theme_bg_b, 255);
+	imgui.push_style_color(imgui.Col_Border, theme_border_r, theme_border_g, theme_border_b, 255);
+	imgui.push_style_color(imgui.Col_TitleBg, 0, 0, 0, 0);
+	imgui.push_style_color(imgui.Col_TitleBgActive, 0, 0, 0, 0);
+	imgui.push_style_color(imgui.Col_Text, theme_text_r, theme_text_g, theme_text_b, 255);
+	imgui.push_style_color(imgui.Col_TextDisabled, 95, 100, 110, 255);
+	imgui.push_style_var_float(imgui.StyleVar_WindowRounding, 4);
+	imgui.push_style_var_float(imgui.StyleVar_WindowBorderSize, 1);
+	imgui.push_style_var(imgui.StyleVar_WindowPadding, 0, 0);
+	imgui.push_style_var(imgui.StyleVar_ItemSpacing, 8, 6);
+	local v778 = 26 * v762;
+	local v779 = (v26 and v778) or v764;
+	v27 = lerp(v27 or v764, v779, 0.15);
+	imgui.set_next_window_size(v763, v27, imgui.Cond_Always);
+	local v780 = imgui.begin("SUNRIZE", imgui.WindowFlags_NoCollapse + imgui.WindowFlags_NoTitleBar);
+	if v780 then
+		local v1118, v1119 = pcall(function()
+			imgui.set_window_font_scale(v762);
+			local v1229, v1230 = imgui.get_window_pos();
+			local v1231, v1232 = imgui.get_window_size();
+			v66.menu_rect = {x=v1229,y=v1230,w=v1231,h=v1232};
+			local v1234 = v1229 + v765 + (12 * v762);
+			local v1235 = v1230 + (12 * v762);
+			local v1236 = v1234;
+			imgui.dl_add_rect_filled(v1229, v1230, v1229 + v1231, v1230 + v1232, theme_bg_r, theme_bg_g, theme_bg_b, 255, 4);
+			imgui.dl_add_rect_filled(v1229, v1230, v1229 + v1231, v1230 + v778, theme_card_r, theme_card_g, theme_card_b, 255, 4);
+			imgui.dl_add_line(v1229, v1230 + v778, v1229 + v1231, v1230 + v778, theme_border_r, theme_border_g, theme_border_b, 255, 1);
+			imgui.dl_add_text(v1229 + 16, v1230 + 9, v774, v775, v776, 255, "SUNRIZE");
+			local v1237 = ({"Home","Legit","Rage","Visuals","Settings"})[v5 + 1] or "";
+			imgui.dl_add_text(v1229 + 78, v1230 + 9, theme_text_r, theme_text_g, theme_text_b, 120, v1237);
+			local v1238 = {};
+			local v1239 = 0;
+			local v1240 = "";
+			if (v5 == 0) then
+				v1238 = {"Overview","Changelog"};
+				v1239 = v66.sub_tab_home or 0;
+				v1240 = "home";
+			elseif (v5 == 1) then
+				v1238 = {"Rifles","Snipers","Pistols","SMGs"};
+				v1239 = v57.weapon_class:get();
+				v1240 = "legit";
+			elseif (v5 == 2) then
+				v1238 = {"Aim","Anti-Aim","HvH"};
+				v1239 = v66.sub_tab_rage or 0;
+				v1240 = "aa";
+			elseif (v5 == 3) then
+				v1238 = {"Overlays","Changer","Extra"};
+				v1239 = v66.sub_tab_misc or 0;
+				v1240 = "misc";
+			elseif (v5 == 4) then
+				v1238 = {"Menu","Binds","Config"};
+				v1239 = v66.sub_tab_settings or 0;
+				v1240 = "settings";
+			end
+			local v1241 = v1229 + (108 * v762);
+			for v1320, v1321 in ipairs(v1238) do
+				local v1322 = v1239 == (v1320 - 1);
+				local v1323 = imgui.calc_text_size(v1321);
+				imgui.set_cursor_screen_pos(v1241, v1230 + (10 * v762));
+				if imgui.invisible_button("##hdr_sub_" .. v1240 .. "_" .. v1320, v1323 + 12, 20) then
+					if (v5 == 0) then
+						v66.sub_tab_home = v1320 - 1;
+					elseif (v5 == 1) then
+						v57.weapon_class:set(v1320 - 1);
+					elseif (v5 == 2) then
+						v66.sub_tab_rage = v1320 - 1;
+					elseif (v5 == 3) then
+						v66.sub_tab_misc = v1320 - 1;
+					elseif (v5 == 4) then
+						v66.sub_tab_settings = v1320 - 1;
+					end
+				end
+				local v1324 = imgui.is_item_hovered();
+				local v1325 = (v1322 and theme_text_r) or (theme_text_r - 70);
+				local v1326 = (v1322 and theme_text_g) or (theme_text_g - 70);
+				local v1327 = (v1322 and theme_text_b) or (theme_text_b - 70);
+				if (v1324 and not v1322) then
+					v1325 = theme_text_r - 25;
+					v1326 = theme_text_g - 25;
+					v1327 = theme_text_b - 25;
+				end
+				v1325 = math.max(0, math.min(255, v1325));
+				v1326 = math.max(0, math.min(255, v1326));
+				v1327 = math.max(0, math.min(255, v1327));
+				imgui.dl_add_text(v1241 + (6 * v762), v1230 + (11 * v762), v1325, v1326, v1327, 255, v1321);
+				if v1322 then
+					imgui.dl_add_rect_filled(v1241 + (5 * v762), v1230 + (24 * v762), v1241 + v1323 + (7 * v762), v1230 + (25.5 * v762), v774, v775, v776, 235, 1);
+				end
+				v1241 = v1241 + v1323 + (14 * v762);
+			end
+			if v57.menu_avatar:get() then
+				local v1405 = -1;
+				pcall(function()
+					v1405 = render.get_local_avatar();
+				end);
+				if (v1405 and (v1405 >= 0)) then
+					pcall(function()
+						render.image_rounded(v1405, (v1229 + v1231) - (74 * v762), v1230 + (9 * v762), 22 * v762, 22 * v762, 11);
+					end);
+				end
+			end
+			local v1242 = (v1229 + v1231) - (32 * v762);
+			imgui.set_cursor_screen_pos(v1242, v1230 + (10 * v762));
+			if imgui.invisible_button("##collapse_toggle_btn", 20, 20) then
+				v26 = not v26;
+			end
+			local v1243 = 200;
+			if v26 then
+				imgui.dl_add_line(v1242 + 4, v1230 + 16, v1242 + 10, v1230 + 22, v1243, v1243, v1243, 255, 1.5);
+				imgui.dl_add_line(v1242 + 10, v1230 + 22, v1242 + 16, v1230 + 16, v1243, v1243, v1243, 255, 1.5);
+			else
+				imgui.dl_add_line(v1242 + 4, v1230 + 22, v1242 + 10, v1230 + 16, v1243, v1243, v1243, 255, 1.5);
+				imgui.dl_add_line(v1242 + 10, v1230 + 16, v1242 + 16, v1230 + 22, v1243, v1243, v1243, 255, 1.5);
+			end
+			local v1244 = {"Home","Legit","Rage","Visuals","Settings"};
+			local v1245 = 26 * v762;
+			local v1246 = 4 * v762;
+			local v1247 = v1229 + (12 * v762);
+			local v1248 = v1230 + v778 + (12 * v762);
+			imgui.dl_add_line((v1229 + v765) - (2 * v762), v1230 + v778 + (4 * v762), (v1229 + v765) - (2 * v762), (v1230 + v1232) - (10 * v762), theme_border_r, theme_border_g, theme_border_b, 110, 1);
+			for v1328 = 0, 4 do
+				local v1329 = v1248 + (v1328 * (v1245 + v1246));
+				local v1330 = v5 == v1328;
+				imgui.set_cursor_screen_pos(v1247, v1329);
+				if imgui.invisible_button("##main_tab_" .. v1328, v1245, v1245) then
+					v5 = v1328;
+				end
+				local v1331 = imgui.is_item_hovered();
+				if v1331 then
+					pcall(function()
+						imgui.set_tooltip(v1244[v1328 + 1]);
+					end);
+				end
+				if v1330 then
+					imgui.dl_add_rect_filled(v1247, v1329, v1247 + v1245, v1329 + v1245, v774, v775, v776, 14, 5);
+					imgui.dl_add_rect_filled(v1247 - (6 * v762), v1329 + (5 * v762), v1247 - (4 * v762), (v1329 + v1245) - (5 * v762), v774, v775, v776, 180, 1);
+				end
+				draw_memesense_tab_icon(v1328, v1247 + (v1245 * 0.5), v1329 + (v1245 * 0.5), (v1330 and 1) or 0, v762);
+			end
+			local v1249 = 42 * v762;
+			local v1250 = (v1230 + v1232) - v1249;
+			if (v27 > (v778 + (30 * v762))) then
+				local v1406 = v1230 + v778 + (12 * v762);
+				local v1407 = ((v1232 - v778) - v1249) - (24 * v762);
+				local v1408 = (v1231 - (32 * v762)) * 0.5;
+				local v1409 = v1229 + (12 * v762);
+				local v1410 = v1229 + (12 * v762) + v1408 + (8 * v762);
+				local v1411 = v1235 + (32 * v762);
+				local v1412 = (v764 - (v1411 - v1230)) - (12 * v762);
+				if v57.menu_cards:get() then
+					local v1499 = 8 * v762;
+					local v1500 = v1411 - (8 * v762);
+					local v1501 = (v1411 + v1412) - (6 * v762);
+					local v1502 = (v1229 + (12 * v762)) - (6 * v762);
+					local v1503 = (v1229 + (12 * v762) + v767 + (10 * v762)) - (4 * v762);
+					local v1504 = v767 + (10 * v762);
+					imgui.dl_add_rect_filled(v1502, v1500, v1502 + v1504, v1501, theme_card_r, theme_card_g, theme_card_b, 255, 8);
+					imgui.dl_add_rect_filled(v1503, v1500, v1503 + v1504, v1501, theme_card_r, theme_card_g, theme_card_b, 255, 8);
+					imgui.dl_add_rect(v1502, v1500, v1502 + v1504, v1501, theme_border_r, theme_border_g, theme_border_b, 140, 8, 1);
+					imgui.dl_add_rect(v1503, v1500, v1503 + v1504, v1501, theme_border_r, theme_border_g, theme_border_b, 140, 8, 1);
+				end
+				if (v5 == 0) then
+					if (v66.sub_tab_home == 0) then
+						local v1560 = v1229 + v765 + (12 * v762);
+						local v1561 = v1411;
+						draw_custom_card_header("Session & Account Info", v1560, v1561, v767);
+						v1561 = v1561 + v771;
+						local v1562 = "Authorized User";
+						pcall(function()
+							if v760 then
+								v1562 = v760:get_name();
+							end
+						end);
+						imgui.set_cursor_screen_pos(v1560, v1561);
+						imgui.text("User: " .. v1562);
+						v1561 = v1561 + (18 * v762);
+						imgui.set_cursor_screen_pos(v1560, v1561);
+						imgui.text("Subscription Status: ");
+						imgui.same_line(0, 5);
+						imgui.text_colored(100, 220, 100, 255, "Free (Lifetime)");
+						v1561 = v1561 + (18 * v762);
+						local v1563 = math.floor(globals.realtime() - v57.session_start);
+						local v1564 = math.floor(v1563 / 60);
+						local v1565 = v1563 % 60;
+						imgui.set_cursor_screen_pos(v1560, v1561);
+						imgui.text(string.format("Session Time: %02d:%02d", v1564, v1565));
+						v1561 = v1561 + (18 * v762);
+						imgui.set_cursor_screen_pos(v1560, v1561);
+						imgui.text("Script Version: A2.00");
+						v1561 = v1561 + (18 * v762);
+						imgui.set_cursor_screen_pos(v1560, v1561);
+						imgui.text("Developer - t.me/nex0coded");
+						v1561 = v1561 + (18 * v762);
+						imgui.set_cursor_screen_pos(v1560, v1561);
+						imgui.text("Thanks for using SunRize!<3");
+						local v1566 = v1229 + v765 + (12 * v762) + v767 + (10 * v762);
+						local v1567 = v1411;
+						draw_custom_card_header("Short Instructions", v1566, v1567, v767);
+						v1567 = v1567 + v771;
+						imgui.set_cursor_screen_pos(v1566, v1567);
+						imgui.text("- Configure your settings in the Legitbot tab.");
+						v1567 = v1567 + (18 * v762);
+						imgui.set_cursor_screen_pos(v1566, v1567);
+						imgui.text("- Use the dots on checkboxes to bind keys.");
+						v1567 = v1567 + (18 * v762);
+						imgui.set_cursor_screen_pos(v1566, v1567);
+						imgui.text("- Rage - Aim / Anti-Aim / HvH, states in a combo.");
+						v1567 = v1567 + (18 * v762);
+						imgui.set_cursor_screen_pos(v1566, v1567);
+						imgui.text("- Configs: Settings -> Config (clipboard + file).");
+					elseif (v66.sub_tab_home == 1) then
+						local v1615 = v1229 + v765 + (12 * v762);
+						local v1616 = v1411;
+						draw_custom_card_header("Change Log (A2.00)", v1615, v1616, v767);
+						v1616 = v1616 + v771;
+						local v1617 = {{"A1.44 Stable -> A2.00",true},{"[+] Anti-Aim",true},{"- Conditionals: Standing / Moving / In Air.",false},{"- At Targets, manual directions, Yaw Inverter.",false},{"- Desync 0-58 with side L/R/Auto + flip key.",false},{"- Jitter (random), spin, pitch jitter, ladders.",false},{"[+] Rage Bot",true},{"- Ray based hit chance, spread resolve modes.",false},{"- Min damage head/body + adaptive + lethal HC.",false},{"- Full CS2 hitbox list, target priority.",false},{"- Auto wall: damage + hit chance through wall.",false},{"- 360 shots, revolver pacing, auto pistol.",false},{"[+] HvH",true},{"- Resolver: movement / brute / manual + key.",false},{"- Peek assistant: save point, auto return.",false},{"- After shot break, body aim, HC/dmg overrides.",false},{"[+] Visuals",true},{"- Watermark, player ESP, tracers, grenades,",false},{"- offscreen arrows, FOV circle, kill counter.",false},{"[+] Interface",true},{"- Minimal menu, left hotbar, switches, pills.",false},{"- Binds with dots, key chips and T/H/A modes.",false},{"- Configs via clipboard + file, accent color.",false},{"[-] Removed",true},{"- Bunnyhop.",false},{"- Custom Gameplay Crosshair.",false},{"- UI theme selector (single theme now).",false},{"[/] Stability",true},{"- Fixed GUI crash (_G in sandbox).",false},{"- Fixed dropdown click-through, bind popup.",false},{"- Fixed ladder / in-air state detection.",false},{"- Fixed target selection skipping visible foes.",false}};
+						for v1622, v1623 in ipairs(v1617) do
+							imgui.set_cursor_screen_pos(v1615, v1616);
+							if v1623[2] then
+								imgui.text_colored(v774, v775, v776, 255, v1623[1]);
+							else
+								imgui.text(v1623[1]);
+							end
+							v1616 = v1616 + (18 * v762);
+						end
+						local v1618 = v1229 + v765 + (12 * v762) + v767 + (10 * v762);
+						local v1619 = v1411;
+						draw_custom_card_header("Credits & Sources", v1618, v1619, v767);
+						v1619 = v1619 + v771;
+						imgui.set_cursor_screen_pos(v1618, v1619);
+						imgui.text("Developed with passion by nex0coded.");
+						v1619 = v1619 + (18 * v762);
+						imgui.set_cursor_screen_pos(v1618, v1619);
+						imgui.text("HVH math, subtick jumps, and visual overlays.");
+						v1619 = v1619 + (18 * v762);
+						imgui.set_cursor_screen_pos(v1618, v1619);
+						imgui.text("Optimized sandbox env to avoid upvalue limits.");
+					end
+				elseif (v5 == 1) then
+					local v1568 = v1229 + v765 + (12 * v762);
+					local v1569 = v1411;
+					local v1570 = {"Rifles","Snipers","Pistols","SMGs"};
+					local v1571 = v1570[v57.weapon_class:get() + 1] or "Global";
+					draw_custom_card_header(v1571 .. " Aimbot Setup", v1568, v1569, v767);
+					v1569 = v1569 + v771;
+					imgui.set_cursor_screen_pos(v1568, v1569);
+					v57.enable_aim:set((custom_checkbox("Enable Aimbot", v57.enable_aim:get(), "leg_en_cb", "enable_aim")));
+					v1569 = v1569 + v768;
+					imgui.set_cursor_screen_pos(v1568, v1569);
+					v57.draw_fov:set((custom_checkbox("Draw FOV Circle", v57.draw_fov:get(), "leg_fov_cb")));
+					v1569 = v1569 + v768;
+					imgui.set_cursor_screen_pos(v1568, v1569);
+					v57.dynamic_fov:set((custom_checkbox("Dynamic FOV", v57.dynamic_fov:get(), "leg_dfov_cb")));
+					v1569 = v1569 + v768;
+					imgui.set_cursor_screen_pos(v1568, v1569);
+					v57.aim_amount:set((custom_slider("FOV Size", v57.aim_amount:get(), 0, 30, false, "°", "aim_amt_sl", v767 - (12 * v762))));
+					v1569 = v1569 + v769;
+					imgui.set_cursor_screen_pos(v1568, v1569);
+					v57.aim_smooth:set((custom_slider("Smooth Speed", v57.aim_smooth:get(), 1, 10, false, nil, "aim_sm_sl", v767 - (12 * v762))));
+					v1569 = v1569 + v769;
+					imgui.set_cursor_screen_pos(v1568, v1569);
+					v57.snap_freeze_time:set((custom_slider("Snap Freeze Time", v57.snap_freeze_time:get(), 0, 2, false, "s", "snap_freeze_sl", v767 - (12 * v762))));
+					v1569 = v1569 + v769;
+					imgui.set_cursor_screen_pos(v1568, v1569);
+					v57.rcs_enable:set((custom_checkbox("Recoil Control System (RCS)", v57.rcs_enable:get(), "rcs_enable_cb")));
+					v1569 = v1569 + v768;
+					if v57.rcs_enable:get() then
+						imgui.set_cursor_screen_pos(v1568, v1569);
+						v57.rcs_amount:set((custom_slider("RCS Control Scale", v57.rcs_amount:get(), 1, 2, false, "x", "rcs_amt_sl", v767 - (12 * v762))));
+						v1569 = v1569 + v769;
+					end
+					imgui.set_cursor_screen_pos(v1568, v1569);
+					v57.aim_lethal_only:set((custom_checkbox("Lethal Shots Only (Rage)", v57.aim_lethal_only:get(), "aim_lethal_cb", "aim_lethal_only")));
+					v1569 = v1569 + v768;
+					imgui.set_cursor_screen_pos(v1568, v1569);
+					local v1572 = custom_combo("Snap Hitgroup", v57.aim_target_hitgroup, {"Head","Chest"}, "aim_hg_combo", v767 - (12 * v762));
+					v1569 = v1569 + v770;
+					imgui.set_cursor_screen_pos(v1568, v1569);
+					local v1573 = custom_combo("Target Selection", v57.aim_sort_mode, {"Distance","FOV (Crosshair)","Highest Damage","Lowest HP"}, "aim_sort_combo", v767 - (12 * v762));
+					local v1574 = v1229 + v765 + (12 * v762) + v767 + (10 * v762);
+					local v1575 = v1411;
+					draw_custom_card_header(v1571 .. " Accuracy Filters", v1574, v1575, v767);
+					v1575 = v1575 + v771;
+					imgui.set_cursor_screen_pos(v1574, v1575);
+					local v1576 = custom_combo("Hitbox Priority", v57.hit_selection, {"Head, Stomach","All hitboxes","Head Only","Chest Only"}, "hit_selection", v767 - (12 * v762));
+					v1575 = v1575 + v770;
+					imgui.set_cursor_screen_pos(v1574, v1575);
+					v57.only_body_aim:set((custom_checkbox("Only body aim", v57.only_body_aim:get(), "ob_aim_cb")));
+					v1575 = v1575 + v768;
+					imgui.set_cursor_screen_pos(v1574, v1575);
+					v57.prefer_head:set((custom_checkbox("Prefer head aim", v57.prefer_head:get(), "pref_h_cb")));
+					v1575 = v1575 + v768;
+					imgui.set_cursor_screen_pos(v1574, v1575);
+					v57.prefer_body:set((custom_checkbox("Prefer body aim", v57.prefer_body:get(), "pref_b_cb")));
+					v1575 = v1575 + v768;
+					imgui.set_cursor_screen_pos(v1574, v1575);
+					v57.body_lethal:set((custom_checkbox("Body aim if lethal", v57.body_lethal:get(), "b_leth_cb")));
+					v1575 = v1575 + v768;
+					imgui.set_cursor_screen_pos(v1574, v1575);
+					v57.one_click_delay:set((custom_checkbox("One click delay", v57.one_click_delay:get(), "oc_cb")));
+					v1575 = v1575 + v768;
+					imgui.set_cursor_screen_pos(v1574, v1575);
+					v57.before_shot_delay:set((custom_slider("Before shot delay", v57.before_shot_delay:get(), 0, 500, true, "ms", "bs_sl", v767 - (12 * v762))));
+					v1575 = v1575 + v769;
+					imgui.set_cursor_screen_pos(v1574, v1575);
+					v57.target_switch_delay:set((custom_slider("Target switch delay", v57.target_switch_delay:get(), 0, 1000, true, "ms", "ts_sl", v767 - (12 * v762))));
+					v1575 = v1575 + v769;
+					imgui.set_cursor_screen_pos(v1574, v1575);
+					v57.min_hit_chance:set((custom_slider("Minimum hit chance", v57.min_hit_chance:get(), 0, 100, true, "%", "mhc_sl", v767 - (12 * v762))));
+					v1575 = v1575 + v769;
+					imgui.set_cursor_screen_pos(v1574, v1575);
+					v57.min_damage:set((custom_slider("Minimum damage", v57.min_damage:get(), 0, 120, true, "HP", "mdm_sl", v767 - (12 * v762))));
+				elseif (v5 == 2) then
+					local v1620 = v66.sub_tab_rage or 0;
+					if (v1620 == 0) then
+						local v1634 = v1229 + v765 + (12 * v762);
+						local v1635 = v1411;
+						draw_custom_card_header("Rage Bot", v1634, v1635, v767);
+						v1635 = v1635 + v771;
+						imgui.set_cursor_screen_pos(v1634, v1635);
+						v57.enable_aim:set((custom_checkbox("Enable Aimbot", v57.enable_aim:get(), "aim_en_cb", "enable_aim")));
+						v1635 = v1635 + v768;
+						imgui.set_cursor_screen_pos(v1634, v1635);
+						v57.auto_aim_shoot:set((custom_checkbox("Auto Fire", v57.auto_aim_shoot:get(), "aim_autofire_cb", "auto_aim_shoot")));
+						v1635 = v1635 + v768;
+						imgui.set_cursor_screen_pos(v1634, v1635);
+						v57.silent_aim:set((custom_checkbox("Silent Aim", v57.silent_aim:get(), "aim_silent_cb", "silent_aim")));
+						v1635 = v1635 + v768;
+						imgui.set_cursor_screen_pos(v1634, v1635);
+						v57.auto_scope:set((custom_checkbox("Auto Scope (snipers)", v57.auto_scope:get(), "aim_scope_cb")));
+						v1635 = v1635 + v768;
+						imgui.set_cursor_screen_pos(v1634, v1635);
+						v57.quick_stop_mode:set(custom_combo("Quick Stop", v57.quick_stop_mode, {"Off","On Shot","Always"}, "aim_qstop_cmb", v767 - (24 * v762)));
+						v1635 = v1635 + v770;
+						imgui.set_cursor_screen_pos(v1634, v1635);
+						v57.shot_delay:set((custom_slider("Shot Delay", v57.shot_delay:get(), 0, 500, true, "ms", "aim_sdelay_sl", v767 - (24 * v762))));
+						v1635 = v1635 + v769;
+						imgui.set_cursor_screen_pos(v1634, v1635);
+						v57.aim_hitbox:set(custom_combo("Aim Hitbox", v57.aim_hitbox, v83, "aim_hitbox_cmb", v767 - (24 * v762)));
+						v1635 = v1635 + v770;
+						imgui.set_cursor_screen_pos(v1634, v1635);
+						v57.aim_sort_mode:set(custom_combo("Target Priority", v57.aim_sort_mode, {"Distance","FOV","Lowest HP","Highest Damage"}, "aim_sort_cmb2", v767 - (24 * v762)));
+						v1635 = v1635 + v770;
+						imgui.set_cursor_screen_pos(v1634, v1635);
+						v57.rage_360_enable:set((custom_checkbox("360 Shots", v57.rage_360_enable:get(), "r360_cb", "rage_360_enable")));
+						v1635 = v1635 + v768;
+						if v57.rage_360_enable:get() then
+							imgui.set_cursor_screen_pos(v1634, v1635);
+							v57.rage_360_max_angle:set((custom_slider("Max Angle To Target", v57.rage_360_max_angle:get(), 90, 360, false, "deg", "r360_ang_sl", v767 - (24 * v762))));
+							v1635 = v1635 + v769;
+							imgui.set_cursor_screen_pos(v1634, v1635);
+							v57.rage_360_keep_view:set((custom_checkbox("Keep Camera Still", v57.rage_360_keep_view:get(), "r360_keep_cb")));
+							v1635 = v1635 + v768;
+							imgui.set_cursor_screen_pos(v1634, v1635);
+							v57.rage_360_spin:set((custom_checkbox("Spin Shots", v57.rage_360_spin:get(), "r360_spin_cb")));
+							v1635 = v1635 + v768;
+							if v57.rage_360_spin:get() then
+								imgui.set_cursor_screen_pos(v1634, v1635);
+								v57.rage_360_spin_speed:set((custom_slider("Spin Speed", v57.rage_360_spin_speed:get(), 1, 60, false, "deg/t", "r360_spd_sl", v767 - (24 * v762))));
+								v1635 = v1635 + v769;
+							end
+						end
+						v1635 = v1635 + (6 * v762);
+						imgui.set_cursor_screen_pos(v1634, v1635);
+						v57.auto_pistol:set((custom_checkbox("Auto Pistol", v57.auto_pistol:get(), "auto_pistol_cb", "auto_pistol")));
+						v1635 = v1635 + v768;
+						if v57.auto_pistol:get() then
+							imgui.set_cursor_screen_pos(v1634, v1635);
+							v57.auto_pistol_delay:set((custom_slider("Pistol Interval", v57.auto_pistol_delay:get(), 40, 400, true, "ms", "auto_pistol_sl", v767 - (24 * v762))));
+							v1635 = v1635 + v769;
+						end
+						local v1636 = v1229 + v765 + (12 * v762) + v767 + (10 * v762);
+						local v1637 = v1411;
+						draw_custom_card_header("Accuracy & Damage", v1636, v1637, v767);
+						v1637 = v1637 + v771;
+						imgui.set_cursor_screen_pos(v1636, v1637);
+						v57.min_hit_chance:set((custom_slider("Hit Chance", v57.min_hit_chance:get(), 0, 100, false, "%", "aim_hc_sl", v767 - (24 * v762))));
+						v1637 = v1637 + v769;
+						imgui.set_cursor_screen_pos(v1636, v1637);
+						v57.min_damage_head:set((custom_slider("Min Damage (Head)", v57.min_damage_head:get(), 0, 120, false, "HP", "aim_mdh_sl", v767 - (24 * v762))));
+						v1637 = v1637 + v769;
+						imgui.set_cursor_screen_pos(v1636, v1637);
+						v57.min_damage_body:set((custom_slider("Min Damage (Body)", v57.min_damage_body:get(), 0, 120, false, "HP", "aim_mdb_sl", v767 - (24 * v762))));
+						v1637 = v1637 + v769;
+						imgui.set_cursor_screen_pos(v1636, v1637);
+						v57.min_damage_auto:set((custom_checkbox("Adaptive Min Damage", v57.min_damage_auto:get(), "aim_mdauto_cb")));
+						v1637 = v1637 + v768;
+						imgui.set_cursor_screen_pos(v1636, v1637);
+						v57.rage_lethal_ignore_hc:set((custom_checkbox("Ignore HC On Lethal", v57.rage_lethal_ignore_hc:get(), "aim_ihc_cb")));
+						v1637 = v1637 + v768;
+						imgui.set_cursor_screen_pos(v1636, v1637);
+						v57.spread_mode:set(custom_combo("Spread Resolve", v57.spread_mode, {"Hit Chance (rays)","Always Shoot","Only When Accurate"}, "aim_spread_cmb", v767 - (24 * v762)));
+						v1637 = v1637 + v770;
+						if (v57.spread_mode:get() == 2) then
+							imgui.set_cursor_screen_pos(v1636, v1637);
+							v57.spread_accurate_vel:set((custom_slider("Max Speed To Shoot", v57.spread_accurate_vel:get(), 0, 250, false, "u/s", "aim_spvel_sl", v767 - (24 * v762))));
+							v1637 = v1637 + v769;
+						end
+						imgui.set_cursor_screen_pos(v1636, v1637);
+						v57.spread_scale:set((custom_slider("Spread Scale (HC)", v57.spread_scale:get(), 0.1, 3, false, "x", "aim_spscale_sl", v767 - (24 * v762))));
+						v1637 = v1637 + (6 * v762);
+						draw_custom_card_header("Auto Wall Shot", v1636, v1637, v767);
+						v1637 = v1637 + v771;
+						imgui.set_cursor_screen_pos(v1636, v1637);
+						v57.autowall_enable:set((custom_checkbox("Shoot Through Walls", v57.autowall_enable:get(), "aim_aw_cb", "autowall_enable")));
+						v1637 = v1637 + v768;
+						if v57.autowall_enable:get() then
+							imgui.set_cursor_screen_pos(v1636, v1637);
+							v57.autowall_min_damage:set((custom_slider("Min Damage Through Wall", v57.autowall_min_damage:get(), 0, 120, false, "HP", "aim_awmd_sl", v767 - (24 * v762))));
+							v1637 = v1637 + v769;
+							imgui.set_cursor_screen_pos(v1636, v1637);
+							v57.autowall_hc:set((custom_slider("Hit Chance Through Wall", v57.autowall_hc:get(), 0, 100, false, "%", "aim_awhc_sl", v767 - (24 * v762))));
+							v1637 = v1637 + v769;
+							imgui.set_cursor_screen_pos(v1636, v1637);
+							v57.autowall_lethal_only:set((custom_checkbox("Only If Lethal", v57.autowall_lethal_only:get(), "aim_awlethal_cb")));
+							v1637 = v1637 + v768;
+							imgui.set_cursor_screen_pos(v1636, v1637);
+							v57.autowall_max_thickness:set((custom_slider("Max Wall Thickness", v57.autowall_max_thickness:get(), 1, 100, false, "u", "aim_awth_sl", v767 - (24 * v762))));
+							v1637 = v1637 + v769;
+							imgui.set_cursor_screen_pos(v1636, v1637);
+							v57.autowall_retention:set((custom_slider("Damage Retention", v57.autowall_retention:get(), 0.05, 1, false, "x", "aim_awret_sl", v767 - (24 * v762))));
+							v1637 = v1637 + v769;
+							imgui.set_cursor_screen_pos(v1636, v1637);
+							v57.dmg_falloff:set((custom_slider("Damage Falloff per 100u", v57.dmg_falloff:get(), 0, 0.1, false, nil, "aim_falloff_sl", v767 - (24 * v762))));
+						end
+					elseif (v1620 == 1) then
+						local v1640 = v1229 + v765 + (12 * v762);
+						local v1641 = v1411;
+						draw_custom_card_header("Anti-Aim", v1640, v1641, v767);
+						v1641 = v1641 + v771;
+						imgui.set_cursor_screen_pos(v1640, v1641);
+						v57.aa:set((custom_checkbox("Enable Anti-Aim", v57.aa:get(), "aa_enabled", "aa")));
+						v1641 = v1641 + v768;
+						imgui.set_cursor_screen_pos(v1640, v1641);
+						v57.aa_state:set(custom_combo("AA State", v57.aa_state, {"Standing","Moving","In Air"}, "aa_state_cmb", v767 - (24 * v762)));
+						v1641 = v1641 + v770;
+						imgui.set_cursor_screen_pos(v1640, v1641);
+						v57.aa_at_targets:set((custom_checkbox("At Targets (Face Enemy)", v57.aa_at_targets:get(), "aa_at_targets_cb")));
+						v1641 = v1641 + v768;
+						imgui.set_cursor_screen_pos(v1640, v1641);
+						v57.aa_disable_on_shot:set((custom_checkbox("Disable AA While Shooting", v57.aa_disable_on_shot:get(), "aa_shoot_cb")));
+						v1641 = v1641 + v768;
+						imgui.set_cursor_screen_pos(v1640, v1641);
+						v57.hvh_aa_flip_shot:set((custom_checkbox("Flip AA On Shot", v57.hvh_aa_flip_shot:get(), "aa_flip_cb")));
+						v1641 = v1641 + v768;
+						imgui.set_cursor_screen_pos(v1640, v1641);
+						v57.mvfix:set((custom_checkbox("Movement Correction", v57.mvfix:get(), "mvfix_cb")));
+						v1641 = v1641 + v768;
+						if v57.mvfix:get() then
+							imgui.set_cursor_screen_pos(v1640, v1641);
+							v57.mvfix_mode:set(custom_combo("Correction Mode", v57.mvfix_mode, {"Auto (any angle change)","Only While AA / Aim","Always"}, "mvfix_mode_cmb", v767 - (24 * v762)));
+							v1641 = v1641 + v770;
+						end
+						imgui.set_cursor_screen_pos(v1640, v1641);
+						v57.hold_off:set((custom_checkbox("Disable AA on Use Key (E)", v57.hold_off:get(), "hold_off_cb")));
+						v1641 = v1641 + v768;
+						imgui.set_cursor_screen_pos(v1640, v1641);
+						v57.aa_ladder_check:set((custom_checkbox("Detect Ladders", v57.aa_ladder_check:get(), "aa_ladder_cb")));
+						v1641 = v1641 + v768;
+						imgui.set_cursor_screen_pos(v1640, v1641);
+						v57.aa_ladder_as_air:set((custom_checkbox("Use In-Air AA On Ladder", v57.aa_ladder_as_air:get(), "aa_ladder_air_cb")));
+						v1641 = v1641 + v768;
+						imgui.set_cursor_screen_pos(v1640, v1641);
+						v57.aa_move_speed:set((custom_slider("Moving Speed Threshold", v57.aa_move_speed:get(), 0, 250, false, nil, "aa_move_spd_sl", v767 - (24 * v762))));
+						v1641 = v1641 + v769;
+						imgui.set_cursor_screen_pos(v1640, v1641);
+						v57.aa_manual_move:set((custom_checkbox("Manual AA (Hold A/D Key)", v57.aa_manual_move:get(), "aa_manual_move_cb")));
+						v1641 = v1641 + v768;
+						imgui.set_cursor_screen_pos(v1640, v1641);
+						custom_checkbox("AA Left Direction", is_bind_active("aa_manual_left"), "aa_man_l_cb", "aa_manual_left");
+						v1641 = v1641 + v768;
+						imgui.set_cursor_screen_pos(v1640, v1641);
+						custom_checkbox("AA Right Direction", is_bind_active("aa_manual_right"), "aa_man_r_cb", "aa_manual_right");
+						v1641 = v1641 + v768;
+						imgui.set_cursor_screen_pos(v1640, v1641);
+						custom_checkbox("AA Back Direction", is_bind_active("aa_manual_back"), "aa_man_b_cb", "aa_manual_back");
+						v1641 = v1641 + v768;
+						imgui.set_cursor_screen_pos(v1640, v1641);
+						custom_checkbox("AA Forward Direction", is_bind_active("aa_manual_forward"), "aa_man_f_cb", "aa_manual_forward");
+						v1641 = v1641 + v768;
+						local v1642 = v57.aa_yaw_inverter_key:get();
+						local v1643 = "None";
+						if (v1642 ~= 0) then
+							v1643 = get_clean_key_name(v1642):upper();
+						end
+						imgui.set_cursor_screen_pos(v1640, v1641);
+						local v1644 = "Yaw Inverter: " .. v1643;
+						if custom_button(capture_label(v1644), v767 - (24 * v762), 22 * v762, false, "yaw_inverter") then
+							begin_key_capture("Yaw Inverter", function(v1690)
+								v57.aa_yaw_inverter_key:set(v1690);
+							end);
+						end
+						local v1645 = v1229 + v765 + (12 * v762) + v767 + (10 * v762);
+						local v1646 = v1411;
+						local v1647 = v57.aa_state:get();
+						local v1648 = {"Standing","Moving","In Air"};
+						local v1649 = v1648[v1647 + 1] or "Standing";
+						draw_custom_card_header(v1649 .. " Adjustments", v1645, v1646, v767);
+						v1646 = v1646 + v771;
+						local v1650, v1651, v1652, v1653, v1654, v1655, v1656, v1657;
+						local v1658 = "";
+						if (v1647 == 0) then
+							v1650 = v57.aa_pitch_std;
+							v1651 = v57.aa_yaw_std;
+							v1652 = v57.aa_pitch_val_std;
+							v1653 = v57.aa_yaw_val_std;
+							v1654 = v57.aa_jitter_std;
+							v1655 = v57.aa_jitter_val_std;
+							v1656 = v57.aa_spin_std;
+							v1657 = v57.aa_spin_val_std;
+							v1658 = "_std";
+						elseif (v1647 == 1) then
+							v1650 = v57.aa_pitch_mov;
+							v1651 = v57.aa_yaw_mov;
+							v1652 = v57.aa_pitch_val_mov;
+							v1653 = v57.aa_yaw_val_mov;
+							v1654 = v57.aa_jitter_mov;
+							v1655 = v57.aa_jitter_val_mov;
+							v1656 = v57.aa_spin_mov;
+							v1657 = v57.aa_spin_val_mov;
+							v1658 = "_mov";
+						else
+							v1650 = v57.aa_pitch_air;
+							v1651 = v57.aa_yaw_air;
+							v1652 = v57.aa_pitch_val_air;
+							v1653 = v57.aa_yaw_val_air;
+							v1654 = v57.aa_jitter_air;
+							v1655 = v57.aa_jitter_val_air;
+							v1656 = v57.aa_spin_air;
+							v1657 = v57.aa_spin_val_air;
+							v1658 = "_air";
+						end
+						imgui.set_cursor_screen_pos(v1645, v1646);
+						custom_combo("Pitch Adjust", v1650, {"Off","Down (89 deg)","Up (-89 deg)","Zero","Custom"}, "pitch_combo" .. v1658, v767 - (24 * v762));
+						v1646 = v1646 + v770;
+						if (v1650:get() == 4) then
+							imgui.set_cursor_screen_pos(v1645, v1646);
+							v1652:set((custom_slider("Pitch Offset", v1652:get(), -89, 89, false, "deg", "pitch_offset_sl" .. v1658, v767 - (24 * v762))));
+							v1646 = v1646 + v769;
+						end
+						imgui.set_cursor_screen_pos(v1645, v1646);
+						custom_combo("Yaw Adjust", v1651, {"Off","Backward (180)","Forward (0)","Custom Offset"}, "yaw_combo" .. v1658, v767 - (24 * v762));
+						v1646 = v1646 + v770;
+						if (v1651:get() == 3) then
+							imgui.set_cursor_screen_pos(v1645, v1646);
+							v1653:set((custom_slider("Yaw Offset", v1653:get(), -180, 180, false, "deg", "yaw_offset_sl" .. v1658, v767 - (24 * v762))));
+							v1646 = v1646 + v769;
+						end
+						imgui.set_cursor_screen_pos(v1645, v1646);
+						v57.aa_desync_enable:set((custom_checkbox("Desync Anti-Aim", v57.aa_desync_enable:get(), "aa_desync_cb")));
+						v1646 = v1646 + v768;
+						if v57.aa_desync_enable:get() then
+							imgui.set_cursor_screen_pos(v1645, v1646);
+							v57.aa_desync_amount:set((custom_slider("Desync Amount", v57.aa_desync_amount:get(), 0, 58, false, "deg", "aa_desync_amt_sl", v767 - (24 * v762))));
+							v1646 = v1646 + v769;
+							imgui.set_cursor_screen_pos(v1645, v1646);
+							v57.aa_desync_side:set(custom_combo("Desync Side", v57.aa_desync_side, {"Left","Right","Auto (flip)"}, "aa_desync_side_cmb", v767 - (24 * v762)));
+							v1646 = v1646 + v770;
+							imgui.set_cursor_screen_pos(v1645, v1646);
+							local v1681 = "None";
+							if ((v57.aa_desync_key:get() or 0) ~= 0) then
+								v1681 = get_clean_key_name(v57.aa_desync_key:get()):upper();
+							end
+							if custom_button(capture_label("Flip Side Key: " .. v1681), v767 - (24 * v762), 22 * v762, false, "aa_dsync_key_btn") then
+								begin_key_capture("Desync Flip", function(v1720)
+									v57.aa_desync_key:set(v1720);
+								end);
+							end
+							v1646 = v1646 + v772;
+						end
+						imgui.set_cursor_screen_pos(v1645, v1646);
+						v1654:set((custom_checkbox("Enable Jitter", v1654:get(), "jitter_cb" .. v1658)));
+						v1646 = v1646 + v768;
+						if v1654:get() then
+							imgui.set_cursor_screen_pos(v1645, v1646);
+							v1655:set((custom_slider("Jitter Width", v1655:get(), 1, 180, false, "deg", "jitter_sl" .. v1658, v767 - (24 * v762))));
+							v1646 = v1646 + v769;
+							imgui.set_cursor_screen_pos(v1645, v1646);
+							v57.aa_jitter_random:set((custom_checkbox("Random Jitter", v57.aa_jitter_random:get(), "aa_jit_rnd_cb")));
+							v1646 = v1646 + v768;
+						end
+						imgui.set_cursor_screen_pos(v1645, v1646);
+						v1656:set((custom_checkbox("Enable Spin Rotation", v1656:get(), "spin_cb" .. v1658)));
+						v1646 = v1646 + v768;
+						if v1656:get() then
+							imgui.set_cursor_screen_pos(v1645, v1646);
+							v1657:set((custom_slider("Spin Rot Speed", v1657:get(), 1, 30, false, "deg/t", "spin_sl" .. v1658, v767 - (24 * v762))));
+							v1646 = v1646 + v769;
+						end
+						imgui.set_cursor_screen_pos(v1645, v1646);
+						v57.aa_pitch_jitter:set((custom_checkbox("Separate Pitch Jitter", v57.aa_pitch_jitter:get(), "aa_pitch_jit_cb")));
+						v1646 = v1646 + v768;
+						if v57.aa_pitch_jitter:get() then
+							imgui.set_cursor_screen_pos(v1645, v1646);
+							v57.aa_pitch_jitter_val:set((custom_slider("Pitch Jitter Amount", v57.aa_pitch_jitter_val:get(), 1, 89, false, "deg", "aa_pitch_jit_val_sl", v767 - (24 * v762))));
+						end
+					else
+						local v1659 = v1229 + v765 + (12 * v762);
+						local v1660 = v1411;
+						draw_custom_card_header("Resolver", v1659, v1660, v767);
+						v1660 = v1660 + v771;
+						imgui.set_cursor_screen_pos(v1659, v1660);
+						v57.resolver_mode:set(custom_combo("Resolver Mode", v57.resolver_mode, {"Off","Movement Based","Brute Force","Manual Offset"}, "resolver_mode_cmb", v767 - (24 * v762)));
+						v1660 = v1660 + v770;
+						if (v57.resolver_mode:get() == 2) then
+							imgui.set_cursor_screen_pos(v1659, v1660);
+							v57.resolver_brute_delay:set((custom_slider("Brute Step Delay", v57.resolver_brute_delay:get(), 2, 100, true, "ms", "res_brute_sl", v767 - (24 * v762))));
+							v1660 = v1660 + v769;
+						elseif (v57.resolver_mode:get() == 3) then
+							imgui.set_cursor_screen_pos(v1659, v1660);
+							v57.resolver_offset:set((custom_slider("Manual Offset", v57.resolver_offset:get(), -120, 120, false, "deg", "res_off_sl", v767 - (24 * v762))));
+							v1660 = v1660 + v769;
+						end
+						imgui.set_cursor_screen_pos(v1659, v1660);
+						v57.resolver_fallback_body:set((custom_checkbox("Aim Body When Unresolved", v57.resolver_fallback_body:get(), "res_fb_cb")));
+						v1660 = v1660 + v768;
+						imgui.set_cursor_screen_pos(v1659, v1660);
+						local v1661 = "None";
+						if ((v57.resolver_brute_key:get() or 0) ~= 0) then
+							v1661 = get_clean_key_name(v57.resolver_brute_key:get()):upper();
+						end
+						if custom_button(capture_label("Brute Force Key: " .. v1661), v767 - (24 * v762), 22 * v762, false, "res_brute_key_btn") then
+							begin_key_capture("Brute Force", function(v1691)
+								v57.resolver_brute_key:set(v1691);
+							end);
+						end
+						v1660 = v1660 + v772;
+						local v1662 = v1660 + (22 * v762);
+						draw_custom_card_header("Peek Assistant", v1659, v1662, v767);
+						v1662 = v1662 + v771;
+						imgui.set_cursor_screen_pos(v1659, v1662);
+						v57.peek_enable:set((custom_checkbox("Enable Peek Assistant", v57.peek_enable:get(), "peek_en_cb", "peek_enable")));
+						v1662 = v1662 + v768;
+						imgui.set_cursor_screen_pos(v1659, v1662);
+						local v1663 = "None";
+						if ((v57.peek_key:get() or 0) ~= 0) then
+							v1663 = get_clean_key_name(v57.peek_key:get()):upper();
+						end
+						local v1664 = "Save Point Key: " .. v1663;
+						if custom_button(capture_label(v1664), v767 - (24 * v762), 22 * v762, false, "peek_key_btn") then
+							begin_key_capture("Peek Save Point", function(v1692)
+								v57.peek_key:set(v1692);
+							end);
+						end
+						v1662 = v1662 + v772;
+						imgui.set_cursor_screen_pos(v1659, v1662);
+						v57.peek_return_after_shot:set((custom_checkbox("Return After Shot", v57.peek_return_after_shot:get(), "peek_ret_cb")));
+						v1662 = v1662 + v768;
+						imgui.set_cursor_screen_pos(v1659, v1662);
+						v57.peek_return_on_release:set((custom_checkbox("Return On Key Release", v57.peek_return_on_release:get(), "peek_rel_cb")));
+						v1662 = v1662 + v768;
+						if v57.peek_enable:get() then
+							imgui.set_cursor_screen_pos(v1659, v1662);
+							v57.peek_speed:set((custom_slider("Return Speed", v57.peek_speed:get(), 50, 450, false, "u/s", "peek_spd_sl", v767 - (24 * v762))));
+							v1662 = v1662 + v769;
+							imgui.set_cursor_screen_pos(v1659, v1662);
+							v57.peek_timeout:set((custom_slider("Return Timeout", v57.peek_timeout:get(), 100, 2500, true, "ms", "peek_tmo_sl", v767 - (24 * v762))));
+							v1662 = v1662 + v769;
+							imgui.set_cursor_screen_pos(v1659, v1662);
+							v57.peek_tolerance:set((custom_slider("Arrive Tolerance", v57.peek_tolerance:get(), 5, 150, true, "u", "peek_tol_sl", v767 - (24 * v762))));
+							v1662 = v1662 + v769;
+							imgui.set_cursor_screen_pos(v1659, v1662);
+							v57.peek_abort_on_move:set((custom_checkbox("Abort If Player Moves", v57.peek_abort_on_move:get(), "peek_abort_cb")));
+							v1662 = v1662 + v768;
+							imgui.set_cursor_screen_pos(v1659, v1662);
+							v57.peek_invert_side:set((custom_checkbox("Invert Strafe Side", v57.peek_invert_side:get(), "peek_inv_cb")));
+							v1662 = v1662 + v768;
+							imgui.set_cursor_screen_pos(v1659, v1662);
+							v57.peek_highlight:set((custom_checkbox("Highlight Who Sees You", v57.peek_highlight:get(), "peek_hl_cb")));
+							v1662 = v1662 + v768;
+							imgui.set_cursor_screen_pos(v1659, v1662);
+							v57.peek_ring:set((custom_checkbox("3D Ring Under Them", v57.peek_ring:get(), "peek_ring_cb")));
+							v1662 = v1662 + v768;
+							imgui.set_cursor_screen_pos(v1659, v1662);
+							v57.peek_auto_stop:set((custom_checkbox("Quick Stop While Exposed", v57.peek_auto_stop:get(), "peek_stop_cb")));
+						end
+						local v1665 = v1662 + v768 + (22 * v762);
+						draw_custom_card_header("After Shot Break", v1659, v1665, v767);
+						v1665 = v1665 + v771;
+						imgui.set_cursor_screen_pos(v1659, v1665);
+						v57.shot_break_enable:set((custom_checkbox("Break Movement After Shot", v57.shot_break_enable:get(), "asb_cb")));
+						v1665 = v1665 + v768;
+						if v57.shot_break_enable:get() then
+							imgui.set_cursor_screen_pos(v1659, v1665);
+							v57.shot_break_time:set((custom_slider("Break Duration", v57.shot_break_time:get(), 30, 500, true, "ms", "asb_time_sl", v767 - (24 * v762))));
+						end
+						local v1666 = v1229 + v765 + (12 * v762) + v767 + (10 * v762);
+						local v1667 = v1411;
+						draw_custom_card_header("Overrides", v1666, v1667, v767);
+						v1667 = v1667 + v771;
+						imgui.set_cursor_screen_pos(v1666, v1667);
+						v57.hvh_baim:set((custom_checkbox("Body Aim (bindable)", v57.hvh_baim:get(), "hvh_baim_cb", "hvh_baim")));
+						v1667 = v1667 + v768;
+						imgui.set_cursor_screen_pos(v1666, v1667);
+						v57.hvh_baim_hp:set((custom_slider("Body Aim Below HP (0 = off)", v57.hvh_baim_hp:get(), 0, 100, false, "HP", "hvh_baimhp_sl", v767 - (24 * v762))));
+						v1667 = v1667 + v769;
+						imgui.set_cursor_screen_pos(v1666, v1667);
+						v57.hvh_hc_override:set((custom_checkbox("Hit Chance Override", v57.hvh_hc_override:get(), "hvh_hc_cb", "hvh_hc_override")));
+						v1667 = v1667 + v768;
+						if v57.hvh_hc_override:get() then
+							imgui.set_cursor_screen_pos(v1666, v1667);
+							v57.hvh_hc_override_val:set((custom_slider("Override HC Value", v57.hvh_hc_override_val:get(), 0, 100, false, "%", "hvh_hcv_sl", v767 - (24 * v762))));
+							v1667 = v1667 + v769;
+						end
+						imgui.set_cursor_screen_pos(v1666, v1667);
+						v57.hvh_dmg_override:set((custom_checkbox("Damage Override", v57.hvh_dmg_override:get(), "hvh_dmg_cb", "hvh_dmg_override")));
+						v1667 = v1667 + v768;
+						if v57.hvh_dmg_override:get() then
+							imgui.set_cursor_screen_pos(v1666, v1667);
+							v57.hvh_dmg_override_val:set((custom_slider("Override Min Damage", v57.hvh_dmg_override_val:get(), 0, 120, false, "HP", "hvh_dmgv_sl", v767 - (24 * v762))));
+							v1667 = v1667 + v769;
+						end
+					end
+				elseif (v5 == 3) then
+					if (v66.sub_tab_misc == 0) then
+						local v1668 = v1229 + v765 + (12 * v762);
+						local v1669 = v1411;
+						draw_custom_card_header("Overlay & Custom Scope", v1668, v1669, v767);
+						v1669 = v1669 + v771;
+						imgui.set_cursor_screen_pos(v1668, v1669);
+						v57.scope_enable:set((custom_checkbox("Custom Scope Lines", v57.scope_enable:get(), "sc_en_cb", "scope_enable")));
+						v1669 = v1669 + v768;
+						imgui.set_cursor_screen_pos(v1668, v1669);
+						v57.scope_rem:set((custom_checkbox("Remove Original Scope", v57.scope_rem:get(), "sc_rem_cb")));
+						v1669 = v1669 + v768;
+						imgui.set_cursor_screen_pos(v1668, v1669);
+						v57.gui_scale:set((custom_combo("GUI Scale", v57.gui_scale, {"50%","60%","70%","80%","90%","100%","110%","120%","130%","140%","150%"}, "gui_scale_combo", v767 - (24 * v762))));
+						v1669 = v1669 + v770;
+						if is_bind_active("scope_enable") then
+							imgui.set_cursor_screen_pos(v1668, v1669);
+							v57.scope_type:set(custom_combo("Scope Line Style", v57.scope_type, {"Fade Out Gradient","Solid Cross Lines"}, "scope_type_comb", v767 - (24 * v762)));
+							v1669 = v1669 + v770;
+							imgui.set_cursor_screen_pos(v1668, v1669);
+							v57.scope_len:set(custom_slider("Scope Length", v57.scope_len:get(), 10, 300, true, "px", "scope_len_sl", v767 - (24 * v762)));
+							v1669 = v1669 + v769;
+							imgui.set_cursor_screen_pos(v1668, v1669);
+							v57.scope_gap:set(custom_slider("Scope Center Gap", v57.scope_gap:get(), 0, 100, true, "px", "scope_gap_sl", v767 - (24 * v762)));
+							v1669 = v1669 + v769;
+							imgui.set_cursor_screen_pos(v1668, v1669);
+							v57.scope_thick:set(custom_slider("Scope Line Width", v57.scope_thick:get(), 0.5, 5, false, "px", "scope_thick_sl", v767 - (24 * v762)));
+							v1669 = v1669 + v769;
+							imgui.set_cursor_screen_pos(v1668, v1669);
+							custom_color_picker("Scope Inner Color", v57.scope_inner, "scope_inner_cp");
+						end
+						local v1670 = v1229 + v765 + (12 * v762) + v767 + (10 * v762);
+						local v1671 = v1411;
+						draw_custom_card_header("Overlays & HUD Indicators", v1670, v1671, v767);
+						v1671 = v1671 + v771;
+						imgui.set_cursor_screen_pos(v1670, v1671);
+						v57.dmg_enable:set((custom_checkbox("Enable Damage Text", v57.dmg_enable:get(), "dmg_enable_cb", "dmg_enable")));
+						v1671 = v1671 + v768;
+						if v57.dmg_enable:get() then
+							imgui.set_cursor_screen_pos(v1670, v1671);
+							v57.dmg_outline:set((custom_checkbox("Damage Text Outline", v57.dmg_outline:get(), "dmg_outline_cb")));
+							v1671 = v1671 + v768;
+							imgui.set_cursor_screen_pos(v1670, v1671);
+							custom_color_picker("Damage Color", v57.dmg_color, "dmg_col_pick");
+							v1671 = v1671 + (18 * v762);
+							imgui.set_cursor_screen_pos(v1670, v1671);
+							custom_color_picker("Headshot Damage Color", v57.dmg_head_color, "dmg_hs_col_pick");
+							v1671 = v1671 + (18 * v762);
+						end
+						imgui.set_cursor_screen_pos(v1670, v1671);
+						v57.hit_enable:set((custom_checkbox("Enable Crosshair Hitmarkers", v57.hit_enable:get(), "hit_enable_cb", "hit_enable")));
+						v1671 = v1671 + v768;
+						if v57.hit_enable:get() then
+							imgui.set_cursor_screen_pos(v1670, v1671);
+							custom_color_picker("Hitmarker Color", v57.hit_color, "hit_col_pick");
+							v1671 = v1671 + (18 * v762);
+							imgui.set_cursor_screen_pos(v1670, v1671);
+							custom_color_picker("Headshot Marker Color", v57.hit_head_color, "hit_hs_col_pick");
+							v1671 = v1671 + (18 * v762);
+						end
+						imgui.set_cursor_screen_pos(v1670, v1671);
+						v57.fn_enable:set((custom_checkbox("Enable Fortnite Damage", v57.fn_enable:get(), "fn_enable_cb", "fn_enable")));
+						v1671 = v1671 + v768;
+						if v57.fn_enable:get() then
+							imgui.set_cursor_screen_pos(v1670, v1671);
+							local v1682 = custom_combo("Hitgroup Filter", v57.fn_filter, {"All Hitgroups","Only Headshots","Only Body / Chest"}, "fn_filter_combo", v767 - (24 * v762));
+							v1671 = v1671 + v770;
+							imgui.set_cursor_screen_pos(v1670, v1671);
+							v57.fn_size:set((custom_slider("Font Max Size", v57.fn_size:get(), 20, 100, true, "px", "fn_size_sl", v767 - (24 * v762))));
+							v1671 = v1671 + v769;
+							imgui.set_cursor_screen_pos(v1670, v1671);
+							v57.fn_gravity:set((custom_slider("Popup Gravity (Fall)", v57.fn_gravity:get(), 0, 500, false, nil, "fn_grav_sl", v767 - (24 * v762))));
+							v1671 = v1671 + v769;
+							imgui.set_cursor_screen_pos(v1670, v1671);
+							v57.fn_speed_y:set((custom_slider("Popup Rise Speed", v57.fn_speed_y:get(), 0, 400, false, nil, "fn_speed_sl", v767 - (24 * v762))));
+							v1671 = v1671 + v769;
+							imgui.set_cursor_screen_pos(v1670, v1671);
+							v57.fn_drift_x:set((custom_slider("Popup Wind Drift", v57.fn_drift_x:get(), 0, 200, false, nil, "fn_drift_sl", v767 - (24 * v762))));
+							v1671 = v1671 + v769;
+							imgui.set_cursor_screen_pos(v1670, v1671);
+							custom_color_picker("Popup Color Theme", v57.fn_color, "fn_col_pick");
+						end
+					elseif (v66.sub_tab_misc == 1) then
+						local v1683 = v1229 + v765 + (12 * v762);
+						local v1684 = v1411;
+						draw_custom_card_header("Custom Model Changer", v1683, v1684, v767);
+						v1684 = v1684 + v771;
+						imgui.set_cursor_screen_pos(v1683, v1684);
+						v57.model_changer_en:set((custom_checkbox("Enable Model Changer", v57.model_changer_en:get(), "model_changer_en_cb", "model_changer_en")));
+						v1684 = v1684 + v768;
+						imgui.set_cursor_screen_pos(v1683, v1684);
+						if custom_button("Browse Models...", v767 - (24 * v762), 22 * v762) then
+							v33 = not v33;
+							if v33 then
+								if ((#v70 == 0) and (#v71 == 0)) then
+									reload_agents();
+								end
+								pcall(function()
+									skin.refresh_custom_models();
+								end);
+							end
+						end
+						v1684 = v1684 + v772;
+						local v1685 = "None";
+						if (v35 ~= "") then
+							v1685 = basename(v35);
+						end
+						imgui.set_cursor_screen_pos(v1683, v1684);
+						imgui.text_disabled("Selected model: ");
+						imgui.same_line(0, 5);
+						imgui.text_colored(v774, v775, v776, 255, v1685);
+						local v1686 = v1229 + v765 + (12 * v762) + v767 + (10 * v762);
+						local v1687 = v1411;
+						draw_custom_card_header("Quick Instructions", v1686, v1687, v767);
+						v1687 = v1687 + v771;
+						imgui.set_cursor_screen_pos(v1686, v1687);
+						imgui.text("- CS2 Model Changer relies on pre-cached skins.");
+						v1687 = v1687 + (18 * v762);
+						imgui.set_cursor_screen_pos(v1686, v1687);
+						imgui.text("- Browse through CT/T tabs to select an agent card.");
+						v1687 = v1687 + (18 * v762);
+						imgui.set_cursor_screen_pos(v1686, v1687);
+						imgui.text("- Press 'Apply & Close' to activate your skin.");
+						v1687 = v1687 + (18 * v762);
+						imgui.set_cursor_screen_pos(v1686, v1687);
+						imgui.text("- Agent skin resets on round spawn or refresh.");
+					elseif (v66.sub_tab_misc == 2) then
+						local v1709 = v1229 + v765 + (12 * v762);
+						local v1710 = v1411;
+						draw_custom_card_header("Player ESP", v1709, v1710, v767);
+						v1710 = v1710 + v771;
+						imgui.set_cursor_screen_pos(v1709, v1710);
+						v57.esp_enable:set((custom_checkbox("Enable ESP", v57.esp_enable:get(), "esp_en_cb", "esp_enable")));
+						v1710 = v1710 + v768;
+						if v57.esp_enable:get() then
+							imgui.set_cursor_screen_pos(v1709, v1710);
+							v57.esp_hp:set((custom_checkbox("Health Bar", v57.esp_hp:get(), "esp_hp_cb")));
+							v1710 = v1710 + v768;
+							imgui.set_cursor_screen_pos(v1709, v1710);
+							v57.esp_name:set((custom_checkbox("Name", v57.esp_name:get(), "esp_name_cb")));
+							v1710 = v1710 + v768;
+							imgui.set_cursor_screen_pos(v1709, v1710);
+							v57.esp_dist:set((custom_checkbox("Distance", v57.esp_dist:get(), "esp_dist_cb")));
+							v1710 = v1710 + v768;
+							imgui.set_cursor_screen_pos(v1709, v1710);
+							v57.esp_skeleton:set((custom_checkbox("Skeleton", v57.esp_skeleton:get(), "esp_skel_cb")));
+							v1710 = v1710 + v768;
+							imgui.set_cursor_screen_pos(v1709, v1710);
+							v57.esp_ring:set((custom_checkbox("3D Ring", v57.esp_ring:get(), "esp_ring_cb")));
+							v1710 = v1710 + v768;
+							imgui.set_cursor_screen_pos(v1709, v1710);
+							v57.esp_avatar:set((custom_checkbox("Steam Avatar", v57.esp_avatar:get(), "esp_av_cb")));
+							v1710 = v1710 + v768;
+							imgui.set_cursor_screen_pos(v1709, v1710);
+							custom_color_picker("ESP Color", v57.esp_color, "esp_col_pick");
+							v1710 = v1710 + (18 * v762);
+							imgui.set_cursor_screen_pos(v1709, v1710);
+							v57.esp_vis_mode:set(custom_combo("ESP Colors", v57.esp_vis_mode, {"Single Color","Visible / Hidden"}, "esp_vis_cmb", v767 - (24 * v762)));
+							v1710 = v1710 + v770;
+							if (v57.esp_vis_mode:get() == 1) then
+								imgui.set_cursor_screen_pos(v1709, v1710);
+								custom_color_picker("Hidden Color", v57.esp_hidden_color, "esp_hid_pick");
+								v1710 = v1710 + (18 * v762);
+							end
+							imgui.set_cursor_screen_pos(v1709, v1710);
+							v57.esp_armor:set((custom_checkbox("Armor", v57.esp_armor:get(), "esp_armor_cb")));
+						end
+						local v1711 = v1229 + v765 + (12 * v762) + v767 + (10 * v762);
+						local v1712 = v1411;
+						draw_custom_card_header("Tracers, Grenades & Arrows", v1711, v1712, v767);
+						v1712 = v1712 + v771;
+						imgui.set_cursor_screen_pos(v1711, v1712);
+						v57.tracer_enable:set((custom_checkbox("Bullet Tracers", v57.tracer_enable:get(), "tr_en_cb")));
+						v1712 = v1712 + v768;
+						if v57.tracer_enable:get() then
+							imgui.set_cursor_screen_pos(v1711, v1712);
+							v57.tracer_life:set((custom_slider("Tracer Lifetime", v57.tracer_life:get(), 0.2, 3, false, "s", "tr_life_sl", v767 - (24 * v762))));
+							v1712 = v1712 + v769;
+							imgui.set_cursor_screen_pos(v1711, v1712);
+							custom_color_picker("Tracer Color", v57.tracer_color, "tr_col_pick");
+							v1712 = v1712 + (18 * v762);
+						end
+						imgui.set_cursor_screen_pos(v1711, v1712);
+						v57.grenade_enable:set((custom_checkbox("Grenade Tracker", v57.grenade_enable:get(), "gr_en_cb")));
+						v1712 = v1712 + v768;
+						imgui.set_cursor_screen_pos(v1711, v1712);
+						v57.arrows_enable:set((custom_checkbox("Offscreen Arrows", v57.arrows_enable:get(), "ar_en_cb")));
+						v1712 = v1712 + v768;
+						if v57.arrows_enable:get() then
+							imgui.set_cursor_screen_pos(v1711, v1712);
+							custom_color_picker("Arrow Color", v57.arrows_color, "ar_col_pick");
+							v1712 = v1712 + (18 * v762);
+						end
+						imgui.set_cursor_screen_pos(v1711, v1712);
+						v57.wm_style:set(custom_combo("Watermark Style", v57.wm_style, {"Simple","Detailed"}, "wm_style_cmb", v767 - (24 * v762)));
+						v1712 = v1712 + v770;
+						imgui.set_cursor_screen_pos(v1711, v1712);
+						v57.wm_avatar:set((custom_checkbox("Avatar In Watermark", v57.wm_avatar:get(), "wm_av_cb")));
+						v1712 = v1712 + v768;
+						imgui.set_cursor_screen_pos(v1711, v1712);
+						v57.arrows_distance:set((custom_checkbox("Distance On Arrows", v57.arrows_distance:get(), "ar_dist_cb")));
+						v1712 = v1712 + v768;
+						imgui.set_cursor_screen_pos(v1711, v1712);
+						custom_color_picker("FOV Circle Color", v57.fov_color, "fov_col_pick");
+						v1712 = v1712 + (22 * v762);
+						imgui.set_cursor_screen_pos(v1711, v1712);
+						v57.wm_kills:set((custom_checkbox("Kills In Watermark", v57.wm_kills:get(), "wm_kills_cb")));
+					end
+				elseif (v5 == 4) then
+					if (v66.sub_tab_settings == 0) then
+						local v1688 = v1229 + v765 + (12 * v762);
+						local v1689 = v1411;
+						draw_custom_card_header("Menu Configuration", v1688, v1689, v767);
+						v1689 = v1689 + v771;
+						imgui.set_cursor_screen_pos(v1688, v1689);
+						custom_color_picker("Accent Color", v57.menu_color, "m_color_pick");
+					elseif (v66.sub_tab_settings == 1) then
+						local v1713 = v1229 + v765 + (12 * v762);
+						local v1714 = v1411;
+						draw_custom_card_header("Keybinds", v1713, v1714, (v767 * 2) + (10 * v762));
+						v1714 = v1714 + v771;
+						local v1715 = 20 * v762;
+						local v1716 = 3 * v762;
+						local v1717 = {};
+						for v1721, v1722 in ipairs(v62) do
+							local v1723 = v61[v1722];
+							if v1723 then
+								v1717[#v1717 + 1] = {id=v1722,b=v1723};
+							end
+						end
+						local v1718 = math.ceil(#v1717 / 2);
+						if (v1718 < 1) then
+							v1718 = 1;
+						end
+						for v1724 = 1, #v1717 do
+							local v1725 = v1717[v1724];
+							local v1726 = math.floor((v1724 - 1) / v1718);
+							local v1727 = (v1724 - 1) % v1718;
+							local v1728 = v1713 + (v1726 * (v767 + (10 * v762)));
+							local v1729 = v1714 + (v1727 * (v1715 + v1716));
+							draw_bind_row(v1728, v1729, v767, v1725.id, v1725.b, v762, v774, v775, v776);
+						end
+						local v1719 = v1714 + (v1718 * (v1715 + v1716)) + (8 * v762);
+						imgui.set_cursor_screen_pos(v1713, v1719);
+						if custom_button("Reset All Binds", 130 * v762, 20 * v762, false, "reset_binds") then
+							for v1733, v1734 in ipairs(v62) do
+								local v1735 = v61[v1734];
+								if v1735 then
+									v1735.key = 0;
+									v1735.mode = 0;
+									v1735.was_down = false;
+									v1735.active = false;
+								end
+							end
+						end
+						imgui.dl_add_text(v1713 + (142 * v762), v1719 + (4 * v762), 120, 126, 136, 255, "T = Toggle,  H = Hold,  A = Always on");
+					elseif (v66.sub_tab_settings == 2) then
+						local v1730 = v1229 + v765 + (12 * v762);
+						local v1731 = v1411;
+						draw_custom_card_header("Config Files", v1730, v1731, v767);
+						v1731 = v1731 + v771;
+						imgui.set_cursor_screen_pos(v1730, v1731);
+						if custom_button("Export Config", v767 - (24 * v762), 22 * v762, true, "cfg_exp") then
+							config_export();
+						end
+						v1731 = v1731 + v772 + (4 * v762);
+						imgui.set_cursor_screen_pos(v1730, v1731);
+						if custom_button("Import Config", v767 - (24 * v762), 22 * v762, false, "cfg_imp") then
+							config_import();
+						end
+						v1731 = v1731 + v772 + (8 * v762);
+						if (v32.text ~= "") then
+							local v1736 = globals.realtime() - v32.born;
+							local v1737 = 255;
+							if (v1736 > 6) then
+								v1737 = math.max(0, math.floor(255 * (1 - ((v1736 - 6) / 2))));
+							end
+							local v1738 = (v32.ok and 140) or 235;
+							local v1739 = (v32.ok and 220) or 110;
+							local v1740 = (v32.ok and 150) or 110;
+							imgui.dl_add_text(v1730, v1731, v1738, v1739, v1740, v1737, v32.text);
+						end
+						imgui.dl_add_text(v1730, v1731 + (22 * v762), 118, 124, 134, 255, "Format: SRZ1 base64  |  clipboard + file: " .. v86);
+					end
+				end
+			end
+			render_active_dropdown();
+		end);
+		if not v1118 then
+			print("super error debug message: " .. tostring(v1119));
+		end
+	end
+	imgui.end_window();
+	imgui.pop_style_color(6);
+	imgui.pop_style_var(4);
+	draw_model_browser();
+	render_bind_popup(v762, v774, v775, v776);
+end);
+function draw_model_browser()
+	if not v33 then
+		return;
+	end
+	local v781, v782 = render.get_screen_size();
+	imgui.set_next_window_size(600, 600, imgui.Cond_Once);
+	imgui.set_next_window_pos((v781 * 0.5) - 300, (v782 * 0.5) - 300, imgui.Cond_Once);
+	imgui.set_next_window_size_constraints(420, 360, 1100, 1000);
+	imgui.push_style_var(imgui.StyleVar_WindowPadding, 10, 10);
+	local v783 = imgui.WindowFlags_NoScrollbar + imgui.WindowFlags_NoTitleBar + imgui.WindowFlags_NoCollapse;
+	local v784, v785 = imgui.begin_closeable("Model Browser##cm_win", true, v783);
+	v33 = v785;
+	if v784 then
+		imgui.text("Model Browser");
+		imgui.same_line(0, 8);
+		imgui.text_disabled(string.format("%d agents", #v70 + #v71));
+		imgui.same_line(0, 0);
+		local v1120 = imgui.get_content_region_avail();
+		imgui.set_cursor_pos_x(imgui.get_cursor_pos_x() + math.max(0, v1120 - 22));
+		imgui.push_style_color(imgui.Col_Button, 0.55, 0.18, 0.18, 1);
+		imgui.push_style_color(imgui.Col_ButtonHovered, 0.78, 0.24, 0.24, 1);
+		if imgui.button("X##cmclose", 22, 0) then
+			v33 = false;
+		end
+		imgui.pop_style_color(2);
+		imgui.separator();
+		local v1121 = 78;
+		imgui.set_next_item_width((imgui.get_content_region_avail() - v1121) - 6);
+		v34 = imgui.input_text("##cmf", v34, 64);
+		imgui.same_line(0, 6);
+		if imgui.button("Refresh##cmref", v1121, 0) then
+			reload_agents();
+			pcall(function()
+				skin.refresh_custom_models();
+			end);
+		end
+		imgui.separator();
+		local v1122 = (imgui.get_frame_height() * 2) + 18;
+		local v1123 = {{txt=string.format("CT (%d)", #v70),draw=function()
+			agent_grid(v70);
+		end},{txt=string.format("T (%d)", #v71),draw=function()
+			agent_grid(v71);
+		end},{txt="Custom",draw=custom_list}};
+		if (v37 and (v37 > #v1123)) then
+			v37 = 1;
+		end
+		if not v37 then
+			v37 = 1;
+		end
+		local v1124 = #v1123;
+		local v1125 = 28;
+		local v1126 = imgui.get_content_region_avail() / v1124;
+		local v1127, v1128 = imgui.get_cursor_screen_pos();
+		local v1129, v1130, v1131 = v57.menu_color:get();
+		imgui.dl_add_rect_filled(v1127, v1128, v1127 + (v1126 * v1124), v1128 + v1125, 20, 21, 25, 255, 6);
+		for v1251, v1252 in ipairs(v1123) do
+			if (v1251 > 1) then
+				imgui.same_line(0, 0);
+			end
+			if imgui.invisible_button("##cmtab" .. v1251, v1126, v1125) then
+				v37 = v1251;
+			end
+			local v1253 = imgui.is_item_hovered();
+			local v1254, v1255 = imgui.get_item_rect_min();
+			local v1256, v1257 = imgui.get_item_rect_max();
+			local v1258 = v37 == v1251;
+			if v1258 then
+				imgui.dl_add_rect_filled(v1254 + 2, v1255 + 2, v1256 - 2, v1257 - 2, v1129, v1130, v1131, 95, 5);
+			elseif v1253 then
+				imgui.dl_add_rect_filled(v1254 + 2, v1255 + 2, v1256 - 2, v1257 - 2, 255, 255, 255, 12, 5);
+			end
+			local v1259 = imgui.calc_text_size(v1252.txt);
+			local v1260 = v1254 + ((v1126 - v1259) * 0.5);
+			imgui.dl_push_clip_rect(v1254, v1255, v1256, v1257, true);
+			imgui.dl_add_text(v1260, v1255 + ((v1125 - 13) * 0.5), (v1258 and 255) or 150, (v1258 and 255) or 153, (v1258 and 255) or 160, 255, v1252.txt);
+			imgui.dl_pop_clip_rect();
+		end
+		imgui.set_cursor_screen_pos(v1127, v1128 + v1125);
+		imgui.spacing();
+		imgui.begin_child("##cm_content", 0, -v1122);
+		imgui.spacing();
+		local v1132, v1133 = pcall(v1123[v37].draw);
+		if not v1132 then
+			imgui.text_disabled("draw error: " .. tostring(v1133));
+		end
+		imgui.end_child();
+		imgui.separator();
+		local v1134 = basename(v35);
+		if (v1134 ~= "") then
+			imgui.text_disabled("Selected:");
+			imgui.same_line(0, 5);
+			imgui.text_colored(v1129, v1130, v1131, 255, v1134);
+		else
+			imgui.text_disabled("No model selected");
+		end
+		local v1135 = v1134 ~= "";
+		imgui.push_style_color(imgui.Col_Button, 0.16, 0.4, 0.26, 1);
+		imgui.push_style_color(imgui.Col_ButtonHovered, 0.2, 0.5, 0.32, 1);
+		if imgui.button((v1135 and "Apply & Close") or "Close", -86, 0) then
+			v33 = false;
+		end
+		imgui.pop_style_color(2);
+		imgui.same_line(0, 6);
+		if imgui.button("Clear##cmclear", -1, 0) then
+			select_model("");
+		end
+	end
+	imgui.end_window();
+	imgui.pop_style_var();
+end
+local v92 = 92;
+local v93 = 6;
+local v94 = 18;
+function select_model(v786)
+	v35 = v786;
+	v36 = "";
+end
+function draw_agent_card(v787)
+	local v788 = get_agent_srv(v787);
+	local v789 = v787.model_path == v35;
+	local v790 = rc(v787.rarity);
+	imgui.push_style_var_float(imgui.StyleVar_FrameRounding, 5);
+	imgui.push_style_var(imgui.StyleVar_FramePadding, 0, 0);
+	imgui.push_style_color(imgui.Col_Button, 0, 0, 0, 0);
+	imgui.push_style_color(imgui.Col_ButtonHovered, 0, 0, 0, 0);
+	imgui.push_style_color(imgui.Col_ButtonActive, 0, 0, 0, 0);
+	local v791;
+	if (v788 ~= 0) then
+		v791 = imgui.image_button_ptr("##ag_" .. tostring(v787.def_idx), v788, v92, v92);
+	else
+		v791 = imgui.button("##ag_" .. tostring(v787.def_idx), v92, v92);
+	end
+	imgui.pop_style_color(3);
+	imgui.pop_style_var(2);
+	local v792 = imgui.is_item_hovered();
+	local v793, v794 = imgui.get_item_rect_min();
+	local v795, v796 = imgui.get_item_rect_max();
+	if (v788 == 0) then
+		imgui.dl_add_rect_filled(v793, v794, v795, v796, 26, 27, 32, 255, 6);
+	end
+	imgui.dl_add_rect_filled(v793, v796 - v94, v795, v796, 12, 13, 16, 215, 6);
+	imgui.dl_push_clip_rect(v793 + 6, v796 - v94, v795 - 6, v796, true);
+	imgui.dl_add_text(v793 + 7, (v796 - v94) + 3, 220, 222, 228, 255, v787.name);
+	imgui.dl_pop_clip_rect();
+	imgui.dl_push_clip_rect(v793, v794, v795, v794 + 4, true);
+	imgui.dl_add_rect_filled(v793, v794, v795, v794 + 16, v790[1], v790[2], v790[3], 255, 6);
+	imgui.dl_pop_clip_rect();
+	imgui.dl_add_rect(v793, v794, v795, v796, 60, 62, 72, 255, 6, 1);
+	local v797 = {79,200,120};
+	if (v792 and not v789) then
+		imgui.dl_add_rect(v793, v794, v795, v796, 120, 124, 140, 255, 6, 1.5);
+		imgui.dl_add_rect_filled(v793 + 1, v794 + 1, v795 - 1, v796 - 1, 255, 255, 255, 12, 6);
+	end
+	if v789 then
+		imgui.dl_add_rect(v793, v794, v795, v796, v797[1], v797[2], v797[3], 255, 6, 2);
+		imgui.dl_add_circle_filled(v795 - 9, v794 + 9, 7, v797[1], v797[2], v797[3], 255);
+		imgui.dl_add_line(v795 - 12, v794 + 9, v795 - 10, v794 + 12, 255, 255, 255, 255, 1.6);
+		imgui.dl_add_line(v795 - 10, v794 + 12, v795 - 6, v794 + 6, 255, 255, 255, 255, 1.6);
+	end
+	if v791 then
+		select_model(v787.model_path);
+	end
+	if v792 then
+		imgui.set_tooltip(v787.name .. "\n" .. v787.model_path);
+	end
+end
+function agent_grid(v798)
+	local v799 = v34:lower();
+	local v800 = imgui.get_content_region_avail();
+	local v801 = math.max(1, math.floor(v800 / (v92 + v93)));
+	local v802, v803 = 0, 0;
+	for v978, v979 in ipairs(v798) do
+		if ((v799 == "") or v979.name:lower():find(v799, 1, true)) then
+			draw_agent_card(v979);
+			v803 = v803 + 1;
+			v802 = v802 + 1;
+			if (v802 < v801) then
+				imgui.same_line(0, v93);
+			else
+				v802 = 0;
+			end
+		end
+	end
+	if (v803 == 0) then
+		imgui.spacing();
+		imgui.text_disabled(((v799 == "") and "  No agents loaded — click Refresh") or ('  No matches for \"' .. v34 .. '\"'));
+	end
+end
+function custom_list()
+	if (not skin or (type(skin.get_custom_models) ~= "function")) then
+		return;
+	end
+	local v804 = skin.get_custom_models();
+	if (#v804 == 0) then
+		imgui.spacing();
+		imgui.text_disabled("  No .vmdl_c found in csgo/agents/models/ — click Refresh");
+		return;
+	end
+	local v805 = v34:lower();
+	local v806 = imgui.get_content_region_avail();
+	imgui.push_style_var_float(imgui.StyleVar_FrameRounding, 4);
+	for v980, v981 in ipairs(v804) do
+		if ((v805 == "") or v981.name:lower():find(v805, 1, true)) then
+			local v1261 = v981.path == v35;
+			local v1262 = {79,200,120};
+			if v1261 then
+				imgui.push_style_color(imgui.Col_Button, 0.13, 0.27, 0.19, 1);
+				imgui.push_style_color(imgui.Col_ButtonHovered, 0.16, 0.32, 0.23, 1);
+			else
+				imgui.push_style_color(imgui.Col_Button, 0.135, 0.14, 0.17, 1);
+				imgui.push_style_color(imgui.Col_ButtonHovered, 0.2, 0.21, 0.25, 1);
+			end
+			local v1263 = imgui.button("##cml_" .. v981.path, v806, 30);
+			imgui.pop_style_color(2);
+			local v1264, v1265 = imgui.get_item_rect_min();
+			local v1266, v1267 = imgui.get_item_rect_max();
+			if v1261 then
+				imgui.dl_add_rect_filled(v1264, v1265, v1264 + 3, v1267, v1262[1], v1262[2], v1262[3], 255, 0);
+			end
+			imgui.dl_push_clip_rect(v1264 + 12, v1265, v1266 - 8, v1267, true);
+			imgui.dl_add_text(v1264 + 12, v1265 + 7, (v1261 and 224) or 206, (v1261 and 234) or 209, (v1261 and 216) or 213, 255, v981.name);
+			imgui.dl_pop_clip_rect();
+			if v1263 then
+				select_model(v981.path);
+			end
+			if imgui.is_item_hovered() then
+				imgui.set_tooltip(v981.path);
+			end
+			imgui.spacing();
+		end
+	end
+	imgui.pop_style_var();
+end
+client.add_event_callback("bullet_impact", function(v807)
+	local v808 = entitylist.get_local_player();
+	if not v808 then
+		return;
+	end
+	if (v807:get_player("userid") ~= v808:get_address()) then
+		return;
+	end
+	if v57.tracer_enable:get() then
+		local v1136, v1137, v1138 = v807:get_float("x"), v807:get_float("y"), v807:get_float("z");
+		if v1136 then
+			v16[#v16 + 1] = {x=v1136,y=v1137,z=v1138,born=globals.realtime()};
+			if (#v16 > 48) then
+				table.remove(v16, 1);
+			end
+		end
+	end
+	if not v57.hit_enable:get() then
+		return;
+	end
+	v20 = {x=v807:get_float("x"),y=v807:get_float("y"),z=v807:get_float("z"),t=globals.realtime()};
+end);
+client.add_event_callback("player_hurt", function(v809)
+	local v810 = entitylist.get_local_player();
+	if not v810 then
+		return;
+	end
+	local v811 = v810:get_address();
+	if (v809:get_player("attacker") ~= v811) then
+		return;
+	end
+	if (v809:get_player("userid") == v811) then
+		return;
+	end
+	local v812 = globals.realtime();
+	if v57.hit_enable:get() then
+		local v1139;
+		if (v20 and ((v812 - v20.t) < 0.1)) then
+			v1139, v20 = v20, nil;
+		else
+			local v1333 = entitylist.player_from_address(v809:get_player("userid"));
+			if v1333 then
+				v1139 = v1333:get_hitbox_position(hitbox.chest);
+			end
+		end
+		if v1139 then
+			table.insert(v18, {born=v812,x=v1139.x,y=v1139.y,z=v1139.z,hg=v809:get_int("hitgroup")});
+		end
+	end
+	local v813 = v809:get_player("userid");
+	if (v813 ~= 0) then
+		local v1140 = entitylist.player_from_address(v813);
+		if v1140 then
+			local v1334 = v1140:get_eye_position();
+			if v57.dmg_enable:get() then
+				table.insert(v17, {x=v1334.x,y=v1334.y,z=v1334.z,dmg=v809:get_int("dmg_health"),born=v812,hg=v809:get_int("hitgroup")});
+			end
+			local v1335 = "Enemy";
+			pcall(function()
+				v1335 = v1140:get_name() or "Enemy";
+			end);
+			local v1336 = 0;
+			pcall(function()
+				v1336 = v1140:get_health() or 0;
+			end);
+			local v1337 = {[0]="Generic",[1]="Head",[2]="Chest",[3]="Stomach",[4]="Left Arm",[5]="Right Arm",[6]="Left Leg",[7]="Right Leg",[10]="Gear"};
+			local v1338 = v1337[v809:get_int("hitgroup")] or "Generic";
+			table.insert(v19, {text=string.format("HIT %s IN %s FOR %d DAMAGE (%d HP LEFT)", v1335:upper(), v1338:upper(), v809:get_int("dmg_health"), v1336),born=v812,alpha_anim=0});
+		end
+	end
+	if v57.fn_enable:get() then
+		local v1141 = v57.fn_filter:get();
+		local v1142 = v809:get_int("hitgroup");
+		local v1143 = true;
+		if ((v1141 == 1) and (v1142 ~= 1)) then
+			v1143 = false;
+		end
+		if ((v1141 == 2) and ((v1142 == 1) or (v1142 == 0))) then
+			v1143 = false;
+		end
+		if v1143 then
+			if (v813 ~= 0) then
+				local v1426 = entitylist.player_from_address(v813);
+				if v1426 then
+					local v1517 = v1426:get_origin();
+					local v1518 = v57.fn_drift_x:get();
+					local v1519 = v57.fn_speed_y:get();
+					local v1520 = ((math.random() * 2) - 1) * v1518;
+					local v1521 = ((math.random() * 2) - 1) * v1518;
+					table.insert(v15, {x=v1517.x,y=v1517.y,z=(v1517.z + 110),dmg=tostring(v809:get_int("dmg_health")),born=v812,vel_x=v1520,vel_y=v1521,vel_z=v1519});
+				end
+			end
+		end
+	end
+end);
+client.set_callback("on_createmove_end", function()
+	if not cmd.is_valid() then
+		return;
+	end
+	if not engine.is_in_game() then
+		return;
+	end
+	local v814 = entitylist.get_local_player();
+	if (not v814 or not v814:is_alive()) then
+		return;
+	end
+	handle_manual_aa();
+	local v815 = v57.aa_yaw_inverter_key:get();
+	if (v815 and (v815 ~= 0)) then
+		local v1144 = false;
+		pcall(function()
+			v1144 = input.is_button_pressed(v815);
+		end);
+		if v1144 then
+			v57.aa_yaw_inverted:set(not v57.aa_yaw_inverted:get());
+		end
+	end
+	local v816, v817 = 0, 0;
+	pcall(function()
+		v816, v817 = cmd.get_view_angles();
+	end);
+	v23 = v817 or 0;
+	pcall(function()
+		v22 = cmd.buttons or 0;
+	end);
+	local v818 = schema.get_offset("C_CSPlayerPawn", "m_fFlags") or schema.get_offset("C_BaseEntity", "m_fFlags") or 968;
+	local v819 = 0;
+	pcall(function()
+		v819 = memory.read_u32(v814:get_address() + v818) or 0;
+	end);
+	local v820 = v12(v819, 1) ~= 0;
+	local v821 = safe_get_velocity(v814);
+	local v822 = math.abs(v821.z) < 1;
+	local v823 = v820 or v822;
+	local v824 = false;
+	local v825 = nil;
+	if is_bind_active("enable_aim") then
+		local v1145, v1146 = run_optimized_rage_bot(v814, cmd, v816, v817);
+		if (v1145 and v1146) then
+			v824 = true;
+			v825 = v1146;
+		end
+	end
+	local v826 = is_revolver(v814);
+	if (v826 and v824 and v57.revolver_enable:get()) then
+		local v1147 = globals.realtime();
+		local v1148 = (v57.revolver_delay:get() or 250) / 1000;
+		local v1149 = v66.last_revolver_shot or 0;
+		if ((v1147 - v1149) >= v1148) then
+			v66.last_revolver_shot = v1147;
+			pcall(function()
+				cmd.buttons = v14(cmd.buttons or 0, 1);
+				if v57.revolver_subtick:get() then
+					cmd.add_subtick(buttons.attack, 0, true);
+					cmd.add_subtick(buttons.attack, 0.5, false);
+				end
+			end);
+		end
+	end
+	local v827 = false;
+	pcall(function()
+		v827 = cmd.is_button_down(buttons.attack) or v824;
+	end);
+	local v828 = v816;
+	local v829 = v817;
+	if (is_bind_active("enable_aim") and v827) then
+		if (v824 and v825) then
+			v828 = v825.pitch;
+			v829 = v825.yaw;
+		elseif v57.aim_snap:get() then
+			local v1427 = get_aim_snap_angles(v814, cmd, v57.aim_target_hitgroup:get());
+			if v1427 then
+				v828 = v1427.pitch;
+				v829 = v1427.yaw;
+			end
+		end
+	end
+	if (v57.rcs_enable:get() and v827) then
+		local v1150 = schema.get_offset("C_CSPlayerPawn", "m_aimPunchAngle");
+		if v1150 then
+			local v1342 = v814:get_address();
+			if (v1342 and (v1342 ~= 0)) then
+				local v1428 = memory.read_float(v1342 + v1150) or 0;
+				local v1429 = memory.read_float(v1342 + v1150 + 4) or 0;
+				local v1430 = v57.rcs_amount:get() or 2;
+				v828 = v828 - (v1428 * v1430);
+				v829 = v829 - (v1429 * v1430);
+			end
+		end
+	end
+	local v830 = false;
+	if (is_bind_active("aa") and (not v827 or not v57.aa_disable_on_shot:get())) then
+		if not (v57.hold_off:get() and input.is_button_down(input.E)) then
+			v828 = get_aa_pitch(v816, v814);
+			v829 = get_aa_yaw(v817, v814);
+			if (v827 and v57.hvh_aa_flip_shot:get()) then
+				v829 = v829 + 180;
+				while v829 > 180 do
+					v829 = v829 - 360;
+				end
+				while v829 < -180 do
+					v829 = v829 + 360;
+				end
+			end
+			v830 = true;
+		end
+	end
+	local v831 = v57.snap_freeze_time:get();
+	if (not v830 and not v827 and v66.last_snap_time and ((globals.realtime() - v66.last_snap_time) < v831)) then
+		if v66.last_snap_angles then
+			v828 = v66.last_snap_angles.pitch;
+			v829 = v66.last_snap_angles.yaw;
+		end
+	end
+	if v827 then
+		v66.last_shot_time = globals.realtime();
+		v66.last_snap_time = globals.realtime();
+		v66.last_snap_angles = {pitch=v828,yaw=v829};
+	end
+	v66.shot_360_yaw = nil;
+	if (v827 and v57.rage_360_enable:get()) then
+		local v1154 = 0;
+		if v57.rage_360_spin:get() then
+			v66.shot_spin_angle = ((v66.shot_spin_angle or 0) + (v57.rage_360_spin_speed:get() or 12)) % 360;
+			v1154 = v66.shot_spin_angle;
+		end
+		local v1155 = v829 + v1154;
+		while v1155 > 180 do
+			v1155 = v1155 - 360;
+		end
+		while v1155 < -180 do
+			v1155 = v1155 + 360;
+		end
+		v66.shot_360_yaw = v1155;
+	end
+	pcall(function()
+		local v982 = v829;
+		local v983 = v817;
+		if (v827 and v66.shot_360_yaw) then
+			v982 = v66.shot_360_yaw;
+			if not v57.rage_360_keep_view:get() then
+				v983 = v66.shot_360_yaw;
+			end
+		end
+		if (is_bind_active("enable_aim") and v827 and v57.silent_aim:get()) then
+			cmd.set_subtick_angles(v828, v982, 0);
+			cmd.set_view_angles(v816, v983, 0);
+		else
+			cmd.set_view_angles(v828, v982, 0);
+			cmd.set_subtick_angles(v828, v982, 0);
+		end
+	end);
+	local v833 = v57.peek_key:get();
+	if (v833 and (v833 ~= 0)) then
+		local v1157 = false;
+		local v1158 = false;
+		pcall(function()
+			v1157 = input.is_button_pressed(v833);
+			v1158 = input.is_button_down(v833);
+		end);
+		if v1157 then
+			local v1346 = nil;
+			pcall(function()
+				v1346 = v814:get_origin();
+			end);
+			if v1346 then
+				v66.peek_point = {x=v1346.x,y=v1346.y,z=v1346.z};
+				v66.peek_armed = true;
+				v66.peek_return = false;
+				v66.peek_key_down = true;
+			end
+		end
+		if (v66.peek_key_down and not v1158) then
+			v66.peek_key_down = false;
+			if (v57.peek_return_on_release:get() and v66.peek_armed) then
+				v66.peek_return = true;
+				v66.peek_return_start = globals.realtime();
+				v66.peek_armed = false;
+			end
+		end
+	end
+	if (v66.peek_armed and v827 and v57.peek_return_after_shot:get()) then
+		v66.peek_return = true;
+		v66.peek_return_start = globals.realtime();
+		v66.peek_armed = false;
+	end
+	if (v66.peek_return and v66.peek_point) then
+		local v1162 = nil;
+		pcall(function()
+			v1162 = v814:get_origin();
+		end);
+		if not v1162 then
+			v66.peek_return = false;
+		else
+			local v1349 = v66.peek_point.x - v1162.x;
+			local v1350 = v66.peek_point.y - v1162.y;
+			local v1351 = math.sqrt((v1349 * v1349) + (v1350 * v1350));
+			local v1352 = v57.peek_tolerance:get() or 40;
+			local v1353 = globals.realtime() - (v66.peek_return_start or 0);
+			local v1354 = v1353 > ((v57.peek_timeout:get() or 900) / 1000);
+			local v1355 = false;
+			if v57.peek_abort_on_move:get() then
+				pcall(function()
+					if (input.is_button_down(87) or input.is_button_down(65) or input.is_button_down(83) or input.is_button_down(68)) then
+						v1355 = true;
+					end
+				end);
+			end
+			if ((v1351 <= v1352) or v1354 or v1355) then
+				v66.peek_return = false;
+			else
+				local v1439 = 0;
+				pcall(function()
+					local v1505, v1506 = cmd.get_view_angles();
+					v1439 = v1506 or 0;
+				end);
+				local v1440 = math.deg(math.atan2(v1350, v1349));
+				local v1441 = v1440 - v1439;
+				while v1441 > 180 do
+					v1441 = v1441 - 360;
+				end
+				while v1441 < -180 do
+					v1441 = v1441 + 360;
+				end
+				local v1442 = math.rad(v1441);
+				local v1443 = v57.peek_speed:get() or 250;
+				local v1444 = math.cos(v1442) * v1443;
+				local v1445 = -math.sin(v1442) * v1443;
+				if v57.peek_invert_side:get() then
+					v1445 = -v1445;
+				end
+				pcall(function()
+					cmd.set_forwardmove(v1444);
+					cmd.set_sidemove(v1445);
+				end);
+			end
+		end
+	end
+	if (v57.shot_break_enable:get() and not v66.peek_return) then
+		local v1163 = globals.realtime();
+		if (v827 or (v66.spread_hold == true)) then
+			v66.break_until = v1163 + ((v57.shot_break_time:get() or 120) / 1000);
+		end
+		if (v66.break_until and (v1163 < v66.break_until)) then
+			pcall(function()
+				cmd.set_forwardmove(0);
+				cmd.set_sidemove(0);
+			end);
+		end
+	end
+	local v834 = v57.quick_stop_mode:get();
+	if (v834 and (v834 ~= 0)) then
+		local v1164 = (v834 == 2) or v827 or (v66.spread_hold == true);
+		if (v57.peek_auto_stop:get() and ((v66.peek_exposed or 0) > 0)) then
+			v1164 = true;
+		end
+		if v66.peek_return then
+			v1164 = false;
+		end
+		if v1164 then
+			pcall(function()
+				cmd.set_forwardmove(0);
+				cmd.set_sidemove(0);
+			end);
+		end
+	end
+	if (v57.auto_scope:get() and (v57.weapon_class:get() == 1)) then
+		local v1165 = false;
+		pcall(function()
+			v1165 = is_scoped();
+		end);
+		if not v1165 then
+			pcall(function()
+				cmd.set_button(buttons.attack2);
+			end);
+		end
+	end
+	local v835 = is_bind_active("enable_aim") and v827;
+	local v836 = false;
+	if v57.mvfix:get() then
+		local v1166 = v57.mvfix_mode:get();
+		local v1167 = math.abs((v829 or v817) - v817) > 0.01;
+		if (v1166 == 0) then
+			v836 = v1167 or v830 or v835;
+		elseif (v1166 == 1) then
+			v836 = v830 or v835;
+		else
+			v836 = true;
+		end
+	end
+	if v66.peek_return then
+		v836 = false;
+	end
+	if v836 then
+		local v1168 = v817;
+		pcall(function()
+			cmd.rotate_movement(v1168);
+		end);
+	end
+end);
+client.add_event_callback("player_death", function(v837)
+	local v838 = entitylist.get_local_player();
+	if not v838 then
+		return;
+	end
+	if (v837:get_player("attacker") ~= v838:get_address()) then
+		return;
+	end
+	local v839 = v837:get_player("userid");
+	if (v839 == v838:get_address()) then
+		return;
+	end
+	v66.kills = (v66.kills or 0) + 1;
+end);
+client.set_callback("on_frame_stage", function(v841)
+	if (v841 ~= frame_stage.RENDER_START) then
+		return;
+	end
+	if (v57.model_changer_en:get() and v54) then
+		local v1169 = entitylist.get_local_player();
+		if (v1169 and v1169:is_alive()) then
+			local v1357 = v35;
+			if (v1357 ~= "") then
+				if (v1357 ~= v24) then
+					pcall(function()
+						skin.precache_model(v1357);
+						v24 = v1357;
+					end);
+				end
+				local v1446 = v1169:get_address();
+				if (v1446 and (v1446 ~= 0)) then
+					pcall(function()
+						memory.call(v54, v1446, v1357);
+					end);
+				end
+			end
+		end
+	end
+end);
+client.add_event_callback("player_spawn", function(v842)
+	local v843 = entitylist.get_local_player();
+	if (v843 and (v842:get_player("userid") == v843:get_address())) then
+		v36 = "";
+	end
+end);
+print("made in t.me/nex0coded");
